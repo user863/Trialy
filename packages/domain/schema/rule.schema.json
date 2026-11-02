@@ -1,0 +1,844 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$defs": {
+    "Rule": {
+      "anyOf": [
+        {
+          "type": "object",
+          "required": [
+            "_tag",
+            "types"
+          ],
+          "properties": {
+            "_tag": {
+              "type": "string",
+              "enum": [
+                "cancerType"
+              ]
+            },
+            "types": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "nsclc",
+                  "sclc",
+                  "adenocarcinoma",
+                  "squamous"
+                ]
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "_tag",
+            "stages"
+          ],
+          "properties": {
+            "_tag": {
+              "type": "string",
+              "enum": [
+                "stage"
+              ]
+            },
+            "stages": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "I",
+                  "II",
+                  "III",
+                  "IV"
+                ]
+              }
+            },
+            "extent": {
+              "type": "string",
+              "enum": [
+                "limited",
+                "extensive"
+              ]
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "_tag",
+            "gene",
+            "state"
+          ],
+          "properties": {
+            "_tag": {
+              "type": "string",
+              "enum": [
+                "biomarker"
+              ]
+            },
+            "gene": {
+              "type": "string",
+              "enum": [
+                "EGFR",
+                "ALK",
+                "ROS1",
+                "KRAS",
+                "BRAF",
+                "MET",
+                "RET",
+                "HER2",
+                "NTRK",
+                "NRG1"
+              ]
+            },
+            "state": {
+              "type": "string",
+              "enum": [
+                "positive",
+                "negative"
+              ]
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "_tag"
+          ],
+          "properties": {
+            "_tag": {
+              "type": "string",
+              "enum": [
+                "pdl1"
+              ]
+            },
+            "min": {
+              "type": "number"
+            },
+            "max": {
+              "type": "number"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "_tag",
+            "category"
+          ],
+          "properties": {
+            "_tag": {
+              "type": "string",
+              "enum": [
+                "priorTherapy"
+              ]
+            },
+            "category": {
+              "type": "string",
+              "enum": [
+                "chemotherapy",
+                "immunotherapy",
+                "targeted",
+                "radiotherapy",
+                "surgery",
+                "systemic"
+              ]
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "_tag"
+          ],
+          "properties": {
+            "_tag": {
+              "type": "string",
+              "enum": [
+                "priorLines"
+              ]
+            },
+            "min": {
+              "type": "number"
+            },
+            "max": {
+              "type": "number"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "_tag",
+            "category"
+          ],
+          "properties": {
+            "_tag": {
+              "type": "string",
+              "enum": [
+                "currentTherapy"
+              ]
+            },
+            "category": {
+              "type": "string",
+              "enum": [
+                "chemotherapy",
+                "immunotherapy",
+                "targeted",
+                "radiotherapy",
+                "surgery",
+                "systemic"
+              ]
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "_tag",
+            "analyte"
+          ],
+          "properties": {
+            "_tag": {
+              "type": "string",
+              "enum": [
+                "lab"
+              ]
+            },
+            "analyte": {
+              "type": "string",
+              "enum": [
+                "anc",
+                "platelets",
+                "hemoglobin",
+                "crcl"
+              ]
+            },
+            "min": {
+              "type": "number"
+            },
+            "max": {
+              "type": "number"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "_tag"
+          ],
+          "properties": {
+            "_tag": {
+              "type": "string",
+              "enum": [
+                "age"
+              ]
+            },
+            "min": {
+              "type": "number"
+            },
+            "max": {
+              "type": "number"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "_tag",
+            "sex"
+          ],
+          "properties": {
+            "_tag": {
+              "type": "string",
+              "enum": [
+                "sex"
+              ]
+            },
+            "sex": {
+              "type": "string",
+              "enum": [
+                "female",
+                "male"
+              ]
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "_tag"
+          ],
+          "properties": {
+            "_tag": {
+              "type": "string",
+              "enum": [
+                "performanceStatus"
+              ]
+            },
+            "min": {
+              "type": "number"
+            },
+            "max": {
+              "type": "number"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "_tag",
+            "flag"
+          ],
+          "properties": {
+            "_tag": {
+              "type": "string",
+              "enum": [
+                "flag"
+              ]
+            },
+            "flag": {
+              "type": "string",
+              "enum": [
+                "brainMetsAny",
+                "brainMetsActive",
+                "ild",
+                "autoimmune"
+              ]
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "_tag"
+          ],
+          "properties": {
+            "_tag": {
+              "type": "string",
+              "enum": [
+                "other"
+              ]
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "_tag",
+            "rules"
+          ],
+          "properties": {
+            "_tag": {
+              "type": "string",
+              "enum": [
+                "anyOf"
+              ]
+            },
+            "rules": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Rule"
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "_tag",
+            "rules"
+          ],
+          "properties": {
+            "_tag": {
+              "type": "string",
+              "enum": [
+                "allOf"
+              ]
+            },
+            "rules": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Rule"
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "_tag",
+            "rule"
+          ],
+          "properties": {
+            "_tag": {
+              "type": "string",
+              "enum": [
+                "not"
+              ]
+            },
+            "rule": {
+              "$ref": "#/$defs/Rule"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "_tag",
+            "rule"
+          ],
+          "properties": {
+            "_tag": {
+              "type": "string",
+              "enum": [
+                "narrow"
+              ]
+            },
+            "rule": {
+              "$ref": "#/$defs/Rule"
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "anyOf": [
+    {
+      "type": "object",
+      "required": [
+        "_tag",
+        "types"
+      ],
+      "properties": {
+        "_tag": {
+          "type": "string",
+          "enum": [
+            "cancerType"
+          ]
+        },
+        "types": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "nsclc",
+              "sclc",
+              "adenocarcinoma",
+              "squamous"
+            ]
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "_tag",
+        "stages"
+      ],
+      "properties": {
+        "_tag": {
+          "type": "string",
+          "enum": [
+            "stage"
+          ]
+        },
+        "stages": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "I",
+              "II",
+              "III",
+              "IV"
+            ]
+          }
+        },
+        "extent": {
+          "type": "string",
+          "enum": [
+            "limited",
+            "extensive"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "_tag",
+        "gene",
+        "state"
+      ],
+      "properties": {
+        "_tag": {
+          "type": "string",
+          "enum": [
+            "biomarker"
+          ]
+        },
+        "gene": {
+          "type": "string",
+          "enum": [
+            "EGFR",
+            "ALK",
+            "ROS1",
+            "KRAS",
+            "BRAF",
+            "MET",
+            "RET",
+            "HER2",
+            "NTRK",
+            "NRG1"
+          ]
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "positive",
+            "negative"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "_tag"
+      ],
+      "properties": {
+        "_tag": {
+          "type": "string",
+          "enum": [
+            "pdl1"
+          ]
+        },
+        "min": {
+          "type": "number"
+        },
+        "max": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "_tag",
+        "category"
+      ],
+      "properties": {
+        "_tag": {
+          "type": "string",
+          "enum": [
+            "priorTherapy"
+          ]
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "chemotherapy",
+            "immunotherapy",
+            "targeted",
+            "radiotherapy",
+            "surgery",
+            "systemic"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "_tag"
+      ],
+      "properties": {
+        "_tag": {
+          "type": "string",
+          "enum": [
+            "priorLines"
+          ]
+        },
+        "min": {
+          "type": "number"
+        },
+        "max": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "_tag",
+        "category"
+      ],
+      "properties": {
+        "_tag": {
+          "type": "string",
+          "enum": [
+            "currentTherapy"
+          ]
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "chemotherapy",
+            "immunotherapy",
+            "targeted",
+            "radiotherapy",
+            "surgery",
+            "systemic"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "_tag",
+        "analyte"
+      ],
+      "properties": {
+        "_tag": {
+          "type": "string",
+          "enum": [
+            "lab"
+          ]
+        },
+        "analyte": {
+          "type": "string",
+          "enum": [
+            "anc",
+            "platelets",
+            "hemoglobin",
+            "crcl"
+          ]
+        },
+        "min": {
+          "type": "number"
+        },
+        "max": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "_tag"
+      ],
+      "properties": {
+        "_tag": {
+          "type": "string",
+          "enum": [
+            "age"
+          ]
+        },
+        "min": {
+          "type": "number"
+        },
+        "max": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "_tag",
+        "sex"
+      ],
+      "properties": {
+        "_tag": {
+          "type": "string",
+          "enum": [
+            "sex"
+          ]
+        },
+        "sex": {
+          "type": "string",
+          "enum": [
+            "female",
+            "male"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "_tag"
+      ],
+      "properties": {
+        "_tag": {
+          "type": "string",
+          "enum": [
+            "performanceStatus"
+          ]
+        },
+        "min": {
+          "type": "number"
+        },
+        "max": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "_tag",
+        "flag"
+      ],
+      "properties": {
+        "_tag": {
+          "type": "string",
+          "enum": [
+            "flag"
+          ]
+        },
+        "flag": {
+          "type": "string",
+          "enum": [
+            "brainMetsAny",
+            "brainMetsActive",
+            "ild",
+            "autoimmune"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "_tag"
+      ],
+      "properties": {
+        "_tag": {
+          "type": "string",
+          "enum": [
+            "other"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "_tag",
+        "rules"
+      ],
+      "properties": {
+        "_tag": {
+          "type": "string",
+          "enum": [
+            "anyOf"
+          ]
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Rule"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "_tag",
+        "rules"
+      ],
+      "properties": {
+        "_tag": {
+          "type": "string",
+          "enum": [
+            "allOf"
+          ]
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Rule"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "_tag",
+        "rule"
+      ],
+      "properties": {
+        "_tag": {
+          "type": "string",
+          "enum": [
+            "not"
+          ]
+        },
+        "rule": {
+          "$ref": "#/$defs/Rule"
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "_tag",
+        "rule"
+      ],
+      "properties": {
+        "_tag": {
+          "type": "string",
+          "enum": [
+            "narrow"
+          ]
+        },
+        "rule": {
+          "$ref": "#/$defs/Rule"
+        }
+      },
+      "additionalProperties": false
+    }
+  ],
+  "title": "TrialBase rule"
+}

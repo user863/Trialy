@@ -1,0 +1,360 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": [
+    "cancerType",
+    "histology",
+    "stage",
+    "sclcExtent",
+    "biomarkers",
+    "pdl1",
+    "priorTherapies",
+    "priorLines",
+    "currentTherapy",
+    "age",
+    "sex",
+    "ecog",
+    "brainMets",
+    "ild",
+    "autoimmune",
+    "labs",
+    "country",
+    "postcode"
+  ],
+  "properties": {
+    "cancerType": {
+      "type": "string",
+      "enum": [
+        "nsclc",
+        "sclc",
+        "unknown"
+      ]
+    },
+    "histology": {
+      "type": "string",
+      "enum": [
+        "adenocarcinoma",
+        "squamous",
+        "other",
+        "unknown"
+      ]
+    },
+    "stage": {
+      "type": "string",
+      "enum": [
+        "I",
+        "II",
+        "III",
+        "IV",
+        "unknown"
+      ]
+    },
+    "sclcExtent": {
+      "type": "string",
+      "enum": [
+        "limited",
+        "extensive",
+        "unknown"
+      ]
+    },
+    "biomarkers": {
+      "type": "object",
+      "required": [
+        "EGFR",
+        "ALK",
+        "ROS1",
+        "KRAS",
+        "BRAF",
+        "MET",
+        "RET",
+        "HER2",
+        "NTRK",
+        "NRG1"
+      ],
+      "properties": {
+        "EGFR": {
+          "type": "string",
+          "enum": [
+            "positive",
+            "negative",
+            "unknown"
+          ]
+        },
+        "ALK": {
+          "type": "string",
+          "enum": [
+            "positive",
+            "negative",
+            "unknown"
+          ]
+        },
+        "ROS1": {
+          "type": "string",
+          "enum": [
+            "positive",
+            "negative",
+            "unknown"
+          ]
+        },
+        "KRAS": {
+          "type": "string",
+          "enum": [
+            "positive",
+            "negative",
+            "unknown"
+          ]
+        },
+        "BRAF": {
+          "type": "string",
+          "enum": [
+            "positive",
+            "negative",
+            "unknown"
+          ]
+        },
+        "MET": {
+          "type": "string",
+          "enum": [
+            "positive",
+            "negative",
+            "unknown"
+          ]
+        },
+        "RET": {
+          "type": "string",
+          "enum": [
+            "positive",
+            "negative",
+            "unknown"
+          ]
+        },
+        "HER2": {
+          "type": "string",
+          "enum": [
+            "positive",
+            "negative",
+            "unknown"
+          ]
+        },
+        "NTRK": {
+          "type": "string",
+          "enum": [
+            "positive",
+            "negative",
+            "unknown"
+          ]
+        },
+        "NRG1": {
+          "type": "string",
+          "enum": [
+            "positive",
+            "negative",
+            "unknown"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "pdl1": {
+      "type": "string",
+      "enum": [
+        "lt1",
+        "1to49",
+        "ge50",
+        "unknown"
+      ]
+    },
+    "priorTherapies": {
+      "type": "object",
+      "required": [
+        "chemotherapy",
+        "immunotherapy",
+        "targeted",
+        "radiotherapy",
+        "surgery"
+      ],
+      "properties": {
+        "chemotherapy": {
+          "type": "string",
+          "enum": [
+            "yes",
+            "no",
+            "unknown"
+          ]
+        },
+        "immunotherapy": {
+          "type": "string",
+          "enum": [
+            "yes",
+            "no",
+            "unknown"
+          ]
+        },
+        "targeted": {
+          "type": "string",
+          "enum": [
+            "yes",
+            "no",
+            "unknown"
+          ]
+        },
+        "radiotherapy": {
+          "type": "string",
+          "enum": [
+            "yes",
+            "no",
+            "unknown"
+          ]
+        },
+        "surgery": {
+          "type": "string",
+          "enum": [
+            "yes",
+            "no",
+            "unknown"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "priorLines": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "currentTherapy": {
+      "type": "string",
+      "enum": [
+        "none",
+        "chemotherapy",
+        "immunotherapy",
+        "targeted",
+        "radiotherapy",
+        "unknown"
+      ]
+    },
+    "age": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "sex": {
+      "type": "string",
+      "enum": [
+        "female",
+        "male",
+        "unknown"
+      ]
+    },
+    "ecog": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "brainMets": {
+      "type": "string",
+      "enum": [
+        "none",
+        "treated",
+        "active",
+        "unknown"
+      ]
+    },
+    "ild": {
+      "type": "string",
+      "enum": [
+        "yes",
+        "no",
+        "unknown"
+      ]
+    },
+    "autoimmune": {
+      "type": "string",
+      "enum": [
+        "yes",
+        "no",
+        "unknown"
+      ]
+    },
+    "labs": {
+      "type": "object",
+      "required": [
+        "anc",
+        "platelets",
+        "hemoglobin",
+        "crcl"
+      ],
+      "properties": {
+        "anc": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "platelets": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "hemoglobin": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "crcl": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "country": {
+      "type": "string",
+      "enum": [
+        "DE",
+        "AT",
+        "CH"
+      ]
+    },
+    "postcode": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "title": "TrialBase patient profile"
+}

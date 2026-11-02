@@ -1,0 +1,4826 @@
+[
+  {
+    "trial": "NCT03526835",
+    "id": "NCT03526835-14",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Received ≥2 and no more than 4 lines of prior therapy in the metastatic setting including: Chemotherapy with oxaliplatin, irinotecan, and a fluoropyrimidine, Targeted therapy with an anti-VEGF therapy",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "priorLines",
+            "max": 4
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT03526835",
+    "id": "NCT03526835-19",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Central nervous system metastases that are untreated or symptomatic, or require radiation, surgery, or continued steroid therapy to control symptoms within 14 days of study entry.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "brainMetsActive"
+      }
+    }
+  },
+  {
+    "trial": "NCT03526835",
+    "id": "NCT03526835-29",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Current dyspnea at rest of any origin, or other diseases requiring continuous oxygen therapy. Patients with a history of interstitial lung disease (e.g., pneumonitis or pulmonary fibrosis) or evidence of ILD on baseline chest computerized tomography (CT) scan.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT03742687",
+    "id": "NCT03742687-6",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Prior radiotherapy to the thorax, unless there is no significant overlap of current treatment volumes with previous treatment fields.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "priorTherapy",
+        "category": "radiotherapy"
+      }
+    }
+  },
+  {
+    "trial": "NCT03958240",
+    "id": "NCT03958240-0",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Patient with histologically documented local or metastatic solid malignant tumor (head and neck, ovarian, cervical, and other tumor types including, but not limited to glioblastoma, NSCLC and anal cancer) or patients with pre-invasive cervical high grade dysplasia (CIN II or III)",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "cancerType",
+          "types": [
+            "nsclc"
+          ]
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT04165070",
+    "id": "NCT04165070-9",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Has an active autoimmune disease that has required systemic treatment in the past 2 years",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "autoimmune"
+      }
+    }
+  },
+  {
+    "trial": "NCT04165070",
+    "id": "NCT04165070-10",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Has a history of (noninfectious) pneumonitis that required steroids or has current pneumonitis",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT04165070",
+    "id": "NCT04165070-20",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Has received prior systemic cytotoxic chemotherapy or other targeted or biological antineoplastic therapy for metastatic disease",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "priorTherapy",
+        "category": "chemotherapy"
+      }
+    }
+  },
+  {
+    "trial": "NCT04339218",
+    "id": "NCT04339218-12",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Prior systemic treatment for advanced non-small cell lung cancer (except adjuvant therapy after complete resection).",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "priorLines",
+        "min": 1
+      }
+    }
+  },
+  {
+    "trial": "NCT04389632",
+    "id": "NCT04389632-12",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "History of noninfectious interstitial lung disease (ILD) or pneumonitis that required steroids, current ILD or pneumonitis, or suspected ILD or pneumonitis that cannot be ruled out by imaging at screening",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT04585750",
+    "id": "NCT04585750-1",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Locally advanced or metastatic solid malignancy with a TP53 Y220C mutation",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "stage",
+        "stages": [
+          "III",
+          "IV"
+        ]
+      }
+    }
+  },
+  {
+    "trial": "NCT04585750",
+    "id": "NCT04585750-24",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Received prior therapy with an anti-PD-1, anti-PD-L1, or anti-PD-L2 agent or with an agent directed to another stimulatory or co-inhibitory T-cell receptor and discontinued from that treatment due to a Grade 3 or higher immune-related AE (irAE)",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "priorTherapy",
+        "category": "immunotherapy"
+      }
+    }
+  },
+  {
+    "trial": "NCT04585750",
+    "id": "NCT04585750-29",
+    "kind": "exclusion",
+    "confidence": "high",
+    "text": "History of radiation pneumonitis",
+    "rule": {
+      "_tag": "flag",
+      "flag": "ild"
+    }
+  },
+  {
+    "trial": "NCT04585750",
+    "id": "NCT04585750-30",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "History of (non-infectious) or active pneumonitis / interstitial lung disease that required steroids",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT04686305",
+    "id": "NCT04686305-0",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Histologically documented unresectable locally advanced/metastatic non-squamous NSCLC",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "allOf",
+          "rules": [
+            {
+              "_tag": "cancerType",
+              "types": [
+                "nsclc"
+              ]
+            },
+            {
+              "_tag": "not",
+              "rule": {
+                "_tag": "cancerType",
+                "types": [
+                  "squamous"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "stage",
+            "stages": [
+              "III",
+              "IV"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT04686305",
+    "id": "NCT04686305-5",
+    "kind": "inclusion",
+    "confidence": "high",
+    "text": "WHO / ECOG performance status of 0 or 1",
+    "rule": {
+      "_tag": "performanceStatus",
+      "min": 0,
+      "max": 1
+    }
+  },
+  {
+    "trial": "NCT04686305",
+    "id": "NCT04686305-9",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "HER2 mutation if previously known",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "biomarker",
+        "gene": "HER2",
+        "state": "positive"
+      }
+    }
+  },
+  {
+    "trial": "NCT04686305",
+    "id": "NCT04686305-10",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Has a history of (non-infectious) ILD/pneumonitis that required steroids, has current ILD/pneumonitis, or where suspected ILD/pneumonitis cannot be ruled out by imaging at screening",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT04790253",
+    "id": "NCT04790253-12",
+    "kind": "inclusion",
+    "confidence": "high",
+    "text": "ECOG PS ≤ 2",
+    "rule": {
+      "_tag": "performanceStatus",
+      "min": 0,
+      "max": 2
+    }
+  },
+  {
+    "trial": "NCT04790253",
+    "id": "NCT04790253-27",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Prior radiotherapy to the brain or whole brain radiotherapy. Note: Patients who have undergone prior stereotactic radiosurgery for benign tumours or conditions (e.g., acoustic neuroma, grade I meningioma, trigeminal neuralgia) may be considered on a case-by-case basis. Discussion with EORTC Headquarters is mandatory, before the randomization.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "priorTherapy",
+        "category": "radiotherapy"
+      }
+    }
+  },
+  {
+    "trial": "NCT04875585",
+    "id": "NCT04875585-25",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "History of (non-infectious) pneumonitis that required steroids or has current pneumonitis.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT04928846",
+    "id": "NCT04928846-1",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Participants must have c-Met overexpressing non-small cell lung cancer (NSCLC) as assessed by an AbbVie designated immunohistochemistry (IHC) laboratory using the VENTANA MET (SP44) RxDx assay.",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "cancerType",
+          "types": [
+            "nsclc"
+          ]
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT04986293",
+    "id": "NCT04986293-0",
+    "kind": "inclusion",
+    "confidence": "high",
+    "text": "Age ≥18 years",
+    "rule": {
+      "_tag": "age",
+      "min": 18
+    }
+  },
+  {
+    "trial": "NCT05061550",
+    "id": "NCT05061550-12",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "History of non-infectious interstitial lung disease (ILD) ILD/pneumonitis that required steroids, has current ILD/pneumonitis, or has suspected ILD/pneumonitis that cannot be ruled out by imaging at screening.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT05099172",
+    "id": "NCT05099172-17",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Any history of primary brain or leptomeningeal disease (symptomatic or asymptomatic), presence of symptomatic central nervous system (CNS) metastases, or CNS metastases that require local treatment (such as radiotherapy or surgery).",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "brainMetsActive"
+      }
+    }
+  },
+  {
+    "trial": "NCT05118789",
+    "id": "NCT05118789-5",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Patient's cancer has a known oncogenic driver alteration other than ROS1.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "biomarker",
+        "gene": "ROS1",
+        "state": "positive"
+      }
+    }
+  },
+  {
+    "trial": "NCT05122806",
+    "id": "NCT05122806-0",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Stage IIIB/IV NSCLC non eligible to locoregional treatment with curative intent",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "stage",
+        "stages": [
+          "III",
+          "IV"
+        ]
+      }
+    }
+  },
+  {
+    "trial": "NCT05123482",
+    "id": "NCT05123482-17",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Brain metastases unless treated, asymptomatic, stable, and not requiring continuous corticosteroids at a dose of \\> 10 mg prednisone/day or equivalent for at least 4 weeks prior to start of study.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "brainMetsAny"
+      }
+    }
+  },
+  {
+    "trial": "NCT05123482",
+    "id": "NCT05123482-19",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "History of (non-infectious) ILD/pneumonitis that required steroids, has current ILD/pneumonitis, or where suspected ILD/pneumonitis cannot be ruled out by imaging at screening.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT05123482",
+    "id": "NCT05123482-25",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Active or prior documented autoimmune or inflammatory disorders requiring chronic treatment with steroids or other immunosuppressive treatment.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "autoimmune"
+      }
+    }
+  },
+  {
+    "trial": "NCT05123482",
+    "id": "NCT05123482-34",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Patients have received prior therapy with AZD9574 or more than 1 prior line of any other PARPi-based regimen",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "priorLines",
+        "min": 2
+      }
+    }
+  },
+  {
+    "trial": "NCT05176483",
+    "id": "NCT05176483-30",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Known brain metastases or cranial epidural disease unless adequately treated with radiotherapy and/or surgery (including radiosurgery) and stable for at least 4 weeks before first dose of study treatment.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "brainMetsAny"
+      }
+    }
+  },
+  {
+    "trial": "NCT05208762",
+    "id": "NCT05208762-3",
+    "kind": "inclusion",
+    "confidence": "high",
+    "text": "Eastern Cooperative Oncology Group (ECOG) performance status score of 0 or 1",
+    "rule": {
+      "_tag": "performanceStatus",
+      "min": 0,
+      "max": 1
+    }
+  },
+  {
+    "trial": "NCT05255302",
+    "id": "NCT05255302-27",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "History of active autoimmune disease including but not limited to rheumatoid polyarthritis, myasthenia, autoimmune hepatitis, systemic Lupus, Wegener's granulomatosis, vascular thrombosis associated with antiphospholipid syndrome, Sjogren's syndrome with interstitial pulmonary disease, recent Guillain-Barré syndrome, multiple sclerosis, vasculitis, or glomerulonephritis.",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "autoimmune"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT05281406",
+    "id": "NCT05281406-4",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Tumor positive for Ex19del or L858R EGFR mutation assessed according to local standard.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "biomarker",
+        "gene": "EGFR",
+        "state": "positive"
+      }
+    }
+  },
+  {
+    "trial": "NCT05354596",
+    "id": "NCT05354596-2",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Age \\> 18 years old. • Life expectancy \\> 6 months.",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "age",
+          "min": 19
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT05354596",
+    "id": "NCT05354596-14",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "If the patient has received previous radiotherapy, the combined dose at the radiation site must be evaluated by the treating physician and preferably not exceed the dose constraints",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "priorTherapy",
+        "category": "radiotherapy"
+      }
+    }
+  },
+  {
+    "trial": "NCT05384626",
+    "id": "NCT05384626-7",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Patient's cancer has a known oncogenic driver alteration other than ALK.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "biomarker",
+        "gene": "ALK",
+        "state": "positive"
+      }
+    }
+  },
+  {
+    "trial": "NCT05443126",
+    "id": "NCT05443126-2",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "ECOG performance status of 0 or 1 and life expectancy \\>3 months at screening",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "performanceStatus",
+          "min": 0,
+          "max": 1
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT05443126",
+    "id": "NCT05443126-7",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Any known major driver gene alterations other than RET.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "biomarker",
+        "gene": "RET",
+        "state": "positive"
+      }
+    }
+  },
+  {
+    "trial": "NCT05592626",
+    "id": "NCT05592626-2",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "For Phase 2, participants must have one of the following solid tumors: TMB-H (not enrolling) MSI-H/dMMR (not enrolling) CRC (both Ras wild type and mutant) (not enrolling) NSCLC (recurrent or Primary Stage 4) CRC with pMMR/MSS (without TMB-H requirement)",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "cancerType",
+            "types": [
+              "nsclc"
+            ]
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT05692999",
+    "id": "NCT05692999-2",
+    "kind": "inclusion",
+    "confidence": "high",
+    "text": "Non-operable / non-irradiable stage III or stage IV.",
+    "rule": {
+      "_tag": "stage",
+      "stages": [
+        "III",
+        "IV"
+      ]
+    }
+  },
+  {
+    "trial": "NCT05692999",
+    "id": "NCT05692999-47",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "History of idiopathic pulmonary fibrosis, organized pneumonia (i.e., obliterating bronchiolitis), drug-induced lung disease or active signs of pneumonia, pulmonary infiltration (regardless of cause) detected on the baseline chest CT-scan.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT05718323",
+    "id": "NCT05718323-9",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "ED-SCLC must not have progressed during or after standard chemo-immunotherapy (as per RECIST v1.1).",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "cancerType",
+          "types": [
+            "sclc"
+          ]
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT05718323",
+    "id": "NCT05718323-20",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "History of idiopathic pulmonary fibrosis, organising pneumonia (e.g., bronchiolitis obliterans), drug-induced pneumonitis, or idiopathic pneumonitis, or evidence of active pneumonitis on screening chest computed tomography (CT) scan.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT05789082",
+    "id": "NCT05789082-11",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "History of idiopathic pulmonary fibrosis, organizing pneumonia (e.g., bronchiolitis obliterans), drug-induced pneumonitis, or idiopathic pneumonitis, or evidence of active pneumonitis, active tuberculosis, significant cardiovascular disease within 3 months prior to initiation of study treatment",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT05789082",
+    "id": "NCT05789082-16",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Participants with brain metastases for whom complete surgical resections is clinically appropriate",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "brainMetsAny"
+      }
+    }
+  },
+  {
+    "trial": "NCT05882058",
+    "id": "NCT05882058-0",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Male or female participants ≥18 years old and at least at the legal age of consent in countries where it is greater than 18 years at the time of signature of the informed consent form (ICF).",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "age",
+          "min": 18
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT05889247",
+    "id": "NCT05889247-0",
+    "kind": "inclusion",
+    "confidence": "high",
+    "text": "Newly diagnosed, histologically verified, Non-Small Cell Lung Cancer (NSCLC)",
+    "rule": {
+      "_tag": "cancerType",
+      "types": [
+        "nsclc"
+      ]
+    }
+  },
+  {
+    "trial": "NCT05889247",
+    "id": "NCT05889247-1",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Advanced or locally advanced disease without curative intended treatment options",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "stage",
+        "stages": [
+          "III",
+          "IV"
+        ]
+      }
+    }
+  },
+  {
+    "trial": "NCT05967689",
+    "id": "NCT05967689-30",
+    "kind": "exclusion",
+    "confidence": "high",
+    "text": "Past medical history of interstitial lung disease, treatment-related pneumonitis (any grade), or evidence of clinically active interstitial lung disease.",
+    "rule": {
+      "_tag": "flag",
+      "flag": "ild"
+    }
+  },
+  {
+    "trial": "NCT05983432",
+    "id": "NCT05983432-4",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Has histologically documented, incurable, locally advanced or metastatic epithelial origin malignant cancer, priority to include the following tumor types: NSCLC, HER2 - breast cancer, esophageal cancer, SCLC, NPC, and HNSCC.",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "cancerType",
+          "types": [
+            "nsclc",
+            "sclc"
+          ]
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT05983432",
+    "id": "NCT05983432-57",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "For NSCLC EGFRmut: Participants treated with more than two systemic chemotherapies prior to randomization.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "priorLines",
+        "min": 3
+      }
+    }
+  },
+  {
+    "trial": "NCT05983432",
+    "id": "NCT05983432-58",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "NOTE: Progression of disease within 12 months after receiving neoadjuvant and adjuvant chemotherapies is considered 1 prior systemic chemotherapy Previously documented EGFR Exon 20 insertion mutations as primary EGFR mutations",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "biomarker",
+        "gene": "EGFR",
+        "state": "positive"
+      }
+    }
+  },
+  {
+    "trial": "NCT05983432",
+    "id": "NCT05983432-60",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "a) Participants treated with more than two systemic chemotherapies prior to randomization.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "priorLines",
+        "min": 3
+      }
+    }
+  },
+  {
+    "trial": "NCT05983432",
+    "id": "NCT05983432-65",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "For NSCLC with EGFR WT squamous or adenocarcinoma histology: a) Participants received more than 1 prior line of systemic chemotherapy for locally advanced or metastatic disease",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "priorLines",
+        "min": 2
+      }
+    }
+  },
+  {
+    "trial": "NCT06026410",
+    "id": "NCT06026410-0",
+    "kind": "inclusion",
+    "confidence": "high",
+    "text": "At least 18 years of age.",
+    "rule": {
+      "_tag": "age",
+      "min": 18
+    }
+  },
+  {
+    "trial": "NCT06026410",
+    "id": "NCT06026410-11",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Active or prior documented autoimmune or inflammatory disorders within the past 5 years prior to Cycle 1 Day 1 (with exceptions).",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "autoimmune"
+      }
+    }
+  },
+  {
+    "trial": "NCT06043817",
+    "id": "NCT06043817-8",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Has a tumor that is known to harbor EGFR ex20ins p.H773\\_V774insH variant, or any EGFR kinase domain activating mutation concurrent with either a T790M and/or C797S resistance mutations",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "biomarker",
+        "gene": "EGFR",
+        "state": "positive"
+      }
+    }
+  },
+  {
+    "trial": "NCT06053099",
+    "id": "NCT06053099-4",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Presence of a common EGFR mutation (Del19 or L858R).",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "biomarker",
+        "gene": "EGFR",
+        "state": "positive"
+      }
+    }
+  },
+  {
+    "trial": "NCT06057766",
+    "id": "NCT06057766-0",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Resectable (I-IIIA) NSCLC patients who had lung resection surgery, one to twelve months before inclusion, with or without (neo-)adjuvant chemotherapy/radiotherapy/immunotherapy.",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "not",
+          "rule": {
+            "_tag": "narrow",
+            "rule": {
+              "_tag": "priorTherapy",
+              "category": "surgery"
+            }
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06095583",
+    "id": "NCT06095583-1",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Histologically or cytologically confirmed LS-SCLC using the Veteran's Administration Lung Study Arm (VALSG) staging criteria (Appendix 3). Patients with TNM Stage I or II disease per AJCC 8th edition must be medically inoperable (as determined by the Investigator) or the patient must refuse surgery.",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "cancerType",
+          "types": [
+            "sclc"
+          ]
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06119581",
+    "id": "NCT06119581-0",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Histologically or cytologically confirmed NSCLC with Stage IIIB-IIIC or Stage IV disease, not suitable for curative intent radical surgery or radiation therapy.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "cancerType",
+        "types": [
+          "nsclc"
+        ]
+      }
+    }
+  },
+  {
+    "trial": "NCT06119581",
+    "id": "NCT06119581-2",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Must have disease with evidence of KRAS G12C mutation.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "biomarker",
+        "gene": "KRAS",
+        "state": "positive"
+      }
+    }
+  },
+  {
+    "trial": "NCT06162221",
+    "id": "NCT06162221-10",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Active or history of interstitial lung disease (ILD) or pneumonitis requiring steroids",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT06170788",
+    "id": "NCT06170788-8",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Received prior systemic anticancer therapy including investigational agents within 4 weeks before randomization.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "priorTherapy",
+        "category": "systemic"
+      }
+    }
+  },
+  {
+    "trial": "NCT06170788",
+    "id": "NCT06170788-17",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Active autoimmune disease that has required systemic treatment in the past 2 years.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "autoimmune"
+      }
+    }
+  },
+  {
+    "trial": "NCT06170788",
+    "id": "NCT06170788-18",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "History of (noninfectious) pneumonitis/interstitial lung disease (ILD) that required steroids or has current pneumonitis/ILD.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT06172478",
+    "id": "NCT06172478-2",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Participants aged ≥18 years (follow local regulatory requirements if the legal age of consent for study participation is \\>18 years old).",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "age",
+        "min": 18
+      }
+    }
+  },
+  {
+    "trial": "NCT06172478",
+    "id": "NCT06172478-6",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Must have had disease progression on anti-PD-(L)1 (either as monotherapy or in combination with chemotherapy or other therapies). Must also have had disease progression on a platinum-based chemotherapy (PBC) regimen either in the recurrent or metastatic setting or in the locally advanced setting with curative intent.",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "priorTherapy",
+            "category": "chemotherapy"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06172478",
+    "id": "NCT06172478-28",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Has a history of (non-infectious) interstitial lung disease (ILD), that required corticosteroids, has current ILD/pneumonitis, or suspected ILD/pneumonitis cannot be ruled out by imaging at screening.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT06202222",
+    "id": "NCT06202222-3",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "\\- Contraindications to cyclo-ergometry: Deep vein thrombosis in a lower limb. Patients with one or both lower limbs amputated. Rheumatological pathology, trauma, or previous surgery in the lower limb, pelvis, or spine, resulting in limited joint amplitude or strict immobilization.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "priorTherapy",
+        "category": "surgery"
+      }
+    }
+  },
+  {
+    "trial": "NCT06216301",
+    "id": "NCT06216301-1",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "≥18 years of age outside of the USA.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "age",
+        "min": 18
+      }
+    }
+  },
+  {
+    "trial": "NCT06216301",
+    "id": "NCT06216301-2",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Histologically or cytologically diagnosis of stage 4 (according to Version 8 of the American Joint Committee on Cancer \\[AJCC\\] criteria) non-squamous or squamous NSCLC.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "cancerType",
+        "types": [
+          "nsclc"
+        ]
+      }
+    }
+  },
+  {
+    "trial": "NCT06222489",
+    "id": "NCT06222489-4",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Have received at least one line of EGFR TKI treatment for (locally) advanced stage NSCLC.",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "priorLines",
+            "min": 1
+          }
+        },
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "cancerType",
+            "types": [
+              "nsclc"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06223711",
+    "id": "NCT06223711-0",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Histologically confirmed first diagnosis of ES-SCLC according to the Veterans Administration Lung Study Group (VALG) Staging System for SCLC1 (disease extension that cannot be treated within one radiation field).",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "cancerType",
+          "types": [
+            "sclc"
+          ]
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06223711",
+    "id": "NCT06223711-2",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Stable disease (SD) or partial response (PR) according to RECIST 1.1 criteria after previous treatment with two cycles of platinum/etoposide/durvalumab.",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "anyOf",
+          "rules": [
+            {
+              "_tag": "narrow",
+              "rule": {
+                "_tag": "priorTherapy",
+                "category": "immunotherapy"
+              }
+            },
+            {
+              "_tag": "narrow",
+              "rule": {
+                "_tag": "priorTherapy",
+                "category": "chemotherapy"
+              }
+            }
+          ]
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06223711",
+    "id": "NCT06223711-23",
+    "kind": "exclusion",
+    "confidence": "high",
+    "text": "History of leptomeningeal carcinomatosis.",
+    "rule": {
+      "_tag": "flag",
+      "flag": "brainMetsActive"
+    }
+  },
+  {
+    "trial": "NCT06247826",
+    "id": "NCT06247826-2",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Histologically confirmed advanced NSCLC (metastatic or locally advanced unresectable and not suitable for definitive radiotherapy) with EGFR ins20;",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "cancerType",
+        "types": [
+          "nsclc"
+        ]
+      }
+    }
+  },
+  {
+    "trial": "NCT06253871",
+    "id": "NCT06253871-16",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Participants requiring immediate local therapy for brain metastases",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "brainMetsAny"
+      }
+    }
+  },
+  {
+    "trial": "NCT06312137",
+    "id": "NCT06312137-23",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Has an active autoimmune disease that has required systemic treatment in the past 2 years",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "autoimmune"
+      }
+    }
+  },
+  {
+    "trial": "NCT06312137",
+    "id": "NCT06312137-24",
+    "kind": "exclusion",
+    "confidence": "high",
+    "text": "Has a history of (noninfectious) interstitial lung disease (ILD)/pneumonitis, has current ILD/pneumonitis, or has suspected ILD or pneumonitis that cannot be ruled out by standard diagnostic assessments at screening",
+    "rule": {
+      "_tag": "flag",
+      "flag": "ild"
+    }
+  },
+  {
+    "trial": "NCT06315010",
+    "id": "NCT06315010-5",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "No indication for immediate local therapy (neurosurgery, brain radiotherapy) of brain metastases per local investigator.",
+    "rule": {
+      "_tag": "not",
+      "rule": {
+        "_tag": "narrow",
+        "rule": {
+          "_tag": "flag",
+          "flag": "brainMetsAny"
+        }
+      }
+    }
+  },
+  {
+    "trial": "NCT06315010",
+    "id": "NCT06315010-27",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Have received prior radiotherapy within two weeks before the first dose of Study treatment (four weeks in case of radiation therapy of the central nervous system). Participants must have recovered from all radiation-related toxicities, not require steroids, and not have had radiation pneumonitis.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT06315010",
+    "id": "NCT06315010-44",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Note: The use of stable corticosteroid therapy in patients with brain metastases should be discussed with the Sponsor's Medical Monitor.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "brainMetsAny"
+      }
+    }
+  },
+  {
+    "trial": "NCT06332274",
+    "id": "NCT06332274-27",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Active or history of autoimmune disease or immune deficiency, with the exception of history of treated autoimmune-related hypothyroidism and Type 1 diabetes mellitus on insulin regimen",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "autoimmune"
+      }
+    }
+  },
+  {
+    "trial": "NCT06343402",
+    "id": "NCT06343402-9",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Patients with a history of interstitial lung disease/pneumonitis that required steroids, or current interstitial lung disease/pneumonitis",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT06345729",
+    "id": "NCT06345729-14",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Has received radiotherapy to non-central nervous system (CNS) disease within 2 weeks of start of study intervention. Participants must have recovered from all radiation-related toxicities, not required corticosteroids, and not have had radiation pneumonitis",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT06345729",
+    "id": "NCT06345729-17",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Has active autoimmune disease that has required systemic treatment in the past 2 years",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "autoimmune"
+      }
+    }
+  },
+  {
+    "trial": "NCT06345729",
+    "id": "NCT06345729-18",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Has history of (noninfectious) pneumonitis/interstitial lung disease that required steroids or has current pneumonitis/interstitial lung disease",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT06357533",
+    "id": "NCT06357533-16",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Spinal cord compression, or brain metastases unless participant treated and no longer symptomatic, radiologically stable, and who require no treatment with corticosteroids or anticonvulsants.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "brainMetsActive"
+      }
+    }
+  },
+  {
+    "trial": "NCT06362252",
+    "id": "NCT06362252-3",
+    "kind": "inclusion",
+    "confidence": "high",
+    "text": "Has histologically or cytologically confirmed diagnosis of ES-SCLC who will require first-line (IL) therapy.",
+    "rule": {
+      "_tag": "cancerType",
+      "types": [
+        "sclc"
+      ]
+    }
+  },
+  {
+    "trial": "NCT06362252",
+    "id": "NCT06362252-8",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Has ECOG PS of ≤1 (assessed within 7 days before enrollment/randomization).",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "performanceStatus",
+        "min": 0,
+        "max": 1
+      }
+    }
+  },
+  {
+    "trial": "NCT06362252",
+    "id": "NCT06362252-22",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Has history of (non-infectious) ILD/pneumonitis that required corticosteroids, current ILD/pneumonitis, or suspected ILD/pneumonitis that cannot be ruled out by imaging at Screening.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT06393816",
+    "id": "NCT06393816-12",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Nota Bene: if creatinine clearance is \\<60 ml/min, patients must be treated with carboplatin rather than cisplatin.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "lab",
+        "analyte": "crcl",
+        "max": 60
+      }
+    }
+  },
+  {
+    "trial": "NCT06393816",
+    "id": "NCT06393816-24",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Active or prior documented autoimmune or inflammatory disorders (including inflammatory bowel disease \\[e.g., colitis or Crohn's disease\\], diverticulitis \\[with the exception of diverticulosis\\], systemic lupus erythematosus, Sarcoidosis syndrome, or Wegener syndrome \\[granulomatosis with polyangiitis\\], Graves' disease, rheumatoid arthritis, hypophysitis, uveitis, etc).",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "autoimmune"
+      }
+    }
+  },
+  {
+    "trial": "NCT06393816",
+    "id": "NCT06393816-28",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Central Nervous System metastases, unless asymptomatic (including patients treated with anticonvulsants) or previously treated (surgery or radiation therapy combined with corticosteroids ≤10 mg per day) and stable at the time of randomization for at least 15 days;",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "brainMetsAny"
+      }
+    }
+  },
+  {
+    "trial": "NCT06417814",
+    "id": "NCT06417814-1",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Must have evidence of documented pre-existing EGFRm information (EGFRm known to be associated with (epidermal growth factor receptor \\[EGFR\\] tyrosine kinase inhibitor \\[TKis\\] sensitivity \\[Ex19del, L858R, G719X, S768I, or L861Q\\], either alone or in combination with other EGFR mutations, which may include T790M).",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "biomarker",
+            "gene": "EGFR",
+            "state": "positive"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06417814",
+    "id": "NCT06417814-2",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Documented extra-cranial radiologic progression on prior osimertinib monotherapy (as most recent line of treatment) in the adjuvant, locally advanced, or metastatic setting.",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "priorTherapy",
+            "category": "targeted"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06417814",
+    "id": "NCT06417814-9",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Any evidence of severe or uncontrolled systemic diseases, including, but not limited to active bleeding diseases, active infection, active ILD/pneumonitis, cardiac disease.",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "flag",
+          "flag": "ild"
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06417814",
+    "id": "NCT06417814-11",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "History of non-infectious ILD/pneumonitis including radiation pneumonitis that required steroids or drug-induced ILD, has current ILD/pneumonitis, or has suspected ILD/pneumonitis that cannot be ruled out by imaging at screening.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT06422143",
+    "id": "NCT06422143-3",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Has Eastern Cooperative Oncology Group Performance Status (ECOG PS) score of 0 or 1 assessed within 7 days prior to allocation",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "performanceStatus",
+        "min": 0,
+        "max": 1
+      }
+    }
+  },
+  {
+    "trial": "NCT06422143",
+    "id": "NCT06422143-32",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Has a history of (noninfectious)pneumonitis/ILD that required steroids, has current pneumonitis/ILD, or has suspected ILD or pneumonitis that cannot be ruled out by standard diagnostic assessments at Screening",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT06427941",
+    "id": "NCT06427941-2",
+    "kind": "inclusion",
+    "confidence": "high",
+    "text": "Eastern Cooperative Oncology Group (ECOG) Performance Status ≤ 1.",
+    "rule": {
+      "_tag": "performanceStatus",
+      "min": 0,
+      "max": 1
+    }
+  },
+  {
+    "trial": "NCT06427941",
+    "id": "NCT06427941-7",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Active autoimmune disease or a history of autoimmune disease with potential for relapse.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "autoimmune"
+      }
+    }
+  },
+  {
+    "trial": "NCT06436625",
+    "id": "NCT06436625-3",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Previously untreated patients with histologically or cytologically documented metastatic (Stage IV according to Version 9 on the IASLC Staging Manual in Thoracic oncology) or recurrent NSCLC",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "cancerType",
+            "types": [
+              "nsclc"
+            ]
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06448572",
+    "id": "NCT06448572-10",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Known symptomatic CNS metastases and/or carcinomatous meningitis. Participants with asymptomatic brain metastases (ie, no neurological symptoms and no requirements for corticosteroids \\> 10mg/d prednisone equivalent) may participate.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "brainMetsActive"
+      }
+    }
+  },
+  {
+    "trial": "NCT06448572",
+    "id": "NCT06448572-16",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "History of (noninfectious) pneumonitis/interstitial lung disease that required steroids or has current pneumonitis/interstitial lung disease.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT06455917",
+    "id": "NCT06455917-11",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Evidence of significant, uncontrolled concomitant diseases that could affect compliance with the protocol, including autoimmune or immunodeficient conditions, significant pulmonary disease, significant cardiac and/or vascular disease per investigator's judgment.",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "autoimmune"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06476808",
+    "id": "NCT06476808-2",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Participants must have an unresectable/metastatic carcinoma.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "stage",
+        "stages": [
+          "III",
+          "IV"
+        ]
+      }
+    }
+  },
+  {
+    "trial": "NCT06529081",
+    "id": "NCT06529081-9",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Absence of active autoimmune diseases except for diabetes, hypothyroidism, psoriasis, eczema, lichen planus, and vitiligo.",
+    "rule": {
+      "_tag": "not",
+      "rule": {
+        "_tag": "narrow",
+        "rule": {
+          "_tag": "flag",
+          "flag": "autoimmune"
+        }
+      }
+    }
+  },
+  {
+    "trial": "NCT06529081",
+    "id": "NCT06529081-17",
+    "kind": "exclusion",
+    "confidence": "high",
+    "text": "Grade 2 or greater CTCAE v.5 pneumonitis secondary to immunotherapy.",
+    "rule": {
+      "_tag": "flag",
+      "flag": "ild"
+    }
+  },
+  {
+    "trial": "NCT06561386",
+    "id": "NCT06561386-1",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Participants must have measurable PD-L1 ≥ 1% Tumor Cell (TC) score by the investigational PD-L1 immunohistochemistry (IHC) assay VENTANA PD-L1 (SP263) CDx Assay conducted by central laboratory during the screening period prior to randomization.",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "pdl1",
+          "min": 1
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06567015",
+    "id": "NCT06567015-20",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Spinal cord compression or CNS metastases that are associated with progressive neurological symptoms or require increasing doses of corticosteroids to control the CNS disease. If a participant requires corticosteroids for management of CNS disease, the dose must have been stable for 2 weeks prior to enrollment in the trial.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "brainMetsActive"
+      }
+    }
+  },
+  {
+    "trial": "NCT06567015",
+    "id": "NCT06567015-27",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Past medical history of Interstitial Lung Disease (ILD), drug-induced ILD, radiation pneumonitis that required steroid treatment, or any evidence of clinically active ILD.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT06598306",
+    "id": "NCT06598306-8",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Participants with untreated or symptomatic brain metastases or those requiring therapy with steroids.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "brainMetsActive"
+      }
+    }
+  },
+  {
+    "trial": "NCT06620835",
+    "id": "NCT06620835-21",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Leptomeningeal, pericardial, pleural and mesenteric lesions, lymphangitic spread (any tumoral lesions not amenable to definitive local therapy). Peri tumoral lymphangitic spread around a tumor, but limited to a lobe, may be treated by surgery).",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "brainMetsActive"
+      }
+    }
+  },
+  {
+    "trial": "NCT06623422",
+    "id": "NCT06623422-0",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Has histologically/cytologically confirmed diagnosis of previously untreated and pathologically confirmed resectable clinical Stage II, IIIA, or IIIB (N2) non-small cell lung cancer (NSCLC) \\[American Joint Committee on Cancer (AJCC) 8th Edition\\]",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "cancerType",
+          "types": [
+            "nsclc"
+          ]
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06623422",
+    "id": "NCT06623422-1",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Has an Eastern Cooperative Oncology Group (ECOG) performance status of 0 or 1 within 7 days before the first dose of study intervention",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "performanceStatus",
+        "min": 0,
+        "max": 1
+      }
+    }
+  },
+  {
+    "trial": "NCT06623422",
+    "id": "NCT06623422-11",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Received prior systemic anticancer therapy including investigational agents other than what is specified in this protocol",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "priorTherapy",
+        "category": "systemic"
+      }
+    }
+  },
+  {
+    "trial": "NCT06625775",
+    "id": "NCT06625775-10",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Patients with KRAS mutant aCRC who have KRAS G12R mutation, BRAFV600E mutation, HER2amp, or dMMR/MSI-H tumors",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "biomarker",
+        "gene": "KRAS",
+        "state": "positive"
+      }
+    }
+  },
+  {
+    "trial": "NCT06627647",
+    "id": "NCT06627647-1",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Stage III B/C or IV NSCLC (based on the American Joint Committee on Cancer Edition 8) not amenable to curative treatment.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "stage",
+        "stages": [
+          "III",
+          "IV"
+        ]
+      }
+    }
+  },
+  {
+    "trial": "NCT06627647",
+    "id": "NCT06627647-2",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Absence of sensitizing EGFR mutations (including, but not limited to, exon 19 deletion and exon 21 L858R, exon 21 L861Q, exon 18 G719X, and exon 20 S768I mutations) and ALK and ROS1 rearrangements.",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "not",
+          "rule": {
+            "_tag": "anyOf",
+            "rules": [
+              {
+                "_tag": "narrow",
+                "rule": {
+                  "_tag": "biomarker",
+                  "gene": "EGFR",
+                  "state": "positive"
+                }
+              },
+              {
+                "_tag": "narrow",
+                "rule": {
+                  "_tag": "biomarker",
+                  "gene": "ALK",
+                  "state": "positive"
+                }
+              },
+              {
+                "_tag": "narrow",
+                "rule": {
+                  "_tag": "biomarker",
+                  "gene": "ROS1",
+                  "state": "positive"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06627647",
+    "id": "NCT06627647-13",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Active or prior documented autoimmune or inflammatory disorders requiring chronic systemic treatment with the use of disease-modifying agents, corticosteroids, or immunosuppressive drugs.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "autoimmune"
+      }
+    }
+  },
+  {
+    "trial": "NCT06646276",
+    "id": "NCT06646276-4",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Participants have certain health conditions, like spread of small cell lung cancer to the brain that are causing symptoms, certain lung diseases, heart diseases, infections, autoimmune diseases, other cancers, or a type of nerve damage called peripheral sensory neuropathy",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "autoimmune"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06656598",
+    "id": "NCT06656598-19",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Metastatic NSCLC including brain metastasis.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "brainMetsAny"
+      }
+    }
+  },
+  {
+    "trial": "NCT06667076",
+    "id": "NCT06667076-0",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Have histologically or cytologically confirmed advanced or metastatic non-small cell lung cancer (NSCLC) that is not amenable to curative intent therapy",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "cancerType",
+        "types": [
+          "nsclc"
+        ]
+      }
+    }
+  },
+  {
+    "trial": "NCT06667076",
+    "id": "NCT06667076-5",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Medical history of active interstitial lung disease (ILD), including drug-induced ILD or radiation pneumonitis. Participants with medical history of radiation pneumonitis, including radiation pneumonitis which required steroid treatment, should consult with the medical monitor and eligibility be assessed on a case-by-case basis",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT06667908",
+    "id": "NCT06667908-1",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Have a medical history of pathologically (histologically or cytologically) proven diagnosis of NSCLC within 3 months prior to enrollment/randomization",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "cancerType",
+        "types": [
+          "nsclc"
+        ]
+      }
+    }
+  },
+  {
+    "trial": "NCT06680050",
+    "id": "NCT06680050-17",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Patients who experienced, during the maintenance phase with durvalumab after CRT, grade 3 or more documented immune-related toxicity (with the exception of fully recovered endocrine toxicities) or grade 3 or more radiation-induced pneumonitis.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT06692738",
+    "id": "NCT06692738-0",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Histologically or cytologically documented squamous NSCLC.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "cancerType",
+        "types": [
+          "nsclc"
+        ]
+      }
+    }
+  },
+  {
+    "trial": "NCT06692738",
+    "id": "NCT06692738-1",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Stage III B/C or IV mNSCLC (based on the American Joint Committee on Cancer Edition 8) not amenable to curative treatment.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "stage",
+        "stages": [
+          "III",
+          "IV"
+        ]
+      }
+    }
+  },
+  {
+    "trial": "NCT06692738",
+    "id": "NCT06692738-12",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Active or prior documented autoimmune or inflammatory disorders requiring chronic systemic treatment with the use of disease-modifying agents or other immunosuppressive drugs.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "autoimmune"
+      }
+    }
+  },
+  {
+    "trial": "NCT06712316",
+    "id": "NCT06712316-0",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Have systemic treatment naive, histologically or cytologically confirmed diagnosis of Stage IIIB or IIIC (who are not amenable to curative surgery or radiotherapy) or Stage IV NSCLC per the Union Internationale contre le Cancer/American Joint Committee on Cancer staging system, 9th edition.",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "cancerType",
+            "types": [
+              "nsclc"
+            ]
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06726148",
+    "id": "NCT06726148-10",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Presence of symptomatic CNS metastases or CNS metastases that require local therapy or increasing doses of corticosteroids within 2 weeks prior to study entry.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "brainMetsActive"
+      }
+    }
+  },
+  {
+    "trial": "NCT06731907",
+    "id": "NCT06731907-24",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Has received prior therapy with an anti- programmed cell death 1 protein (anti-PD-1), anti- programmed cell death ligand 1 protein (anti-PD-L1), or anti- programmed cell death ligand 2 protein (anti-PD-L2) agent, or with an agent directed to another stimulatory or coinhibitory T-cell receptor.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "priorTherapy",
+        "category": "immunotherapy"
+      }
+    }
+  },
+  {
+    "trial": "NCT06731907",
+    "id": "NCT06731907-25",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Has received prior radiotherapy within 2 weeks of randomization, has radiation related toxicity requiring corticosteroids, or has had radiation pneumonitis.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT06731907",
+    "id": "NCT06731907-32",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Has active autoimmune disease that has required systemic treatment in the past 2 years.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "autoimmune"
+      }
+    }
+  },
+  {
+    "trial": "NCT06765109",
+    "id": "NCT06765109-0",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Histologically or cytologically confirmed locally advanced (not amenable for multimodality treatment) or metastatic Non-small Cell Lung Cancer (NSCLC)",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "cancerType",
+        "types": [
+          "nsclc"
+        ]
+      }
+    }
+  },
+  {
+    "trial": "NCT06765109",
+    "id": "NCT06765109-5",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Patient's cancer has a known oncogenic driver alteration other than ALK.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "biomarker",
+        "gene": "ALK",
+        "state": "positive"
+      }
+    }
+  },
+  {
+    "trial": "NCT06765109",
+    "id": "NCT06765109-13",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Brain metastases associated with progressive neurological symptoms or requiring increasing doses of corticosteroids to control CNS disease",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "brainMetsActive"
+      }
+    }
+  },
+  {
+    "trial": "NCT06767514",
+    "id": "NCT06767514-4",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Histologically or cytologically confirmed squamous or non-squamous NSCLC",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "cancerType",
+        "types": [
+          "nsclc"
+        ]
+      }
+    }
+  },
+  {
+    "trial": "NCT06767514",
+    "id": "NCT06767514-12",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Symptomatic CNS metastases, CNS metastasis ≥ 1.5 cm, CNS radiation within 7 days prior to randomization, potential need for CNS radiation within the first cycle, or leptomeningeal disease",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "brainMetsActive"
+      }
+    }
+  },
+  {
+    "trial": "NCT06767514",
+    "id": "NCT06767514-14",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Active autoimmune or lung disease requiring systemic therapy",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "autoimmune"
+      }
+    }
+  },
+  {
+    "trial": "NCT06767514",
+    "id": "NCT06767514-18",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "History of noninfectious pneumonia requiring systemic corticosteroids, or current interstitial lung disease",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT06772623",
+    "id": "NCT06772623-8",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "History of interstitial lung disease (ILD) or pneumonitis that required treatment with systemic steroids, or any evidence of active ILD or pneumonitis on screening chest computed tomography (CT) scan.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT06780085",
+    "id": "NCT06780085-5",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "An Eastern Cooperative Oncology Group (ECOG) performance status of 0 to 1 assessed within 7 days before randomization",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "performanceStatus",
+        "min": 0,
+        "max": 1
+      }
+    }
+  },
+  {
+    "trial": "NCT06780085",
+    "id": "NCT06780085-32",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Has active autoimmune disease that has required systemic treatment in the past 2 years",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "autoimmune"
+      }
+    }
+  },
+  {
+    "trial": "NCT06801834",
+    "id": "NCT06801834-10",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Received any prior treatment with irinotecan, topotecan, SG, SN-38, exatecan derivatives, and similar agents targeting topoisomerase I. Received lurbinectedin after progression on or after platinum-based chemotherapy.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "priorTherapy",
+        "category": "chemotherapy"
+      }
+    }
+  },
+  {
+    "trial": "NCT06810609",
+    "id": "NCT06810609-27",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "18\\. History of idiopathic pulmonary fibrosis, pneumonitis (including drug induced), organizing pneumonia (i.e., bronchiolitis obliterans, cryptogenic organizing pneumonia, etc.), or evidence of active pneumonitis on screening chest CT scan.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT06840782",
+    "id": "NCT06840782-18",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Uncontrolled severe comorbidity, symptomatic interstitial lung disease or active infection.",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "flag",
+          "flag": "ild"
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06840782",
+    "id": "NCT06840782-19",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Prior therapy with T-cell costimulation or immune checkpoint-targeted agents within 1 year.",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "priorTherapy",
+            "category": "immunotherapy"
+          }
+        },
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "priorTherapy",
+            "category": "targeted"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06868277",
+    "id": "NCT06868277-1",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Stage IV mNSCLC (metastatic non-small cell lung cancer) (based on the American Joint Committee on Cancer Edition 8) not amenable to curative treatment.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "stage",
+        "stages": [
+          "IV"
+        ]
+      }
+    }
+  },
+  {
+    "trial": "NCT06868277",
+    "id": "NCT06868277-4",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "WHO (World Health Organization)/ECOG (Eastern Cooperative Oncology Group) performance status of 0 or 1, with no deterioration over the previous 2 weeks prior to baseline at screening and prior to randomization.",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "performanceStatus",
+            "min": 0,
+            "max": 1
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06868277",
+    "id": "NCT06868277-11",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Active or prior documented autoimmune or inflammatory disorders requiring chronic treatment with steroids or other immunosuppressive treatment.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "autoimmune"
+      }
+    }
+  },
+  {
+    "trial": "NCT06868277",
+    "id": "NCT06868277-14",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Brain metastases unless asymptomatic, stable, and not requiring steroids or anticonvulsants for at least 4 weeks prior to start of study intervention.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "brainMetsAny"
+      }
+    }
+  },
+  {
+    "trial": "NCT06868485",
+    "id": "NCT06868485-6",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Eastern Cooperative Oncology Group (ECOG) 0-1 and a minimum life expectancy of 12 weeks.",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "performanceStatus",
+          "min": 0,
+          "max": 1
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06875310",
+    "id": "NCT06875310-1",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Locally advanced or metastatic disease.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "stage",
+        "stages": [
+          "III",
+          "IV"
+        ]
+      }
+    }
+  },
+  {
+    "trial": "NCT06875310",
+    "id": "NCT06875310-7",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Participants with an active autoimmune or inflammatory disease requiring systemic treatment within 2 years.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "autoimmune"
+      }
+    }
+  },
+  {
+    "trial": "NCT06875310",
+    "id": "NCT06875310-11",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Treatment targeting KRAS G12C mutation (eg, sotorasib, adagrasib) in any setting.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "biomarker",
+        "gene": "KRAS",
+        "state": "positive"
+      }
+    }
+  },
+  {
+    "trial": "NCT06881784",
+    "id": "NCT06881784-2",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Pathologically confirmed NSCLC, either locally advanced or metastatic, not amenable to curative surgery or radiotherapy.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "cancerType",
+        "types": [
+          "nsclc"
+        ]
+      }
+    }
+  },
+  {
+    "trial": "NCT06881784",
+    "id": "NCT06881784-5",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "One to two prior lines of therapy including an anti-PD-1/anti-PD(L)-1 agent and platinum-based chemotherapy.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "priorLines",
+        "min": 1,
+        "max": 2
+      }
+    }
+  },
+  {
+    "trial": "NCT06890598",
+    "id": "NCT06890598-1",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Must have disease with evidence of KRAS G12C mutation.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "biomarker",
+        "gene": "KRAS",
+        "state": "positive"
+      }
+    }
+  },
+  {
+    "trial": "NCT06896890",
+    "id": "NCT06896890-16",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Patients who have received prior radiotherapy (head, neck, thorax, or abdomen) within 4 weeks prior to the planned day for the first study treatment administration (D1) except palliative radiotherapy (2 weeks). Patients must have recovered from all radiation-related toxicities, not require corticosteroids (see criterion 2425) and not have had radiation pneumonitis \\>grade 2.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT06896890",
+    "id": "NCT06896890-19",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Patients with EGFR activating mutation or ALK translocation, or any other activable molecular alterations that in the opinion of the investigator could be more effectively treated with targeted therapies (Note: This exclusion criterion must be checked before the first SoC administration).",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "biomarker",
+            "gene": "EGFR",
+            "state": "positive"
+          }
+        },
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "biomarker",
+            "gene": "ALK",
+            "state": "positive"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06896890",
+    "id": "NCT06896890-28",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Patients with a known history of idiopathic pulmonary fibrosis, organizing pneumonia, drug-induced pneumonitis, idiopathic pneumonitis, acute exacerbation of chronic obstructive pulmonary disease (COPD) in the last 3 months before D1 (even if managed in an outpatient setting), known history of interstitial lung disease (ILD), or (non-infectious) pneumonitis that require steroids or that have current pneumonitis.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT06896890",
+    "id": "NCT06896890-34",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Positivity for Coronavirus Disease 2019 (COVID-19) by PCR testing. PCR result must not be older than 72 hours prior to the planned day for the first study drug administration (D1). Completed vaccination or prior COVID-19 infection does not exempt patients from PCR testing.",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "age",
+            "min": 72
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06896890",
+    "id": "NCT06896890-45",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Patients with carcinomatous meningitis or CNS metastases, except where such metastases are stable and already irradiated.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "brainMetsAny"
+      }
+    }
+  },
+  {
+    "trial": "NCT06899126",
+    "id": "NCT06899126-2",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Adults ≥18 years of age on the day of signing the ICF. Follow local regulatory requirements if the legal age of consent for trial participation is \\>18 years old.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "age",
+        "min": 18
+      }
+    }
+  },
+  {
+    "trial": "NCT06899126",
+    "id": "NCT06899126-11",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Has a history of (non-infectious) ILD/pneumonitis that required steroids, has current ILD/pneumonitis, or where suspected ILD/pneumonitis cannot be ruled out by imaging at Screening.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT06907095",
+    "id": "NCT06907095-2",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Acute exacerbation of an autoimmune condition requiring escalation in medical therapy within 14 days prior to enrolment,",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "autoimmune"
+      }
+    }
+  },
+  {
+    "trial": "NCT06908304",
+    "id": "NCT06908304-10",
+    "kind": "inclusion",
+    "confidence": "high",
+    "text": "No prior targeted therapy for driver mutations.",
+    "rule": {
+      "_tag": "not",
+      "rule": {
+        "_tag": "priorTherapy",
+        "category": "targeted"
+      }
+    }
+  },
+  {
+    "trial": "NCT06908304",
+    "id": "NCT06908304-56",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "A serious nonmalignant disease (e.g., psychiatric, substance abuse, uncontrolled intercurrent illness, interstitial lung disease etc.) that could compromise protocol objectives in the opinion of the Investigator and/or the Sponsor.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT06908993",
+    "id": "NCT06908993-1",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Histologically proven advanced NSCLC.",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "cancerType",
+          "types": [
+            "nsclc"
+          ]
+        },
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "stage",
+            "stages": [
+              "III",
+              "IV"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06908993",
+    "id": "NCT06908993-16",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Presence of another known driver oncogene alteration (including EGFR, HER2, KRAS, BRAF mutations or ALK, ROS1, RET fusions). In case of detection of any other driver alteration, inclusion should be discussed with the sponsor.",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "biomarker",
+            "gene": "EGFR",
+            "state": "positive"
+          }
+        },
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "biomarker",
+            "gene": "ALK",
+            "state": "positive"
+          }
+        },
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "biomarker",
+            "gene": "ROS1",
+            "state": "positive"
+          }
+        },
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "biomarker",
+            "gene": "KRAS",
+            "state": "positive"
+          }
+        },
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "biomarker",
+            "gene": "BRAF",
+            "state": "positive"
+          }
+        },
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "biomarker",
+            "gene": "RET",
+            "state": "positive"
+          }
+        },
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "biomarker",
+            "gene": "HER2",
+            "state": "positive"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06931717",
+    "id": "NCT06931717-0",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Pathological stage II-IIIA (UICC/ AJCC staging 9th edition) NSCLC Brain imaging should have been performed to complete staging, either preoperatively or postoperatively. If brain imaging has not been performed, a contrast-enhanced CT or MRI of the brain must be performed at screening prior randomisation.",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "cancerType",
+            "types": [
+              "nsclc"
+            ]
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06931717",
+    "id": "NCT06931717-18",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Prior neoadjuvant and/or adjuvant systemic treatment for NSCLC.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "priorTherapy",
+        "category": "systemic"
+      }
+    }
+  },
+  {
+    "trial": "NCT06931717",
+    "id": "NCT06931717-26",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Ongoing or recent (within 5 years) evidence of significant autoimmune disease that required treatment with systemic immunosuppressive treatments.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "autoimmune"
+      }
+    }
+  },
+  {
+    "trial": "NCT06931717",
+    "id": "NCT06931717-30",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Known history of, or any evidence of, interstitial lung disease or active, non-infectious pneumonitis within 5 years prior to randomisation.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT06986291",
+    "id": "NCT06986291-2",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Patients with the non-small cell lung cancer or esophageal cancer or breast cancer who have an indication for intended curative radio(chemo)therapy (in the case of breast cancer inclusion of female patients only)",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "cancerType",
+            "types": [
+              "nsclc"
+            ]
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06996782",
+    "id": "NCT06996782-14",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Has an active autoimmune disease that has required systemic treatment in the past 5 years.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "autoimmune"
+      }
+    }
+  },
+  {
+    "trial": "NCT07001618",
+    "id": "NCT07001618-2",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Histologically confirmed diagnosis of NSCLC (adenocarcinoma versus squamous cell carcinoma versus others)",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "cancerType",
+        "types": [
+          "nsclc"
+        ]
+      }
+    }
+  },
+  {
+    "trial": "NCT07001618",
+    "id": "NCT07001618-4",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Have an Eastern Cooperative Oncology Group performance status (ECOG-PS) of 0 to 2. Evaluation of ECOG-PS is to be performed within 7 days prior to the date of treatment allocation.",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "performanceStatus",
+            "min": 0,
+            "max": 2
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07005102",
+    "id": "NCT07005102-7",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "History of interstitial lung disease (ILD), pneumonitis that required treatment with systemic steroids, or any evidence of active ILD/pneumonitis on screening chest computed tomography (CT) scan.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT07005102",
+    "id": "NCT07005102-8",
+    "kind": "exclusion",
+    "confidence": "high",
+    "text": "History of idiopathic pulmonary fibrosis, organizing pneumonia (e.g., bronchiolitis obliterans), drug-induced pneumonitis, or idiopathic pneumonitis.",
+    "rule": {
+      "_tag": "flag",
+      "flag": "ild"
+    }
+  },
+  {
+    "trial": "NCT07016230",
+    "id": "NCT07016230-22",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Patients who experienced recurrent pneumonitis (grade 2 or higher) or severe, life-threatening immune-mediated AEs or infusion-related reactions including those that lead to permanent discontinuation while on treatment with immuno-oncology agents",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT07020065",
+    "id": "NCT07020065-14",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Prior chemotherapy and/or immunotherapy in curative-intent treatment for locally advanced NSCLC in the past 6 months.",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "priorTherapy",
+            "category": "immunotherapy"
+          }
+        },
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "priorTherapy",
+            "category": "chemotherapy"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07020065",
+    "id": "NCT07020065-18",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "History of pneumonitis in the past 5 years.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT07094204",
+    "id": "NCT07094204-40",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Participant has a history of pneumonitis/interstitial lung disease (ILD) or has current pneumonitis/ILD. Note that a participant with resolved pulmonary infections is eligible.",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "flag",
+          "flag": "ild"
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07098988",
+    "id": "NCT07098988-13",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Received or completed any focal radiotherapy for symptoms within 28 days of the first dose of study drug.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "priorTherapy",
+        "category": "radiotherapy"
+      }
+    }
+  },
+  {
+    "trial": "NCT07098988",
+    "id": "NCT07098988-19",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Any active autoimmune that has required systemic treatment in the past 3 months before planned treatment start (i.e., with use of disease modifying agents, corticosteroids, or immunosuppressive drugs).",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "autoimmune"
+      }
+    }
+  },
+  {
+    "trial": "NCT07098988",
+    "id": "NCT07098988-21",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Has interstitial lung disease or a history of non-infectious pneumonitis that required systemic steroids or current pneumonitis.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT07099898",
+    "id": "NCT07099898-6",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Has adequate organ function and an ECOG performance status of 0 or 1",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "performanceStatus",
+          "min": 0,
+          "max": 1
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07099898",
+    "id": "NCT07099898-14",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Has symptomatic brain metastases or untreated progression exclusively due to brain metastasis during or after the last treatment prior to screening, evidence of leptomeningeal/meningeal/brainstem metastasis or evidence of spinal cord metastases.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "brainMetsActive"
+      }
+    }
+  },
+  {
+    "trial": "NCT07099898",
+    "id": "NCT07099898-15",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Has any evidence of current interstitial lung disease or pneumonitis or a prior history of ILD or non-infectious pneumonitis requiring high dose steroids.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT07100080",
+    "id": "NCT07100080-1",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Documented evidence of EGFR mutation (exon 19 deletion, L858R mutation).",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "biomarker",
+        "gene": "EGFR",
+        "state": "positive"
+      }
+    }
+  },
+  {
+    "trial": "NCT07140016",
+    "id": "NCT07140016-14",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Participant has known oncogenic driver alterations other than ALK rearrangement.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "biomarker",
+        "gene": "ALK",
+        "state": "positive"
+      }
+    }
+  },
+  {
+    "trial": "NCT07144280",
+    "id": "NCT07144280-9",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Received a platinum-based combination therapy for the treatment of metastatic or recurrent disease, or experienced disease progression within 6 months of the last dose of platinum-based chemotherapy in the adjuvant, neoadjuvant, or chemoradiotherapy setting.",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "priorTherapy",
+            "category": "chemotherapy"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07144280",
+    "id": "NCT07144280-15",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Previous receipt of an MMAE-containing agent or prior docetaxel.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "priorTherapy",
+        "category": "chemotherapy"
+      }
+    }
+  },
+  {
+    "trial": "NCT07149649",
+    "id": "NCT07149649-1",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Histologically or cytologically confirmed diagnosis of NSCLC (adeno-, squamous-, large cell carcinoma or NSCLC not otherwise specified);",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "cancerType",
+        "types": [
+          "nsclc"
+        ]
+      }
+    }
+  },
+  {
+    "trial": "NCT07149649",
+    "id": "NCT07149649-5",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "No sensitizing EGFR mutation, METex14 skipping mutation, BRAF V600E mutation, ALK/ROS1/RET, NTRK1/2 gene rearrangements, HER2 mutations, amplifications detected in primary tumor or metastases;",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "not",
+          "rule": {
+            "_tag": "anyOf",
+            "rules": [
+              {
+                "_tag": "narrow",
+                "rule": {
+                  "_tag": "biomarker",
+                  "gene": "EGFR",
+                  "state": "positive"
+                }
+              },
+              {
+                "_tag": "narrow",
+                "rule": {
+                  "_tag": "biomarker",
+                  "gene": "ALK",
+                  "state": "positive"
+                }
+              },
+              {
+                "_tag": "narrow",
+                "rule": {
+                  "_tag": "biomarker",
+                  "gene": "ROS1",
+                  "state": "positive"
+                }
+              },
+              {
+                "_tag": "narrow",
+                "rule": {
+                  "_tag": "biomarker",
+                  "gene": "BRAF",
+                  "state": "positive"
+                }
+              },
+              {
+                "_tag": "narrow",
+                "rule": {
+                  "_tag": "biomarker",
+                  "gene": "RET",
+                  "state": "positive"
+                }
+              },
+              {
+                "_tag": "narrow",
+                "rule": {
+                  "_tag": "biomarker",
+                  "gene": "HER2",
+                  "state": "positive"
+                }
+              },
+              {
+                "_tag": "narrow",
+                "rule": {
+                  "_tag": "biomarker",
+                  "gene": "NTRK",
+                  "state": "positive"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07149649",
+    "id": "NCT07149649-14",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Adequate hepatic function: total bilirubin ≤ 1.5 x ULN (except for patients with Gilbert's disease ≤ 3.0 x ULN), AST and ALT ≤ 2.5 x ULN, or ≤ 5 x ULN under the assumption that abnormal values are a result of NSCLC;",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "cancerType",
+            "types": [
+              "nsclc"
+            ]
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07151040",
+    "id": "NCT07151040-2",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Prior treatment with at least one line of cytotoxic systemic therapy for metastatic/unresectable cancer",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "priorLines",
+        "min": 1
+      }
+    }
+  },
+  {
+    "trial": "NCT07155174",
+    "id": "NCT07155174-0",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Diagnosis of histologically or cytologically confirmed extensive stage small cell lung cancer (ES-SCLC) requiring treatment with first line therapy.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "cancerType",
+        "types": [
+          "sclc"
+        ]
+      }
+    }
+  },
+  {
+    "trial": "NCT07155174",
+    "id": "NCT07155174-5",
+    "kind": "exclusion",
+    "confidence": "high",
+    "text": "Known active/symptomatic central nervous system (CNS) metastases should be excluded.",
+    "rule": {
+      "_tag": "flag",
+      "flag": "brainMetsActive"
+    }
+  },
+  {
+    "trial": "NCT07155174",
+    "id": "NCT07155174-6",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "History of interstitial lung disease (ILD) or pneumonitis that required treatment with systemic steroids, or any evidence of active ILD/pneumonitis on screening chest computed tomography (CT) scan should be excluded.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT07155187",
+    "id": "NCT07155187-6",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Received more than 1 line of systemic therapy in the locally advanced or metastatic setting.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "priorLines",
+        "min": 2
+      }
+    }
+  },
+  {
+    "trial": "NCT07155187",
+    "id": "NCT07155187-8",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Evidence of active interstitial lung disease (ILD)/pneumonitis or history of ILD or pneumonitis that required steroids.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT07158489",
+    "id": "NCT07158489-11",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Adequate bone marrow function: absolute neutrophil count ≥ 1.5 x 109/l, platelet count ≥ 100 x 109/l, hemoglobin ≥ 90 g/l.",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "lab",
+          "analyte": "anc",
+          "min": 1.5
+        },
+        {
+          "_tag": "lab",
+          "analyte": "platelets",
+          "min": 100
+        },
+        {
+          "_tag": "lab",
+          "analyte": "hemoglobin",
+          "min": 9
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07158489",
+    "id": "NCT07158489-44",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "History of non-infectious pneumonia requiring systemic corticosteroids, or current interstitial lung disease.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT07169734",
+    "id": "NCT07169734-13",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Has a history of (non-infectious) interstitial lung disease/pneumonitis that required steroids or current symptomatic or clinically significant pneumonitis requiring steroids and/or immunosuppressive therapies.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT07190248",
+    "id": "NCT07190248-10",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Has active autoimmune disease that has required systemic treatment in the past 2 years",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "autoimmune"
+      }
+    }
+  },
+  {
+    "trial": "NCT07190248",
+    "id": "NCT07190248-11",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "History of (noninfectious) pneumonitis/interstitial lung disease that required steroids or has current pneumonitis/interstitial lung disease",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT07192068",
+    "id": "NCT07192068-20",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Patient who received prior treatment with HER2-directed therapy unless marketed for the study cohort indication.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "priorTherapy",
+        "category": "targeted"
+      }
+    }
+  },
+  {
+    "trial": "NCT07195695",
+    "id": "NCT07195695-7",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Performance status and organ function: Eastern Cooperative Oncology Group (ECOG) score of 0 or 1 Adequate organ function based on laboratory values Further inclusion criteria apply.",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "performanceStatus",
+          "min": 0,
+          "max": 1
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07203053",
+    "id": "NCT07203053-5",
+    "kind": "inclusion",
+    "confidence": "high",
+    "text": "Age ≥18 years.",
+    "rule": {
+      "_tag": "age",
+      "min": 18
+    }
+  },
+  {
+    "trial": "NCT07203053",
+    "id": "NCT07203053-14",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Prior history of immune-checkpoint inhibitor treatment resulting in: any severe or life-threatening immune-mediated adverse event, history of immune-mediated encephalitis or another immune-mediated CNS event (any grade), grade ≥2 immune-mediated recurrent pneumonitis, infusion-related reactions leading to permanent discontinuation of the immunotherapy agent.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT07203053",
+    "id": "NCT07203053-16",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Active autoimmune disease that has required systemic treatment (except replacement therapy) within the past 2 years or any other diseases requiring immunosuppressive therapy while on study.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "autoimmune"
+      }
+    }
+  },
+  {
+    "trial": "NCT07218146",
+    "id": "NCT07218146-10",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Received more than one line of systemic therapy for Extensive-Stage SCLC.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "priorLines",
+        "min": 2
+      }
+    }
+  },
+  {
+    "trial": "NCT07221474",
+    "id": "NCT07221474-7",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Has an Eastern Cooperative Oncology Group (ECOG) performance status of 0 to 1 assessed within 7 days before randomization",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "performanceStatus",
+        "min": 0,
+        "max": 1
+      }
+    }
+  },
+  {
+    "trial": "NCT07221474",
+    "id": "NCT07221474-22",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Has active autoimmune disease that has required systemic treatment in the past 2 years",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "autoimmune"
+      }
+    }
+  },
+  {
+    "trial": "NCT07221474",
+    "id": "NCT07221474-23",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Has a history of (noninfectious) pneumonitis/interstitial lung disease that required steroids or has current pneumonitis/interstitial lung disease",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT07222566",
+    "id": "NCT07222566-1",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Have pathologically confirmed locally advanced (Stage IIIB/IIIC) or metastatic (Stage IV)squamous or non-squamous NSCLC and not be a candidate for complete surgical resection and curative concurrent/sequential chemoradiotherapy (according to the 9th edition of the Union for International Cancer Control and American Joint Committee on Cancer lung cancer Tumor, lymph nodes, metastasis (TNM) staging system).",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "cancerType",
+            "types": [
+              "nsclc"
+            ]
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07222566",
+    "id": "NCT07222566-26",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Prior and concomitant therapy: therapeutic oral or parenteral anticoagulants or thrombolytic agents \\< 10 days to the first dose. chronic antiplatelet therapy \\<7 days to randomization. live or attenuated live vaccine \\< 4 weeks to the first dose. current high-dose systemic corticosteroids. prohibited concomitant medication(s) \\< 21 days to the first dose.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "lab",
+        "analyte": "platelets",
+        "max": 7
+      }
+    }
+  },
+  {
+    "trial": "NCT07226999",
+    "id": "NCT07226999-7",
+    "kind": "exclusion",
+    "confidence": "high",
+    "text": "Leptomeningeal disease",
+    "rule": {
+      "_tag": "flag",
+      "flag": "brainMetsActive"
+    }
+  },
+  {
+    "trial": "NCT07226999",
+    "id": "NCT07226999-10",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "active autoimmune diseases requiring systemic treatment within the past 2 years",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "autoimmune"
+      }
+    }
+  },
+  {
+    "trial": "NCT07227298",
+    "id": "NCT07227298-4",
+    "kind": "inclusion",
+    "confidence": "high",
+    "text": "Eastern Cooperative Oncology Group performance status of 0 or 1.",
+    "rule": {
+      "_tag": "performanceStatus",
+      "min": 0,
+      "max": 1
+    }
+  },
+  {
+    "trial": "NCT07227298",
+    "id": "NCT07227298-10",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Active autoimmune diseases requiring systemic treatment within the past 2 years",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "autoimmune"
+      }
+    }
+  },
+  {
+    "trial": "NCT07227597",
+    "id": "NCT07227597-18",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Has received prior therapy with an anti-programmed cell death protein 1 (anti-PD-1), anti-programmed cell death ligand 1 (anti-PD-L1), or anti-programmed cell death ligand 2 (anti-PD-L2) agent or with an agent directed to another stimulatory or coinhibitory T-cell receptor",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "priorTherapy",
+        "category": "immunotherapy"
+      }
+    }
+  },
+  {
+    "trial": "NCT07227597",
+    "id": "NCT07227597-21",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Has active autoimmune disease that has required systemic treatment in the past 2 years except replacement therapy",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "autoimmune"
+      }
+    }
+  },
+  {
+    "trial": "NCT07234877",
+    "id": "NCT07234877-2",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Patients with pathology proven metastatic NSCLC without an actionable genomic alteration for which there is first line targeted treatment approved by EMA and recommended by the ESMO guidelines.",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "cancerType",
+          "types": [
+            "nsclc"
+          ]
+        },
+        {
+          "_tag": "stage",
+          "stages": [
+            "IV"
+          ]
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07246863",
+    "id": "NCT07246863-5",
+    "kind": "inclusion",
+    "confidence": "high",
+    "text": "Participants must have ECOG performance status ≤1.",
+    "rule": {
+      "_tag": "performanceStatus",
+      "min": 0,
+      "max": 1
+    }
+  },
+  {
+    "trial": "NCT07246863",
+    "id": "NCT07246863-6",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Participants must not have received more than one line of prior systemic treatment for advanced/metastatic NSCLC.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "priorLines",
+        "min": 2
+      }
+    }
+  },
+  {
+    "trial": "NCT07252739",
+    "id": "NCT07252739-13",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Has received any prior immunotherapy and was discontinued from that treatment due to a Grade 3 or higher immune-related adverse event (irAE) (except endocrine disorders that can be treated with replacement therapy) or was discontinued from that treatment due to Grade 2 myocarditis or recurrent Grade 2 pneumonitis",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT07252739",
+    "id": "NCT07252739-21",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Has a history of (noninfectious) pneumonitis/interstitial lung disease (ILD) that required steroids, has current pneumonitis/ILD, or has suspected ILD or pneumonitis that cannot be ruled out by standard diagnostic assessments at screening",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT07286149",
+    "id": "NCT07286149-2",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Has documented disease progression after receiving 1-2 prior lines of programmed cell death protein 1 (PD-1)/programmed death-ligand 1 (PD-L1) therapy and platinum-based chemotherapy",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "priorLines",
+            "min": 1,
+            "max": 2
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07288177",
+    "id": "NCT07288177-0",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Participant has histologically or cytologically confirmed metastatic or locally advanced NSCLC of adenocarcinoma histology, not amenable to curative surgery or radiotherapy.",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "cancerType",
+            "types": [
+              "nsclc"
+            ]
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07288177",
+    "id": "NCT07288177-4",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Participant has an Eastern Cooperative Oncology Group (ECOG) Performance Status (PS) score of 0 or 1 within 7 days of Cycle 1 Day 1.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "performanceStatus",
+        "min": 0,
+        "max": 1
+      }
+    }
+  },
+  {
+    "trial": "NCT07288177",
+    "id": "NCT07288177-5",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Participant has NSCLC with histology other than adenocarcinoma",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "cancerType",
+        "types": [
+          "nsclc"
+        ]
+      }
+    }
+  },
+  {
+    "trial": "NCT07291037",
+    "id": "NCT07291037-3",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Has no known tumour genomic alterations in NTRK, BRAF V600, RET, MET exon 14 skipping, KRAS G12C, or HER2. Additionally, participants must not have known tumour genomic alteration of any other actionable driver oncogenes for which there are locally approved targeted first-line therapies.",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "not",
+          "rule": {
+            "_tag": "anyOf",
+            "rules": [
+              {
+                "_tag": "narrow",
+                "rule": {
+                  "_tag": "biomarker",
+                  "gene": "KRAS",
+                  "state": "positive"
+                }
+              },
+              {
+                "_tag": "narrow",
+                "rule": {
+                  "_tag": "biomarker",
+                  "gene": "BRAF",
+                  "state": "positive"
+                }
+              },
+              {
+                "_tag": "narrow",
+                "rule": {
+                  "_tag": "biomarker",
+                  "gene": "MET",
+                  "state": "positive"
+                }
+              },
+              {
+                "_tag": "narrow",
+                "rule": {
+                  "_tag": "biomarker",
+                  "gene": "RET",
+                  "state": "positive"
+                }
+              },
+              {
+                "_tag": "narrow",
+                "rule": {
+                  "_tag": "biomarker",
+                  "gene": "HER2",
+                  "state": "positive"
+                }
+              },
+              {
+                "_tag": "narrow",
+                "rule": {
+                  "_tag": "biomarker",
+                  "gene": "NTRK",
+                  "state": "positive"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07291037",
+    "id": "NCT07291037-9",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Spinal cord compression or brain metastases, unless asymptomatic, stable, and not requiring treatment with corticosteroids or anticonvulsants for at least 7 days prior to randomisation.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "brainMetsAny"
+      }
+    }
+  },
+  {
+    "trial": "NCT07365241",
+    "id": "NCT07365241-0",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Diagnosis of histologically or cytologically confirmed Relapsed/Refractory (R/R) Small Cell Lung Cancer (SCLC).",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "cancerType",
+        "types": [
+          "sclc"
+        ]
+      }
+    }
+  },
+  {
+    "trial": "NCT07365241",
+    "id": "NCT07365241-7",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Participants with a history of interstitial lung disease (ILD) or pneumonitis that previously required treatment with systemic steroids, or any evidence of active ILD/pneumonitis on screening chest computed tomography (CT) scan.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT07398027",
+    "id": "NCT07398027-16",
+    "kind": "exclusion",
+    "confidence": "high",
+    "text": "Tumors associated with atelectasis, obstructive pneumonitis, pleural effusion, or fibrosis",
+    "rule": {
+      "_tag": "flag",
+      "flag": "ild"
+    }
+  },
+  {
+    "trial": "NCT07423169",
+    "id": "NCT07423169-6",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Adequate immune blood profile (not being immunodepressed): Leucocyte count ≥4000, Neutrophils count ≥1000.",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "lab",
+          "analyte": "anc",
+          "min": 1
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07423169",
+    "id": "NCT07423169-7",
+    "kind": "inclusion",
+    "confidence": "high",
+    "text": "PDL-1 ≥ 1%",
+    "rule": {
+      "_tag": "pdl1",
+      "min": 1
+    }
+  },
+  {
+    "trial": "NCT07431827",
+    "id": "NCT07431827-4",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Has an Eastern Cooperative Oncology Group performance status of 0 or 1 within 10 days before the first dose of the study intervention",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "performanceStatus",
+        "min": 0,
+        "max": 1
+      }
+    }
+  },
+  {
+    "trial": "NCT07431827",
+    "id": "NCT07431827-14",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Has an active autoimmune disease that has required systemic treatment in the past 2 years except replacement therapy",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "autoimmune"
+      }
+    }
+  },
+  {
+    "trial": "NCT07431827",
+    "id": "NCT07431827-15",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Has a history of (noninfectious) pneumonitis/interstitial lung disease that required steroids or has current pneumonitis/interstitial lung disease",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT07432802",
+    "id": "NCT07432802-3",
+    "kind": "inclusion",
+    "confidence": "high",
+    "text": "Clinical stage I NSCLC according to the 9th edition of TNM",
+    "rule": {
+      "_tag": "stage",
+      "stages": [
+        "I"
+      ]
+    }
+  },
+  {
+    "trial": "NCT07436858",
+    "id": "NCT07436858-6",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Disease progression after at least one line of platinum-based chemotherapy ± immunotherapy and starting (new) systemic treatment.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "priorLines",
+        "min": 1
+      }
+    }
+  },
+  {
+    "trial": "NCT07436858",
+    "id": "NCT07436858-25",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Prior treatment with HER2-targeted therapies (except pan HER TKIs).",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "priorTherapy",
+        "category": "targeted"
+      }
+    }
+  },
+  {
+    "trial": "NCT07476287",
+    "id": "NCT07476287-15",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Interstitial lung disease (ILD), pneumonitis, or significant pulmonary disease, including: Prior or current non-infectious pneumonitis requiring systemic therapy DLCO \\<50% predicted Severe asthma, COPD, pulmonary embolism, or autoimmune lung involvement",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT07483112",
+    "id": "NCT07483112-3",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Advanced or recurrent NSCLC not amenable to curative treatment",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "stage",
+        "stages": [
+          "III",
+          "IV"
+        ]
+      }
+    }
+  },
+  {
+    "trial": "NCT07483112",
+    "id": "NCT07483112-23",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Active autoimmune disease requiring systemic immunosuppressive treatment that is seen as contraindication for the use of PD-1/PD-L1-targeted monoclonal antibodies",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "autoimmune"
+      }
+    }
+  },
+  {
+    "trial": "NCT07485452",
+    "id": "NCT07485452-18",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "The patient has received prior treatment with intrathecal chemotherapy",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "priorTherapy",
+        "category": "chemotherapy"
+      }
+    }
+  },
+  {
+    "trial": "NCT07485452",
+    "id": "NCT07485452-24",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Creatinine \\>1.5 times ULN concurrent with creatinine clearance \\<50 ml/min (measured or calculated by Cockcroft and Gault equation); confirmation of creatinine clearance is only required when creatinine is \\>1.5 times ULN",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "lab",
+            "analyte": "crcl",
+            "max": 50
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07485452",
+    "id": "NCT07485452-31",
+    "kind": "exclusion",
+    "confidence": "high",
+    "text": "Past medical history of interstitial lung disease, drug-induced interstitial lung disease, radiation pneumonitis which required steroid treatment, or any evidence of clinically active interstitial lung disease.",
+    "rule": {
+      "_tag": "flag",
+      "flag": "ild"
+    }
+  },
+  {
+    "trial": "NCT07486817",
+    "id": "NCT07486817-13",
+    "kind": "exclusion",
+    "confidence": "high",
+    "text": "Previous therapy with a HER2-directed agent",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "priorTherapy",
+        "category": "targeted"
+      }
+    }
+  },
+  {
+    "trial": "NCT07511933",
+    "id": "NCT07511933-6",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "\\- Brain lesion at the location of a formerly brain metastases with a diagnostic dilemma of radiation necrosis and recurrent brain metastases of NSCLC (group 5), melanoma (group 6) and/ or breast cancer (group 9).",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "cancerType",
+            "types": [
+              "nsclc"
+            ]
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07513376",
+    "id": "NCT07513376-0",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Has a histological diagnosis of pathological Stage I (tumor ≤4 cm) non-small cell lung cancer (NSCLC) per American Joint Committee on Cancer (AJCC) 9th Edition with at least 1of the following high-risk pathologic features as assessed locally: tumor size \\>2cm, visceral pleural invasion, lymphovascular invasion, or high-grade histology",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "cancerType",
+          "types": [
+            "nsclc"
+          ]
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07513376",
+    "id": "NCT07513376-2",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Has not received other prior treatment outside of definitive surgery (including but not limited to chemotherapy, immunotherapy, targeted therapy, or radiotherapy) for their current Stage I NSCLC",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "not",
+          "rule": {
+            "_tag": "narrow",
+            "rule": {
+              "_tag": "priorTherapy",
+              "category": "surgery"
+            }
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07513376",
+    "id": "NCT07513376-12",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Has history of (noninfectious) pneumonitis/interstitial lung disease that required steroids or has current pneumonitis/interstitial lung disease",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT07530744",
+    "id": "NCT07530744-5",
+    "kind": "inclusion",
+    "confidence": "high",
+    "text": "Signed informed consent, age ≥18 y.",
+    "rule": {
+      "_tag": "age",
+      "min": 18
+    }
+  },
+  {
+    "trial": "NCT07554339",
+    "id": "NCT07554339-0",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Has a histological or cytological diagnosis of locally advanced, unresected Stage II (node-positive) to III non-small cell lung cancer (NSCLC) with predominantly nonsquamous histology.",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "allOf",
+          "rules": [
+            {
+              "_tag": "cancerType",
+              "types": [
+                "nsclc"
+              ]
+            },
+            {
+              "_tag": "not",
+              "rule": {
+                "_tag": "cancerType",
+                "types": [
+                  "squamous"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07554339",
+    "id": "NCT07554339-15",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Has an active autoimmune disease that has required systemic treatment in the past 2 years.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "autoimmune"
+      }
+    }
+  },
+  {
+    "trial": "NCT07554339",
+    "id": "NCT07554339-16",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Has a history of, or has current, (noninfectious) pneumonitis/interstitial lung disease that required/requires steroids.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT07680790",
+    "id": "NCT07680790-0",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Participants must have histologically or cytologically confirmed non-squamous NSCLC, newly diagnosed locally advanced (Stage IIIB/IIIC), metastatic (Stage IVA/IVB), or recurrent disease not amenable to curative surgery or definitive radiotherapy and requiring systemic treatment",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "allOf",
+          "rules": [
+            {
+              "_tag": "narrow",
+              "rule": {
+                "_tag": "cancerType",
+                "types": [
+                  "nsclc"
+                ]
+              }
+            },
+            {
+              "_tag": "not",
+              "rule": {
+                "_tag": "narrow",
+                "rule": {
+                  "_tag": "cancerType",
+                  "types": [
+                    "squamous"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07699328",
+    "id": "NCT07699328-13",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "NSCLC with an EGFR or HER2 exon 20 insertion mutation.",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "biomarker",
+            "gene": "EGFR",
+            "state": "positive"
+          }
+        },
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "biomarker",
+            "gene": "HER2",
+            "state": "positive"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07699328",
+    "id": "NCT07699328-25",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "History of interstitial lung disease, noninfectious pneumonitis requiring steroid treatment, or current interstitial lung disease or pneumonitis.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT07707895",
+    "id": "NCT07707895-1",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Diagnosed with locally advanced, metastatic or relapsed cancer of the following histologies: Small cell lung carcinoma (SCLC) Large cell neuroendocrine lung carcinoma (LCNEC-L) Extrapulmonary neuroendocrine carcinoma (epNEC) of small or large cell histology",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "cancerType",
+            "types": [
+              "sclc"
+            ]
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07707895",
+    "id": "NCT07707895-5",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Histologically or cytologically confirmed extended stage small cell lung cancer (ES-SCLC) (excluding combined histologies) using the American Joint Committee on Cancer (AJCC) tumour node metastasis staging system combined with Veterans Administration Lung Study Group (VALG)'s two stage classification scheme.",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "stage",
+          "stages": [],
+          "extent": "extensive"
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07707895",
+    "id": "NCT07707895-9",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Male or female participants ≥18 years old and at least at the legal age of consent in countries where it is greater than 18 years at the time of signature of the informed consent form (ICF)",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "age",
+          "min": 18
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07715396",
+    "id": "NCT07715396-10",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Presence of a condition, disease or abnormality that in the opinion of the Investigator would compromise the safety of the patient, the patient's ability to comply with the study procedures (e.g., dementia) or the quality of the data. Specifically, the presence of any preexisting autoimmune disease that prohibits dosing of IMP as per treatment modification guidelines in the current IB/SmPC",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "autoimmune"
+      }
+    }
+  },
+  {
+    "trial": "NCT07759492",
+    "id": "NCT07759492-22",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Previous chemotherapy in the last 3 years.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "priorTherapy",
+        "category": "chemotherapy"
+      }
+    }
+  },
+  {
+    "trial": "NCT07778316",
+    "id": "NCT07778316-2",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Histologically or cytologically confirmed SCLC with demonstrated progression or relapse.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "cancerType",
+        "types": [
+          "sclc"
+        ]
+      }
+    }
+  },
+  {
+    "trial": "NCT07778316",
+    "id": "NCT07778316-10",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "\\- Any previous diagnosis of non-small cell lung cancer (NSCLC), epidermal growth factor receptor (EGFR) activating mutation that has transformed to SCLC, or mixed SCLC and NSCLC histology, with exceptions defined in the protocol.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "biomarker",
+        "gene": "EGFR",
+        "state": "positive"
+      }
+    }
+  },
+  {
+    "trial": "NCT07778316",
+    "id": "NCT07778316-14",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Current evidence or history of non-infectious pneumonitis/ILD (interstitial lung disease) that required steroids or other immunosuppressive treatment.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT07778316",
+    "id": "NCT07778316-22",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Prior systemic anticancer therapy within 30 days of enrolment",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "priorTherapy",
+        "category": "systemic"
+      }
+    }
+  },
+  {
+    "trial": "NCT07786909",
+    "id": "NCT07786909-0",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Patients with locally advanced, resectable non-small cell lung cancer (NSCLC), stage IIA (≥ 4 cm) to IIIA according to the TNM classification (American Joint Committee on Cancer, 9th edition)",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "cancerType",
+          "types": [
+            "nsclc"
+          ]
+        },
+        {
+          "_tag": "stage",
+          "stages": [
+            "II"
+          ]
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07803848",
+    "id": "NCT07803848-1",
+    "kind": "inclusion",
+    "confidence": "high",
+    "text": "Age ≥ 18 years",
+    "rule": {
+      "_tag": "age",
+      "min": 18
+    }
+  },
+  {
+    "trial": "NCT07803848",
+    "id": "NCT07803848-20",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Respiratory compromise leading to an unjustifiable risk in case of higher-grade CRS, in the judgment of the investigator (possible criteria leading to such judgment: oxygen support at rest \\>2l/min, active pneumonia or pneumonitis)",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "ild"
+      }
+    }
+  },
+  {
+    "trial": "NCT07808138",
+    "id": "NCT07808138-4",
+    "kind": "inclusion",
+    "confidence": "high",
+    "text": "Have a performance status of 0, 1 or 2 on the ECOG Performance Scale.",
+    "rule": {
+      "_tag": "performanceStatus",
+      "min": 0,
+      "max": 1
+    }
+  },
+  {
+    "trial": "NCT07808138",
+    "id": "NCT07808138-18",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Ongoing or recent evidence of significant autoimmune disease that required treatment with systemic immunosuppressive treatments.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "autoimmune"
+      }
+    }
+  },
+  {
+    "trial": "NCT07843940",
+    "id": "NCT07843940-1",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Male or female participants ≥18 years old and at least at the legal age of consent in countries where it is greater than 18 years at the time of signature of the Informed Consent Form (ICF).",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "age",
+          "min": 18
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07843940",
+    "id": "NCT07843940-3",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Histologically or cytologically confirmed Extensive Stage Small Cell Lung Carcinoma (ES-SCLC) \\[using the AJCC (American Joint Committee on Cancer) tumour node metastasis staging system combined with Veterans Administration Lung Study Group (VALG)'s two stage classification scheme\\].",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "stage",
+          "stages": [],
+          "extent": "extensive"
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,20 @@
+{
+  "name": "trial-finder",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "pipeline": "npm run run -w @trial-finder/pipeline --",
+    "dev": "npm run dev -w @trial-finder/web",
+    "build": "npm run build -w @trial-finder/web",
+    "test": "vitest run",
+    "typecheck": "tsc -p packages/domain && tsc -p packages/pipeline && tsc -p packages/web",
+    "schema": "npm run schema -w @trial-finder/domain"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}

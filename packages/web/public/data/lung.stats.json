@@ -1,0 +1,21 @@
+{
+  "trials": 328,
+  "textCriteria": 5881,
+  "structured": 918,
+  "coverage": 15.6,
+  "highConfidence": 661,
+  "lowConfidence": 257,
+  "ruleTypes": {
+    "other": 5020,
+    "age": 154,
+    "performanceStatus": 179,
+    "flag": 264,
+    "priorLines": 33,
+    "priorTherapy": 94,
+    "cancerType": 119,
+    "lab": 28,
+    "stage": 41,
+    "biomarker": 91,
+    "pdl1": 15
+  }
+}
