@@ -1270,13 +1270,15 @@
     opacity: 0.4;
   }
 
-  .map-pin path,
   .map-pin circle {
     stroke: none;
   }
 
   .map-pin path {
-    fill: var(--recruiting-dot);
+    fill: var(--green);
+    stroke: var(--plate);
+    stroke-width: 2.5;
+    paint-order: stroke;
   }
 
   .map-pin circle {
@@ -1285,7 +1287,30 @@
 
   .map-pin.featured path {
     stroke: var(--ink);
-    stroke-width: 3;
+    stroke-width: 2;
+  }
+
+  .map-plate {
+    position: relative;
+  }
+
+  .map-leader {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .map-leader path {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 1;
+  }
+
+  .map-leader circle {
+    fill: var(--ink);
   }
 
   .map-card {
@@ -1420,6 +1445,10 @@
 
     .map-card {
       width: 100%;
+    }
+
+    .map-leader {
+      display: none;
     }
   }
 }
