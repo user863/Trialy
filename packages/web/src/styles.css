@@ -12,7 +12,10 @@
   --line-strong: #bdc1c6;
   --cta: #202124;
   --cta-ink: #ffffff;
-  --brand: #20beff;
+  --brand: #386394;
+  --recruiting: #3f6f42;
+  --caution: #debc3f;
+  --caution-ink: #202124;
   --green: #1ccd76;
   --yellow: #e5cf4a;
   --nav-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
@@ -43,6 +46,8 @@
   --color-line-strong: var(--line-strong);
   --color-cta: var(--cta);
   --color-brand: var(--brand);
+  --color-recruiting: var(--recruiting);
+  --color-caution: var(--caution);
   --color-green: var(--green);
   --color-yellow: var(--yellow);
   --font-sans: "Inter Variable", "Inter", system-ui, sans-serif;
@@ -570,15 +575,21 @@
   }
 
   .pill.live {
-    border-color: var(--cta);
-    background: var(--cta);
-    color: var(--cta-ink);
+    border-color: var(--recruiting);
+    background: var(--recruiting);
+    color: #ffffff;
   }
 
   .pill.muted {
     border-color: var(--line);
     background: var(--plate);
     color: var(--ink-3);
+  }
+
+  .pill.caution {
+    border-color: var(--caution);
+    background: var(--caution);
+    color: var(--caution-ink);
   }
 
   .meter {

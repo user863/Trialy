@@ -37,8 +37,8 @@ export const NO_RECRUITING_SITE =
 
 export function TierBadge({ tier, sites }: { tier: 0 | 1 | 2; sites: number }) {
   if (tier === 2) return <span className="pill live">Recruiting · {sites} site{sites === 1 ? "" : "s"}</span>
-  if (tier === 1) return <span className="pill" title="The registry does not state whether the sites are recruiting. Confirm with the study team.">Site status not stated</span>
-  return <span className="pill muted" title={NO_RECRUITING_SITE}>No recruiting site listed</span>
+  if (tier === 1) return <span className="pill caution" title="The registry does not state whether the sites are recruiting. Confirm with the study team.">Site status not stated</span>
+  return <span className="pill caution" title={NO_RECRUITING_SITE}>No recruiting site listed</span>
 }
 
 export const formatKm = (km: number | null) => (km === null ? null : km < 10 ? `${km.toFixed(1)} km` : `${Math.round(km)} km`)
