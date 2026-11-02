@@ -828,6 +828,10 @@
     list-style: none;
   }
 
+  .sites .pill {
+    align-self: flex-start;
+  }
+
   .sites li {
     display: flex;
     flex-direction: column;

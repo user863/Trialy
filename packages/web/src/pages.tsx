@@ -411,14 +411,13 @@ export function TrialPage({ id }: { id: string }) {
         <ul className="sites">
           {sites.slice(0, 40).map(({ s, d }, i) => (
             <li key={i}>
-              <strong>{s.facility}</strong>, {s.city}, {s.country}
-              {d !== null && <> · {formatKm(d)}</>}
-              {" "}
               {s.status ? (
                 <span className={`pill${isOpen(s) ? " live" : " muted"}`}>{s.status.toLowerCase().replace(/_/g, " ")}</span>
               ) : (
-                <span className="pill">status not stated</span>
+                <span className="pill caution">status not stated</span>
               )}
+              <strong>{s.facility}</strong>
+              <span>{[s.city, s.country].filter(Boolean).join(", ")}{d !== null && ` · ${formatKm(d)}`}</span>
               {(s.contactName || s.contactPhone || s.contactEmail) && (
                 <div className="meta">
                   {s.contactName} {s.contactPhone && <a href={`tel:${s.contactPhone.replace(/\s/g, "")}`}>{s.contactPhone}</a>} {s.contactEmail && <a href={`mailto:${s.contactEmail}`}>{s.contactEmail}</a>}
