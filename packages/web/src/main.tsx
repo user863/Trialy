@@ -2,6 +2,7 @@ import "@fontsource-variable/inter"
 import { StrictMode, useEffect, useState } from "react"
 import { createRoot } from "react-dom/client"
 import { AppProvider, useApp, useHashRoute } from "./app"
+import { Finder } from "./finder"
 import { Landing } from "./home"
 import { Privacy, Results, Shortlist, Summary, TrialPage, Wizard } from "./pages"
 import { Logo } from "./ui"
@@ -43,6 +44,8 @@ const renderPage = ([section, id]: string[]) => {
   switch (section) {
     case "questions":
       return <Wizard stepId={id} />
+    case "find":
+      return <Finder />
     case "results":
       return <Results />
     case "trial":

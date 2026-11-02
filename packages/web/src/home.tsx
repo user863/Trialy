@@ -5,13 +5,13 @@ import { config } from "./config"
 import { CriteriaSections } from "./criteria"
 import { A, TierBadge, fulfilledLine, go } from "./ui"
 
-const CONDITIONS = [
+export const CONDITIONS = [
   { value: "nsclc", label: "Non-small cell lung cancer" },
   { value: "sclc", label: "Small cell lung cancer" },
   { value: "unknown", label: "Lung cancer, type not known" }
 ] as const
 
-const STAGES = [
+export const STAGES = [
   { value: "I", label: "Stage I" },
   { value: "II", label: "Stage II" },
   { value: "III", label: "Stage III" },
@@ -19,7 +19,7 @@ const STAGES = [
   { value: "unknown", label: "Not known" }
 ] as const
 
-const COUNTRIES = [
+export const COUNTRIES = [
   { value: "DE", label: "Germany" },
   { value: "AT", label: "Austria" },
   { value: "CH", label: "Switzerland" }
