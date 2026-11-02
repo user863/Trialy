@@ -120,7 +120,7 @@ function ConditionSearch() {
   )
 }
 
-function LivePreview() {
+export function LivePreview() {
   const { trials } = useApp()
   const sample = useMemo(
     () => trials.find((t) => t.criteria.length >= 8 && t.criteria.length <= 24 && recruitingTier(t) === 2 && t.criteria.some((c) => c.rule._tag === "age")),
@@ -155,27 +155,9 @@ const POINTS = [
   { title: "Recruiting first", text: "Trials with a site that says it is recruiting come first, sorted by distance. Others stay visible, clearly labelled." }
 ]
 
-export function Landing() {
-  const { loadError, started } = useApp()
-
+export function Below() {
   return (
-    <main className="page">
-      <section className="split hero">
-        <div>
-          <h1>Find clinical trials that fit your condition.</h1>
-          <p className="lead">
-            Tell us your diagnosis and see which recruiting trials in Germany and its neighbouring countries you may qualify for, criterion by criterion.
-          </p>
-          {started && (
-            <A to="/results" className="btn outline">
-              Continue with my results
-            </A>
-          )}
-        </div>
-        <ConditionSearch />
-      </section>
-      {loadError && <p className="error">{loadError}</p>}
-
+    <>
       <section className="section cols-2">
         <div className="section-copy">
           <h2>See exactly why a trial fits.</h2>
@@ -212,6 +194,32 @@ export function Landing() {
           <p className="lead">Answers save on this device as you go. Every question can be answered “I don’t know”, and that never excludes a trial.</p>
         </div>
       </section>
+    </>
+  )
+}
+
+export function Landing() {
+  const { loadError, started } = useApp()
+
+  return (
+    <main className="page">
+      <section className="split hero">
+        <div>
+          <h1>Find clinical trials that fit your condition.</h1>
+          <p className="lead">
+            Tell us your diagnosis and see which recruiting trials in Germany and its neighbouring countries you may qualify for, criterion by criterion.
+          </p>
+          {started && (
+            <A to="/results" className="btn outline">
+              Continue with my results
+            </A>
+          )}
+        </div>
+        <ConditionSearch />
+      </section>
+      {loadError && <p className="error">{loadError}</p>}
+
+      <Below />
     </main>
   )
 }
