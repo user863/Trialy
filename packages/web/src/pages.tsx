@@ -1,4 +1,4 @@
-import { useMemo, useState, type ReactNode } from "react"
+import { memo, useEffect, useMemo, useState, type ReactNode } from "react"
 import {
   isStale,
   matchTrial,
@@ -67,7 +67,6 @@ export function Wizard({ stepId }: { stepId?: string }) {
 type Row = { s: Summary; t: Trial }
 
 const PHASES = ["EARLY_PHASE1", "PHASE1", "PHASE2", "PHASE3", "PHASE4"]
-const MAX_ROWS = 500
 
 const MEDICINE_TYPES = new Set(["DRUG", "BIOLOGICAL", "GENETIC", "COMBINATION_PRODUCT"])
 const PROCEDURE_TYPES = new Set(["PROCEDURE", "DEVICE"])
@@ -110,6 +109,7 @@ export function Results() {
   const [status, setStatus] = useState("")
   const [hideStale, setHideStale] = useState(false)
   const [recruitingOnly, setRecruitingOnly] = useState(false)
+  const [limit, setLimit] = useState<number>(config.pageSize)
   const now = useMemo(() => new Date(), [])
 
   const rows = useMemo<Row[]>(
@@ -133,6 +133,8 @@ export function Results() {
     const changed = added.length + closed.length + nowFit.length + nowOut.length > 0
     return changed ? { added, closed, nowFit, nowOut } : null
   }, [prevSnapshot, summaries])
+
+  useEffect(() => setLimit(config.pageSize), [showHidden, maxKm, country, phase, kind, status, hideStale, recruitingOnly])
 
   if (loadError) return <main className="page narrow"><p className="error">{loadError}</p></main>
   if (!summaries || !bundle) return <main className="page narrow"><p aria-live="polite">Matching…</p></main>
@@ -239,7 +241,7 @@ export function Results() {
       </details>
 
       <ol className="cards-grid">
-        {filtered.slice(0, MAX_ROWS).map((row, i, list) => (
+        {filtered.slice(0, limit).map((row, i, list) => (
           <TrialCard
             key={row.t.nctId}
             row={row}
@@ -247,12 +249,18 @@ export function Results() {
             stale={isStale(row.t, now)}
             saved={shortlist.includes(row.t.nctId)}
             full={shortlist.length >= config.maxShortlist}
-            onSave={() => toggleShortlist(row.t.nctId)}
+            onSave={toggleShortlist}
           />
         ))}
       </ol>
       {filtered.length === 0 && <p className="meta">No trials match these filters.</p>}
-      {filtered.length > MAX_ROWS && <p className="meta">Showing the first {MAX_ROWS}. Use the filters to narrow down.</p>}
+      {filtered.length > limit && (
+        <div className="more">
+          <button className="btn outline" onClick={() => setLimit((n) => n + config.pageSize)}>
+            Show more ({filtered.length - limit} left)
+          </button>
+        </div>
+      )}
       <Support />
     </main>
   )
@@ -305,10 +313,10 @@ type TrialCardProps = {
   stale: boolean
   saved: boolean
   full: boolean
-  onSave: () => void
+  onSave: (id: string) => void
 }
 
-function TrialCard({ row: { s, t }, divider, stale, saved, full, onSave }: TrialCardProps) {
+const TrialCard = memo(function TrialCard({ row: { s, t }, divider, stale, saved, full, onSave }: TrialCardProps) {
   const site = s.siteIdx >= 0 ? t.sites[s.siteIdx] : undefined
   const total = s.met + s.notMet + s.unknown
   const countries = [...new Set(t.sites.map((x) => x.country))].join(", ")
@@ -334,14 +342,14 @@ function TrialCard({ row: { s, t }, divider, stale, saved, full, onSave }: Trial
         </p>
         <div className="actions">
           <A to={`/trial/${t.nctId}`} className="btn primary small">See criteria</A>
-          <button className="btn outline small" onClick={onSave} disabled={!saved && full} aria-pressed={saved}>
+          <button className="btn outline small" onClick={() => onSave(t.nctId)} disabled={!saved && full} aria-pressed={saved}>
             {saved ? "On my shortlist" : full ? `Shortlist full (${config.maxShortlist})` : "Add to shortlist"}
           </button>
         </div>
       </li>
     </>
   )
-}
+})
 
 const isOpen = (s: { status?: string }) => s.status === "RECRUITING" || s.status === "NOT_YET_RECRUITING" || s.status === "ENROLLING_BY_INVITATION"
 
