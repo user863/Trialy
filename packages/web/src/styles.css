@@ -1247,59 +1247,71 @@
     font-weight: 600;
   }
 
-  .flow {
-    display: grid;
-    grid-template-columns: 1fr minmax(144px, 0.6fr) var(--phi) minmax(144px, 0.6fr) 1fr;
-    align-items: center;
+  .h-split.rev {
+    grid-template-columns: var(--phi) 1fr;
   }
 
-  .flow-box {
+  .map-plate {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--s4);
+    align-items: center;
+    aspect-ratio: auto;
+    padding: var(--s4);
+  }
+
+  .map-svg {
+    height: 480px;
+    max-width: 100%;
+  }
+
+  .map-land {
+    fill: var(--ink-3);
+    opacity: 0.4;
+  }
+
+  .map-pin path,
+  .map-pin circle {
+    stroke: none;
+  }
+
+  .map-pin path {
+    fill: var(--recruiting-dot);
+  }
+
+  .map-pin circle {
+    fill: #ffffff;
+  }
+
+  .map-pin.featured path {
+    stroke: var(--ink);
+    stroke-width: 3;
+  }
+
+  .map-card {
     display: flex;
     flex-direction: column;
     gap: 4px;
+    align-items: flex-start;
     padding: var(--s3);
-    border: 1px solid var(--line-strong);
+    border: 1px solid var(--line);
     border-radius: var(--radius-card);
+    background: var(--bg);
   }
 
-  .flow-box.strong {
-    border-color: var(--plate);
-    background: var(--plate);
+  .map-card .pill {
+    margin-bottom: var(--s1);
   }
 
-  .flow-box.dashed {
-    border-style: dashed;
-    color: var(--ink-3);
-  }
-
-  .flow-box strong {
+  .map-card strong {
     font-size: 16px;
+    line-height: 22px;
   }
 
-  .flow-box span {
+  .map-card span:not(.pill) {
     color: var(--ink-3);
     font-size: 14px;
     line-height: 20px;
-  }
-
-  .flow-link {
-    position: relative;
-    height: 1px;
-    background: var(--ink);
-  }
-
-  .flow-link.off {
-    background: repeating-linear-gradient(90deg, var(--line-strong) 0 6px, transparent 6px 12px);
-  }
-
-  .flow-link span {
-    position: absolute;
-    bottom: var(--s1);
-    left: 50%;
-    color: var(--ink-3);
-    font-size: 12px;
-    white-space: nowrap;
-    transform: translateX(-50%);
   }
 
   .faq {
@@ -1376,9 +1388,9 @@
     }
 
     .h-split,
+    .h-split.rev,
     .h-steps,
-    .h-principles,
-    .flow {
+    .h-principles {
       grid-template-columns: 1fr;
     }
 
@@ -1397,21 +1409,17 @@
       border-left: 0;
     }
 
-    .flow-link {
-      width: 1px;
-      height: var(--s5);
-      margin-left: var(--s3);
+    .map-plate {
+      grid-template-columns: 1fr;
+      justify-items: center;
     }
 
-    .flow-link.off {
-      background: repeating-linear-gradient(180deg, var(--line-strong) 0 6px, transparent 6px 12px);
+    .map-svg {
+      height: 360px;
     }
 
-    .flow-link span {
-      bottom: auto;
-      left: var(--s2);
-      top: 50%;
-      transform: translateY(-50%);
+    .map-card {
+      width: 100%;
     }
   }
 }

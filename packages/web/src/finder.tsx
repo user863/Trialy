@@ -2,6 +2,7 @@ import { useMemo, useRef, useState, type FormEvent } from "react"
 import type { Profile } from "@trial-finder/domain"
 import { useApp } from "./app"
 import { CONDITIONS, LivePreview } from "./home"
+import { SiteMap } from "./sitemap"
 import { go } from "./ui"
 
 const readCondition = (text: string): Profile["cancerType"] | null => {
@@ -131,23 +132,11 @@ export function Finder() {
           <LivePreview />
         </section>
 
-        <section className="h-section" aria-labelledby="private">
-          <h2 id="private" className="h-label">Private by design</h2>
-          <div className="flow">
-            <div className="flow-box">
-              <strong>ClinicalTrials.gov</strong>
-              <span>Public trial registry</span>
-            </div>
-            <div className="flow-link"><span>Downloaded once</span></div>
-            <div className="flow-box strong">
-              <strong>Your device</strong>
-              <span>Your answers, the matching and the results</span>
-            </div>
-            <div className="flow-link off"><span>Nothing sent back</span></div>
-            <div className="flow-box dashed">
-              <strong>No server</strong>
-              <span>No accounts, no tracking</span>
-            </div>
+        <section className="h-section h-split rev">
+          <SiteMap />
+          <div>
+            <h2>Sites that are recruiting, on the map.</h2>
+            <p className="lead">Pins mark sites that say they are recruiting right now. Add your postcode to sort by distance. It is looked up on this device and never sent anywhere.</p>
           </div>
         </section>
 
