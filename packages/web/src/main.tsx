@@ -4,6 +4,7 @@ import { createRoot } from "react-dom/client"
 import { AppProvider, useApp, useHashRoute } from "./app"
 import { Landing } from "./home"
 import { Privacy, Results, Shortlist, Summary, TrialPage, Wizard } from "./pages"
+import { Logo } from "./ui"
 import { pref } from "./store"
 import "./styles.css"
 
@@ -77,7 +78,7 @@ function Shell() {
       <header className="nav noprint">
         <div className="page nav-inner">
           <a href="#/" className="brand">
-            <span className="logo" aria-hidden="true" />
+            <Logo />
             TrialBase
           </a>
           <nav aria-label="Main">

@@ -45,3 +45,13 @@ export const formatKm = (km: number | null) => (km === null ? null : km < 10 ? `
 
 export const fulfilledLine = (met: number, total: number, notMet: number) =>
   `${met} of ${total} criteria fulfilled${notMet > 0 ? ` · ${notMet} not fulfilled` : ""}`
+
+export const Logo = () => (
+  <span className="logo" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="4.4" r="2.1" fill="#fff" stroke="none" />
+      <path d="M12 5.5V21.5" />
+      <path d="M16.5 7.5H12C7.5 7.5 7.5 11.1 12 11.1C16.5 11.1 16.5 14.7 12 14.7C7.5 14.7 7.5 18.3 12 18.3H15.5" />
+    </svg>
+  </span>
+)
