@@ -1,155 +1,373 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
-import { loadPostcodes, useApp } from "./app"
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type PointerEvent } from "react"
+import { feature } from "topojson-client"
+import type { Topology } from "topojson-specification"
+import type { MultiPolygon, Polygon } from "geojson"
+import { useApp } from "./app"
+import { A } from "./ui"
 
-const MAP = {
-  country: "Germany",
-  lonMin: 5.8,
-  lonMax: 15.2,
-  latMax: 55.1,
-  latMin: 47.2,
-  cellDeg: 0.2,
-  centreLat: 51,
-  pinGroupDeg: 0.25,
-  maxPins: 10,
-  edgeCells: 2,
-  minSeparationCells: 6,
-  pinScale: 0.11,
-  featuredScale: 0.18,
-  pinHeadUnits: 16
+const GLOBE = {
+  view: { lat: -6, lon: 14 },
+  europe: { lat: 50, lon: 14 },
+  dragLimitDeg: 12,
+  wideBreakpointPx: 760,
+  wideHeightShare: 0.5,
+  narrowHeightShare: 0.9,
+  wideCentreShare: 0.42,
+  narrowCentreShare: 0.5,
+  cardZoneShare: 0.3,
+  radiusShare: 1.25,
+  topMarginShare: 0.04,
+  dotSpacingDeg: 0.5,
+  dotRadiusPx: 1.6,
+  maskPxPerDeg: 4,
+  latFrom: -58,
+  latTo: 80,
+  minLonStepScale: 0.25,
+  graticuleDeg: 15,
+  graticuleStepDeg: 2,
+  maxMarkers: 10,
+  startSeparationDeg: 6,
+  minSeparationDeg: 1,
+  separationStepDeg: 0.5,
+  focusDeg: 38,
+  pinGroupDeg: 1,
+  minVisibility: 0.4,
+  edgeMarginShare: 0.08,
+  leaderGutterPx: 21,
+  dragThresholdPx: 4
 } as const
 
-const aspect = Math.cos((MAP.centreLat * Math.PI) / 180)
-const COLS = Math.ceil((MAP.lonMax - MAP.lonMin) / MAP.cellDeg)
-const ROWS = Math.ceil((MAP.latMax - MAP.latMin) / (MAP.cellDeg * aspect))
+const RAD = Math.PI / 180
 
-const toCell = (lat: number, lon: number) => ({
-  x: (lon - MAP.lonMin) / MAP.cellDeg,
-  y: (MAP.latMax - lat) / (MAP.cellDeg * aspect)
-})
+type View = { lat: number; lon: number }
+type Marker = { key: string; lat: number; lon: number; facility: string; city: string; country: string; trials: number }
 
-type Pin = { x: number; y: number; facility: string; city: string; trials: number }
-
-const isInland = (land: ReadonlySet<string>, x: number, y: number) => {
-  const r = MAP.edgeCells
-  const cx = Math.floor(x)
-  const cy = Math.floor(y)
-  for (let dx = -r; dx <= r; dx++) for (let dy = -r; dy <= r; dy++) if (!land.has(`${cx + dx},${cy + dy}`)) return false
-  return true
-}
-
-const spread = (pins: Pin[]) => {
-  const chosen: Pin[] = []
-  for (const p of [...pins].sort((a, b) => b.trials - a.trials)) {
-    if (chosen.length === MAP.maxPins) break
-    if (chosen.every((c) => Math.hypot(c.x - p.x, c.y - p.y) >= MAP.minSeparationCells)) chosen.push(p)
+const project = (lat: number, lon: number, view: View) => {
+  const phi = lat * RAD
+  const dl = (lon - view.lon) * RAD
+  const phi0 = view.lat * RAD
+  return {
+    x: Math.cos(phi) * Math.sin(dl),
+    y: Math.cos(phi0) * Math.sin(phi) - Math.sin(phi0) * Math.cos(phi) * Math.cos(dl),
+    depth: Math.sin(phi0) * Math.sin(phi) + Math.cos(phi0) * Math.cos(phi) * Math.cos(dl)
   }
-  return chosen
 }
 
-type Leader = { d: string; x: number; y: number }
+type Frame = { w: number; h: number; cx: number; wide: boolean }
 
-const PIN_PATH = "M0 0C-6 -8 -9 -12 -9 -16A9 9 0 1 1 9 -16C9 -12 6 -8 0 0Z"
+const frameFor = (w: number, wide: boolean): Frame => {
+  return { w, h: Math.round(w * (wide ? GLOBE.wideHeightShare : GLOBE.narrowHeightShare)), cx: w * (wide ? GLOBE.wideCentreShare : GLOBE.narrowCentreShare), wide }
+}
 
-export function SiteMap() {
-  const { trials } = useApp()
-  const [land, setLand] = useState<ReadonlySet<string>>(new Set())
+const place = (p: { x: number; y: number }, { w, h, cx }: Frame) => {
+  const r = w * GLOBE.radiusShare
+  return { x: cx + r * p.x, y: h * GLOBE.topMarginShare + r - r * p.y }
+}
 
-  useEffect(() => {
-    let cancelled = false
-    loadPostcodes("DE")
-      .then((table: Record<string, [number, number]>) => {
-        if (cancelled) return
-        const cells = new Set<string>()
-        for (const [lat, lon] of Object.values(table)) {
-          const { x, y } = toCell(lat, lon)
-          cells.add(`${Math.floor(x)},${Math.floor(y)}`)
-        }
-        setLand(cells)
-      })
-      .catch(() => setLand(new Set()))
-    return () => {
-      cancelled = true
+const fits = (at: { x: number; y: number }, { w, h, wide }: Frame) =>
+  at.x > w * GLOBE.edgeMarginShare &&
+  at.x < w * (1 - GLOBE.edgeMarginShare - (wide ? GLOBE.cardZoneShare : 0)) &&
+  at.y > h * GLOBE.edgeMarginShare &&
+  at.y < h * (1 - GLOBE.edgeMarginShare)
+
+const polygonsOf = (geometry: Polygon | MultiPolygon) => (geometry.type === "Polygon" ? [geometry.coordinates] : geometry.coordinates)
+
+const sampleLand = (topology: Topology): Float32Array => {
+  const { maskPxPerDeg: px } = GLOBE
+  const canvas = document.createElement("canvas")
+  canvas.width = 360 * px
+  canvas.height = 180 * px
+  const ctx = canvas.getContext("2d", { willReadFrequently: true })
+  if (!ctx) return new Float32Array()
+
+  const land = feature(topology, topology.objects.land!)
+  const features = land.type === "FeatureCollection" ? land.features : [land]
+  for (const f of features) {
+    if (f.geometry.type !== "Polygon" && f.geometry.type !== "MultiPolygon") continue
+    for (const polygon of polygonsOf(f.geometry)) {
+      ctx.beginPath()
+      for (const ring of polygon) {
+        ring.forEach(([lon, lat], i) => (i === 0 ? ctx.moveTo((lon! + 180) * px, (90 - lat!) * px) : ctx.lineTo((lon! + 180) * px, (90 - lat!) * px)))
+        ctx.closePath()
+      }
+      ctx.fill("evenodd")
     }
-  }, [])
+  }
 
-  const pins = useMemo<Pin[]>(() => {
-    const groups = new Map<string, { lat: number; lon: number; facility: string; city: string; ids: Set<string> }>()
+  const { data, width } = ctx.getImageData(0, 0, canvas.width, canvas.height)
+  const dots: number[] = []
+  for (let lat = GLOBE.latFrom; lat <= GLOBE.latTo; lat += GLOBE.dotSpacingDeg) {
+    const step = GLOBE.dotSpacingDeg / Math.max(Math.cos(lat * RAD), GLOBE.minLonStepScale)
+    for (let lon = -180; lon < 180; lon += step) {
+      const x = Math.floor((lon + 180) * px)
+      const y = Math.floor((90 - lat) * px)
+      if (data[(y * width + x) * 4 + 3]! > 127) dots.push(lat, lon)
+    }
+  }
+  return Float32Array.from(dots)
+}
+
+const draw = (canvas: HTMLCanvasElement, frame: Frame, view: View, dots: Float32Array) => {
+  const ctx = canvas.getContext("2d")
+  if (!ctx) return
+  const dpr = window.devicePixelRatio || 1
+  canvas.width = frame.w * dpr
+  canvas.height = frame.h * dpr
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+
+  const style = getComputedStyle(canvas)
+  const bg = style.getPropertyValue("--bg")
+  const line = style.getPropertyValue("--line")
+  const ink = style.getPropertyValue("--ink-3")
+  const r = frame.w * GLOBE.radiusShare
+  const centre = place({ x: 0, y: 0 }, frame)
+
+  ctx.fillStyle = bg
+  ctx.beginPath()
+  ctx.arc(centre.x, centre.y, r, 0, 2 * Math.PI)
+  ctx.fill()
+
+  ctx.strokeStyle = line
+  ctx.lineWidth = 1
+  const trace = (points: Array<[number, number]>) => {
+    let pen = false
+    ctx.beginPath()
+    for (const [lat, lon] of points) {
+      const p = project(lat, lon, view)
+      if (p.depth <= 0) {
+        pen = false
+        continue
+      }
+      const { x, y } = place(p, frame)
+      if (pen) ctx.lineTo(x, y)
+      else ctx.moveTo(x, y)
+      pen = true
+    }
+    ctx.stroke()
+  }
+  for (let lat = -60; lat <= 60; lat += GLOBE.graticuleDeg) {
+    const row: Array<[number, number]> = []
+    for (let lon = -180; lon <= 180; lon += GLOBE.graticuleStepDeg) row.push([lat, lon])
+    trace(row)
+  }
+  for (let lon = -180; lon < 180; lon += GLOBE.graticuleDeg) {
+    const column: Array<[number, number]> = []
+    for (let lat = -80; lat <= 80; lat += GLOBE.graticuleStepDeg) column.push([lat, lon])
+    trace(column)
+  }
+
+  ctx.fillStyle = ink
+  for (let i = 0; i < dots.length; i += 2) {
+    const p = project(dots[i]!, dots[i + 1]!, view)
+    if (p.depth <= 0) continue
+    ctx.globalAlpha = 0.25 + 0.55 * p.depth
+    ctx.beginPath()
+    const at = place(p, frame)
+    ctx.arc(at.x, at.y, GLOBE.dotRadiusPx * (0.4 + 0.6 * Math.sqrt(p.depth)), 0, 2 * Math.PI)
+    ctx.fill()
+  }
+  ctx.globalAlpha = 1
+
+  ctx.strokeStyle = line
+  ctx.beginPath()
+  ctx.arc(centre.x, centre.y, r, 0, 2 * Math.PI)
+  ctx.stroke()
+}
+
+const angularDeg = (a: { lat: number; lon: number }, b: { lat: number; lon: number }) => Math.acos(Math.min(1, Math.max(-1, project(a.lat, a.lon, b).depth))) / RAD
+
+const useMarkers = (wide: boolean): Marker[] => {
+  const { trials } = useApp()
+  return useMemo(() => {
+    const groups = new Map<string, Marker & { ids: Set<string> }>()
     for (const t of trials) {
       for (const s of t.sites) {
-        if (s.country !== MAP.country || s.status !== "RECRUITING" || s.lat == null || s.lon == null) continue
-        const key = `${Math.round(s.lat / MAP.pinGroupDeg)},${Math.round(s.lon / MAP.pinGroupDeg)}`
-        const g = groups.get(key) ?? { lat: s.lat, lon: s.lon, facility: s.facility, city: s.city, ids: new Set<string>() }
+        if (s.status !== "RECRUITING" || s.lat == null || s.lon == null) continue
+        const key = `${Math.round(s.lat / GLOBE.pinGroupDeg)},${Math.round(s.lon / GLOBE.pinGroupDeg)}`
+        const g = groups.get(key) ?? { key, lat: s.lat, lon: s.lon, facility: s.facility, city: s.city, country: s.country, trials: 0, ids: new Set<string>() }
         g.ids.add(t.nctId)
         groups.set(key, g)
       }
     }
-    const all = [...groups.values()].map((g) => ({ ...toCell(g.lat, g.lon), facility: g.facility, city: g.city, trials: g.ids.size }))
-    return spread(all.filter((p) => isInland(land, p.x, p.y)))
-  }, [trials, land])
+    const unit = frameFor(1, wide)
+    const candidates = [...groups.values()]
+      .map(({ ids, ...g }) => ({ ...g, trials: ids.size }))
+      .filter((m) => angularDeg(m, GLOBE.europe) <= GLOBE.focusDeg)
+      .filter((m) => fits(place(project(m.lat, m.lon, GLOBE.view), unit), unit))
+      .sort((a, b) => b.trials - a.trials)
+    // loosen the spacing until ten markers fit, so sparse regions still get a full set
+    let chosen: Marker[] = []
+    for (let gap: number = GLOBE.startSeparationDeg; gap >= GLOBE.minSeparationDeg; gap -= GLOBE.separationStepDeg) {
+      chosen = []
+      for (const m of candidates) {
+        if (chosen.length === GLOBE.maxMarkers) break
+        if (chosen.every((c) => angularDeg(c, m) >= gap)) chosen.push(m)
+      }
+      if (chosen.length === GLOBE.maxMarkers) break
+    }
+    return chosen
+  }, [trials, wide])
+}
 
-  const featured = useMemo(() => pins.reduce<Pin | null>((best, p) => (!best || p.x > best.x ? p : best), null), [pins])
+const useLandDots = () => {
+  const [dots, setDots] = useState<Float32Array>(new Float32Array())
+  useEffect(() => {
+    let cancelled = false
+    import("world-atlas/land-110m.json").then((m) => {
+      if (!cancelled) setDots(sampleLand(m.default as unknown as Topology))
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+  return dots
+}
 
-  const plate = useRef<HTMLDivElement>(null)
-  const svg = useRef<SVGSVGElement>(null)
-  const card = useRef<HTMLDivElement>(null)
+const useThemeTick = () => {
+  const [tick, setTick] = useState(0)
+  useEffect(() => {
+    const observer = new MutationObserver(() => setTick((n) => n + 1))
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] })
+    return () => observer.disconnect()
+  }, [])
+  return tick
+}
+
+type Leader = { d: string; x: number; y: number }
+
+export function SiteMap() {
+  const [width, setWidth] = useState(0)
+  const wide = width >= GLOBE.wideBreakpointPx
+  const markers = useMarkers(wide)
+  const dots = useLandDots()
+  const themeTick = useThemeTick()
+  const [view, setView] = useState<View>(GLOBE.view)
+  const [selectedKey, setSelectedKey] = useState<string | null>(null)
   const [leader, setLeader] = useState<Leader | null>(null)
 
-  useLayoutEffect(() => {
-    const el = plate.current
-    if (!el || !featured) return
-    const measure = () => {
-      const s = svg.current
-      const c = card.current
-      if (!s || !c) return setLeader(null)
-      const box = el.getBoundingClientRect()
-      const sb = s.getBoundingClientRect()
-      const cb = c.getBoundingClientRect()
-      if (cb.left < sb.right) return setLeader(null)
-      const scale = Math.min(sb.width / COLS, sb.height / ROWS)
-      const offX = sb.left - box.left + (sb.width - COLS * scale) / 2
-      const offY = sb.top - box.top + (sb.height - ROWS * scale) / 2
-      const head = MAP.pinHeadUnits * MAP.featuredScale
-      const x1 = offX + (featured.x + 9 * MAP.featuredScale) * scale
-      const y1 = offY + (featured.y - head) * scale
-      const x2 = cb.left - box.left
-      const y2 = cb.top - box.top + cb.height / 2
-      const mid = x1 + (x2 - x1) / 2
-      setLeader({ d: `M${x1} ${y1}H${mid}V${y2}H${x2}`, x: x1, y: y1 })
-    }
-    measure()
-    const observer = new ResizeObserver(measure)
+  const plate = useRef<HTMLDivElement>(null)
+  const globe = useRef<HTMLDivElement>(null)
+  const canvas = useRef<HTMLCanvasElement>(null)
+  const card = useRef<HTMLDivElement>(null)
+  const drag = useRef<{ x: number; y: number; moved: boolean } | null>(null)
+  const justDragged = useRef(false)
+
+  const selected = markers.find((m) => m.key === selectedKey) ?? markers.reduce<Marker | null>((best, m) => (!best || m.trials > best.trials ? m : best), null)
+
+  useEffect(() => {
+    const el = globe.current
+    if (!el) return
+    const observer = new ResizeObserver(([entry]) => setWidth(Math.round(entry!.contentRect.width)))
     observer.observe(el)
     return () => observer.disconnect()
-  }, [featured])
+  }, [])
+
+  const frame = useMemo(() => frameFor(width, wide), [width, wide])
+
+  useEffect(() => {
+    if (canvas.current && width > 0) draw(canvas.current, frame, view, dots)
+  }, [frame, width, view, dots, themeTick])
+
+  useLayoutEffect(() => {
+    const box = plate.current
+    const c = card.current
+    const pin = selected && box?.querySelector<HTMLElement>(`[data-marker="${selected.key}"]`)
+    if (!box || !c || !pin || pin.hidden) return setLeader(null)
+    const b = box.getBoundingClientRect()
+    const p = pin.getBoundingClientRect()
+    const k = c.getBoundingClientRect()
+    if (k.left <= p.right) return setLeader(null)
+    const x1 = p.left - b.left + p.width / 2
+    const y1 = p.top - b.top + p.height * 0.4
+    const x2 = k.left - b.left
+    const y2 = k.top - b.top + k.height / 2
+    const spine = x2 - GLOBE.leaderGutterPx
+    setLeader({ d: `M${x1} ${y1}H${spine}V${y2}H${x2}`, x: x1, y: y1 })
+  }, [selected, view, width])
+
+  const onPointerDown = (e: PointerEvent) => {
+    drag.current = { x: e.clientX, y: e.clientY, moved: false }
+  }
+
+  const onPointerMove = (e: PointerEvent) => {
+    const d = drag.current
+    if (!d || width === 0) return
+    if (!d.moved && Math.hypot(e.clientX - d.x, e.clientY - d.y) < GLOBE.dragThresholdPx) return
+    if (!d.moved) e.currentTarget.setPointerCapture(e.pointerId)
+    d.moved = true
+    const perPx = 1 / (width * GLOBE.radiusShare) / RAD
+    const dx = e.clientX - d.x
+    const dy = e.clientY - d.y
+    d.x = e.clientX
+    d.y = e.clientY
+    const limit = GLOBE.dragLimitDeg
+    setView((v) => ({
+      lat: Math.min(GLOBE.view.lat + limit, Math.max(GLOBE.view.lat - limit, v.lat + dy * perPx)),
+      lon: Math.min(GLOBE.view.lon + limit, Math.max(GLOBE.view.lon - limit, v.lon - dx * perPx))
+    }))
+  }
+
+  const onPointerEnd = () => {
+    justDragged.current = drag.current?.moved ?? false
+    drag.current = null
+  }
 
   return (
-    <div ref={plate} className="plate map-plate" role="img" aria-label={`Map of Germany with ${pins.length} locations that have recruiting sites`}>
-      <svg ref={svg} viewBox={`0 0 ${COLS} ${ROWS}`} className="map-svg" aria-hidden="true">
-        <g className="map-land">
-          {[...land].map((key) => {
-            const [x, y] = key.split(",").map(Number)
-            return <circle key={key} cx={x! + 0.5} cy={y! + 0.5} r={0.34} />
+    <div ref={plate} className="plate map-plate">
+      <div
+        ref={globe}
+        className="globe"
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerEnd}
+        onPointerCancel={onPointerEnd}
+      >
+        <canvas ref={canvas} style={{ width: frame.w, height: frame.h }} role="img" aria-label="Globe zoomed on Europe. Drag to rotate." />
+        {width > 0 &&
+          markers.map((m) => {
+            const p = project(m.lat, m.lon, view)
+            const at = place(p, frame)
+            const inside = fits(at, frame)
+            const isSelected = m.key === selected?.key
+            return (
+              <button
+                key={m.key}
+                type="button"
+                data-marker={m.key}
+                hidden={p.depth < GLOBE.minVisibility || !inside}
+                className={`globe-pin${isSelected ? " selected" : ""}`}
+                style={{ left: at.x, top: at.y }}
+                aria-label={`${m.facility}, ${m.city}, ${m.trials} recruiting trials`}
+                aria-pressed={isSelected}
+                onClick={() => {
+                  if (justDragged.current) {
+                    justDragged.current = false
+                    return
+                  }
+                  setSelectedKey(m.key)
+                }}
+              >
+                <svg viewBox="-10 -26 20 27" aria-hidden="true">
+                  <path d="M0 0C-6 -8 -9 -12 -9 -16A9 9 0 1 1 9 -16C9 -12 6 -8 0 0Z" />
+                  <circle cy={-16} r={3.6} />
+                </svg>
+              </button>
+            )
           })}
-        </g>
-        {pins.map((p) => (
-          <g key={`${p.x},${p.y}`} transform={`translate(${p.x} ${p.y}) scale(${p === featured ? MAP.featuredScale : MAP.pinScale})`} className={p === featured ? "map-pin featured" : "map-pin"}>
-            <path d={PIN_PATH} />
-            <circle cy={-16} r={3.6} />
-          </g>
-        ))}
-      </svg>
+      </div>
       {leader && (
         <svg className="map-leader" aria-hidden="true">
           <path d={leader.d} />
           <circle cx={leader.x} cy={leader.y} r={3} />
         </svg>
       )}
-      {featured && (
-        <div ref={card} className="map-card">
+      {selected && (
+        <div ref={card} className="map-card" aria-live="polite">
           <span className="pill live">Recruiting now</span>
-          <strong>{featured.facility}</strong>
-          <span>{featured.city}, Germany</span>
-          <span>{featured.trials} recruiting {featured.trials === 1 ? "trial" : "trials"} here</span>
+          <strong>{selected.facility}</strong>
+          <span>{selected.city}, {selected.country}</span>
+          <span>{selected.trials} recruiting {selected.trials === 1 ? "trial" : "trials"} here</span>
+          <A to="/results" className="btn outline small">Browse trials</A>
         </div>
       )}
     </div>

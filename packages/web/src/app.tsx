@@ -41,7 +41,7 @@ const Ctx = createContext<App>(null as unknown as App)
 export const useApp = () => useContext(Ctx)
 
 const postcodeTables = new Map<string, Promise<Record<string, [number, number]>>>()
-export const loadPostcodes = (cc: string) => {
+const loadPostcodes = (cc: string) => {
   if (!postcodeTables.has(cc))
     postcodeTables.set(
       cc,

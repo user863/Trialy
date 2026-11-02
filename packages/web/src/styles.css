@@ -1247,51 +1247,86 @@
     font-weight: 600;
   }
 
-  .h-split.rev {
-    grid-template-columns: var(--phi) 1fr;
-  }
-
-  .map-plate {
+  .h-head {
     display: grid;
-    grid-template-columns: auto 1fr;
-    gap: var(--s4);
-    align-items: center;
-    aspect-ratio: auto;
-    padding: var(--s4);
-  }
-
-  .map-svg {
-    height: 480px;
-    max-width: 100%;
-  }
-
-  .map-land {
-    fill: var(--ink-3);
-    opacity: 0.4;
-  }
-
-  .map-pin circle {
-    stroke: none;
-  }
-
-  .map-pin path {
-    fill: var(--green);
-    stroke: var(--plate);
-    stroke-width: 2.5;
-    paint-order: stroke;
-  }
-
-  .map-pin circle {
-    fill: #ffffff;
-  }
-
-  .map-pin.featured path {
-    stroke: var(--ink);
-    stroke-width: 2;
+    grid-template-columns: 1fr var(--phi);
+    gap: var(--s5);
+    align-items: end;
+    margin-bottom: var(--s5);
   }
 
   .map-plate {
     position: relative;
+    display: block;
+    aspect-ratio: auto;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .globe {
+    position: relative;
+    width: 100%;
+    cursor: grab;
+    touch-action: pan-y;
+    user-select: none;
+  }
+
+  .globe:active {
+    cursor: grabbing;
+  }
+
+  .globe canvas {
+    display: block;
+  }
+
+  .globe-pin {
+    position: absolute;
+    width: 24px;
+    height: 32px;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    transform: translate(-50%, -100%);
+    transform-origin: 50% 100%;
+    transition: transform 120ms ease-out;
+  }
+
+  .globe-pin::before {
+    content: "";
+    position: absolute;
+    inset: -8px;
+  }
+
+  .globe-pin svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .globe-pin path {
+    fill: var(--recruiting-dot);
+    stroke: var(--bg);
+    stroke-width: 1.5;
+  }
+
+  .globe-pin circle {
+    fill: #ffffff;
+  }
+
+  .globe-pin:hover {
+    transform: translate(-50%, -100%) scale(1.15);
+  }
+
+  .globe-pin.selected {
+    z-index: 1;
+    transform: translate(-50%, -100%) scale(1.35);
+  }
+
+  .globe-pin.selected path {
+    stroke: var(--ink);
+    stroke-width: 2;
   }
 
   .map-leader {
@@ -1314,6 +1349,11 @@
   }
 
   .map-card {
+    position: absolute;
+    top: 50%;
+    right: var(--s4);
+    width: 280px;
+    transform: translateY(-50%);
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -1326,6 +1366,10 @@
 
   .map-card .pill {
     margin-bottom: var(--s1);
+  }
+
+  .map-card .btn {
+    margin-top: var(--s2);
   }
 
   .map-card strong {
@@ -1413,7 +1457,7 @@
     }
 
     .h-split,
-    .h-split.rev,
+    .h-head,
     .h-steps,
     .h-principles {
       grid-template-columns: 1fr;
@@ -1434,17 +1478,11 @@
       border-left: 0;
     }
 
-    .map-plate {
-      grid-template-columns: 1fr;
-      justify-items: center;
-    }
-
-    .map-svg {
-      height: 360px;
-    }
-
     .map-card {
-      width: 100%;
+      position: static;
+      width: auto;
+      margin: var(--s3);
+      transform: none;
     }
 
     .map-leader {
