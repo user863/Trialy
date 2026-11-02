@@ -48,10 +48,10 @@ export const fulfilledLine = (met: number, total: number, notMet: number) =>
 
 export const Logo = () => (
   <span className="logo" aria-hidden="true">
-    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="4.4" r="2.1" fill="#fff" stroke="none" />
-      <path d="M12 5.5V21.5" />
-      <path d="M16.5 7.5H12C7.5 7.5 7.5 11.1 12 11.1C16.5 11.1 16.5 14.7 12 14.7C7.5 14.7 7.5 18.3 12 18.3H15.5" />
+    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M5.2 -1C5.2 8 6.2 14.6 9.2 14.6" />
+      <circle cx="14.6" cy="14.6" r="5.4" />
+      <circle cx="14.6" cy="14.6" r="2.1" fill="#fff" stroke="none" />
     </svg>
   </span>
 )
