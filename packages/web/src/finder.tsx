@@ -133,10 +133,6 @@ export function Finder() {
         </section>
 
         <section className="h-section">
-          <div className="h-head">
-            <h2>Recruiting sites across Europe.</h2>
-            <p className="lead">Drag the globe and pick a marker to see the site. Add your postcode to sort by distance. It is looked up on this device and never sent anywhere.</p>
-          </div>
           <SiteMap />
         </section>
 

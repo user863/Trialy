@@ -57,6 +57,9 @@
   --color-brand: var(--brand);
   --color-green: var(--green);
   --color-yellow: var(--yellow);
+  --color-recruiting-dot: var(--recruiting-dot);
+  --color-recruiting-bg: var(--recruiting-bg);
+  --color-recruiting-ink: var(--recruiting-ink);
   --font-sans: "Inter Variable", "Inter", system-ui, sans-serif;
   --radius-card: 16px;
   --radius-button: 20px;
@@ -1255,134 +1258,6 @@
     margin-bottom: var(--s5);
   }
 
-  .map-plate {
-    position: relative;
-    display: block;
-    aspect-ratio: auto;
-    padding: 0;
-    overflow: hidden;
-  }
-
-  .globe {
-    position: relative;
-    width: 100%;
-    cursor: grab;
-    touch-action: pan-y;
-    user-select: none;
-  }
-
-  .globe:active {
-    cursor: grabbing;
-  }
-
-  .globe canvas {
-    display: block;
-  }
-
-  .globe-pin {
-    position: absolute;
-    width: 24px;
-    height: 32px;
-    padding: 0;
-    border: 0;
-    background: none;
-    cursor: pointer;
-    transform: translate(-50%, -100%);
-    transform-origin: 50% 100%;
-    transition: transform 120ms ease-out;
-  }
-
-  .globe-pin::before {
-    content: "";
-    position: absolute;
-    inset: -8px;
-  }
-
-  .globe-pin svg {
-    display: block;
-    width: 100%;
-    height: 100%;
-    overflow: visible;
-  }
-
-  .globe-pin path {
-    fill: var(--recruiting-dot);
-    stroke: var(--bg);
-    stroke-width: 1.5;
-  }
-
-  .globe-pin circle {
-    fill: #ffffff;
-  }
-
-  .globe-pin:hover {
-    transform: translate(-50%, -100%) scale(1.15);
-  }
-
-  .globe-pin.selected {
-    z-index: 1;
-    transform: translate(-50%, -100%) scale(1.35);
-  }
-
-  .globe-pin.selected path {
-    stroke: var(--ink);
-    stroke-width: 2;
-  }
-
-  .map-leader {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    overflow: visible;
-    pointer-events: none;
-  }
-
-  .map-leader path {
-    fill: none;
-    stroke: var(--ink);
-    stroke-width: 1;
-  }
-
-  .map-leader circle {
-    fill: var(--ink);
-  }
-
-  .map-card {
-    position: absolute;
-    top: 50%;
-    right: var(--s4);
-    width: 280px;
-    transform: translateY(-50%);
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    align-items: flex-start;
-    padding: var(--s3);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-card);
-    background: var(--bg);
-  }
-
-  .map-card .pill {
-    margin-bottom: var(--s1);
-  }
-
-  .map-card .btn {
-    margin-top: var(--s2);
-  }
-
-  .map-card strong {
-    font-size: 16px;
-    line-height: 22px;
-  }
-
-  .map-card span:not(.pill) {
-    color: var(--ink-3);
-    font-size: 14px;
-    line-height: 20px;
-  }
-
   .faq {
     align-items: start;
   }
@@ -1476,17 +1351,6 @@
     .h-principles li + li {
       border-top: 1px solid var(--line);
       border-left: 0;
-    }
-
-    .map-card {
-      position: static;
-      width: auto;
-      margin: var(--s3);
-      transform: none;
-    }
-
-    .map-leader {
-      display: none;
     }
   }
 }
