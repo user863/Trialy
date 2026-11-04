@@ -1,3 +1,4 @@
+import { and, not, or } from "./kleene.js"
 import type { Criterion, Profile, Rule, Site, Trial, Tri } from "./schema.js"
 
 export type Status = "met" | "notMet" | "unknown"
@@ -54,11 +55,6 @@ export interface TrialMatch {
 }
 
 
-const not = (t: Tri): Tri => (t === "yes" ? "no" : t === "no" ? "yes" : "unknown")
-const and = (ts: ReadonlyArray<Tri>): Tri =>
-  ts.includes("no") ? "no" : ts.every((t) => t === "yes") ? "yes" : "unknown"
-const or = (ts: ReadonlyArray<Tri>): Tri =>
-  ts.includes("yes") ? "yes" : ts.every((t) => t === "no") ? "no" : "unknown"
 const tri = (b: boolean): Tri => (b ? "yes" : "no")
 
 const inRange = (v: number, min?: number, max?: number) =>

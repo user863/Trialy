@@ -1,6 +1,11 @@
+import { attempt, err, ok, type Result } from "./result"
+
 const DB = "trial-finder"
 const STORE = "kv"
-const mem = new Map<string, unknown>()
+
+export type StoreError = "unavailable" | "blocked"
+
+const unavailable = (): StoreError => "unavailable"
 
 // IndexedDB and localStorage throw in private windows or with blocked site data; the app must still work
 export const pref = {
@@ -21,56 +26,73 @@ export const pref = {
   }
 }
 
-const open = (): Promise<IDBDatabase> =>
-  new Promise((resolve, reject) => {
-    const r = indexedDB.open(DB, 1)
-    r.onupgradeneeded = () => r.result.createObjectStore(STORE)
-    r.onsuccess = () => resolve(r.result)
-    r.onerror = () => reject(r.error)
+let connection: Promise<IDBDatabase> | null = null
+
+const connect = () =>
+  new Promise<IDBDatabase>((resolve, reject) => {
+    const request = indexedDB.open(DB, 1)
+    request.onupgradeneeded = () => request.result.createObjectStore(STORE)
+    request.onsuccess = () => {
+      const db = request.result
+      db.onversionchange = () => {
+        db.close()
+        connection = null
+      }
+      resolve(db)
+    }
+    request.onerror = () => reject(request.error)
   })
 
-export async function kvGet<T>(key: string): Promise<T | undefined> {
-  try {
-    const db = await open()
-    return await new Promise<T | undefined>((resolve, reject) => {
-      const req = db.transaction(STORE).objectStore(STORE).get(key)
-      req.onsuccess = () => resolve(req.result as T | undefined)
-      req.onerror = () => reject(req.error)
-    })
-  } catch {
-    return mem.get(key) as T | undefined
-  }
-}
+const open = () =>
+  (connection ??= connect().catch((cause) => {
+    connection = null
+    throw cause
+  }))
 
-export async function kvSet(key: string, value: unknown): Promise<void> {
-  mem.set(key, value)
-  try {
+export const kvGet = <T>(key: string): Promise<Result<T | undefined, StoreError>> =>
+  attempt(async () => {
     const db = await open()
-    await new Promise<void>((resolve, reject) => {
+    return new Promise<T | undefined>((resolve, reject) => {
+      const request = db.transaction(STORE).objectStore(STORE).get(key)
+      request.onsuccess = () => resolve(request.result as T | undefined)
+      request.onerror = () => reject(request.error)
+    })
+  }, unavailable)
+
+export const kvSet = (key: string, value: unknown): Promise<Result<void, StoreError>> =>
+  attempt(async () => {
+    const db = await open()
+    return new Promise<void>((resolve, reject) => {
       const tx = db.transaction(STORE, "readwrite")
       tx.objectStore(STORE).put(value, key)
       tx.oncomplete = () => resolve()
       tx.onerror = () => reject(tx.error)
     })
-  } catch {
-    return
-  }
-}
+  }, unavailable)
 
-export async function wipeAll(): Promise<void> {
-  mem.clear()
-  try {
+const clearWebStorage = () =>
+  attempt(async () => {
     localStorage.clear()
     sessionStorage.clear()
-  } catch {
-    /* ignore */
-  }
-  await new Promise<void>((resolve) => {
+  }, unavailable)
+
+const deleteDatabase = async (): Promise<Result<void, StoreError>> => {
+  const db = await connection?.catch(() => null)
+  db?.close()
+  connection = null
+  return new Promise((resolve) => {
     try {
-      const r = indexedDB.deleteDatabase(DB)
-      r.onsuccess = r.onerror = r.onblocked = () => resolve()
+      const request = indexedDB.deleteDatabase(DB)
+      request.onsuccess = () => resolve(ok(undefined))
+      request.onerror = () => resolve(err("unavailable"))
+      request.onblocked = () => resolve(err("blocked"))
     } catch {
-      resolve()
+      resolve(err("unavailable"))
     }
   })
+}
+
+export const wipeAll = async (): Promise<Result<void, StoreError>> => {
+  const [webStorage, database] = await Promise.all([clearWebStorage(), deleteDatabase()])
+  return webStorage.ok ? database : webStorage
 }

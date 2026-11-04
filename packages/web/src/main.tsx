@@ -63,7 +63,7 @@ const renderPage = ([section, id]: string[]) => {
 
 function Shell() {
   const [route] = useHashRoute()
-  const { shortlist, loaded } = useApp()
+  const { shortlist, loaded, storageOk } = useApp()
   const [theme, cycleTheme] = useTheme()
   const [largeText, toggleLargeText] = useLargeText()
   const parts = route.split("/").filter(Boolean)
@@ -102,6 +102,11 @@ function Shell() {
           </div>
         </div>
       </header>
+      {!storageOk && (
+        <p className="callout page noprint" role="status">
+          Your answers cannot be saved in this browser, for example in a private window. They stay on this page and are lost when you close it.
+        </p>
+      )}
       <div id="main">{loaded ? renderPage(parts) : <main className="page narrow"><p>Loading…</p></main>}</div>
       <footer className="page noprint">
         <p>Information service about clinical trials, not medical advice. Always talk to your treating team. Data: ClinicalTrials.gov. Prototype, English only.</p>

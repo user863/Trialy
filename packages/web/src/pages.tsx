@@ -13,7 +13,9 @@ import { useApp } from "./app"
 import { config } from "./config"
 import { FIELD_LABEL, STEPS, STEP_FOR_FIELD } from "./questions"
 import { CriteriaSections } from "./criteria"
-import { decryptJson, encryptJson } from "./crypto"
+import { decryptJson, encryptJson, type CryptoError } from "./crypto"
+import { reminderCalendar } from "./ics"
+import type { StoreError } from "./store"
 import { A, Disclaimer, NO_RECRUITING_SITE, Support, TierBadge, formatKm, fulfilledLine, go } from "./ui"
 import type { Summary } from "./worker"
 
@@ -100,7 +102,7 @@ function FilterSelect({ label, value, onChange, children, disabled }: { label: s
 }
 
 export function Results() {
-  const { summaries, byId, trials, impact, prevSnapshot, dismissSnapshot, shortlist, toggleShortlist, postcodeStatus, bundle, loadError, started } = useApp()
+  const { summaries, byId, trials, impact, prevSnapshot, dismissSnapshot, shortlist, toggleShortlist, postcodeStatus, bundle, loadError, started, now: clock } = useApp()
   const [showHidden, setShowHidden] = useState(false)
   const [maxKm, setMaxKm] = useState(0)
   const [country, setCountry] = useState("")
@@ -110,7 +112,7 @@ export function Results() {
   const [hideStale, setHideStale] = useState(false)
   const [recruitingOnly, setRecruitingOnly] = useState(false)
   const [limit, setLimit] = useState<number>(config.pageSize)
-  const now = useMemo(() => new Date(), [])
+  const now = useMemo(() => clock(), [clock])
 
   const rows = useMemo<Row[]>(
     () => (summaries ?? []).flatMap((s) => {
@@ -354,7 +356,7 @@ const TrialCard = memo(function TrialCard({ row: { s, t }, divider, stale, saved
 const isOpen = (s: { status?: string }) => s.status === "RECRUITING" || s.status === "NOT_YET_RECRUITING" || s.status === "ENROLLING_BY_INVITATION"
 
 export function TrialPage({ id }: { id: string }) {
-  const { byId, profile, home, shortlist, toggleShortlist } = useApp()
+  const { byId, profile, home, shortlist, toggleShortlist, now } = useApp()
   const t = byId.get(id)
   const match = useMemo(() => (t ? matchTrial(t, profile, home) : null), [t, profile, home])
   if (!t || !match) return <main className="page narrow"><h1>Trial not found</h1><p>It may have stopped recruiting since your last visit. <A to="/results">Back to results</A></p></main>
@@ -372,7 +374,7 @@ export function TrialPage({ id }: { id: string }) {
       <h1>{t.title}</h1>
       <p className="meta">
         <span className="nct">{t.nctId}</span> · {t.phases.map(phaseLabel).join(", ") || "no phase stated"} · registry entry updated {t.lastUpdated || "unknown"}
-        {isStale(t, new Date()) && <span className="pill muted">Possibly outdated: confirm with the site</span>}
+        {isStale(t, now()) && <span className="pill muted">Possibly outdated: confirm with the site</span>}
       </p>
       <p className="pills">
         <TierBadge tier={match.recruiting} sites={match.recruitingSites} />
@@ -483,19 +485,11 @@ const profileLines = (p: Profile): Array<[string, string]> => {
 }
 
 export function Shortlist() {
-  const { shortlist, byId, toggleShortlist, profile, home } = useApp()
+  const { shortlist, byId, toggleShortlist, profile, home, now } = useApp()
   const [months, setMonths] = useState(3)
   const items = shortlist.map((id) => byId.get(id)).filter((t): t is Trial => !!t)
   const reminder = () => {
-    const d = new Date()
-    d.setMonth(d.getMonth() + months)
-    const ymd = d.toISOString().slice(0, 10).replace(/-/g, "")
-    const ics = [
-      "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//TrialBase prototype//EN", "BEGIN:VEVENT",
-      `UID:${Date.now()}@trial-finder.local`, `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, "").slice(0, 15)}Z`,
-      `DTSTART;VALUE=DATE:${ymd}`, "SUMMARY:Check again for clinical trials",
-      "DESCRIPTION:Open TrialBase, update anything that changed (new scan, new treatment, new test result) and see what is new.", "END:VEVENT", "END:VCALENDAR"
-    ].join("\r\n")
+    const ics = reminderCalendar(now(), months)
     const a = document.createElement("a")
     a.href = URL.createObjectURL(new Blob([ics], { type: "text/calendar" }))
     a.download = "check-trials-again.ics"
@@ -540,7 +534,7 @@ export function Shortlist() {
 }
 
 export function Summary() {
-  const { shortlist, byId, profile, home } = useApp()
+  const { shortlist, byId, profile, home, now } = useApp()
   const items = shortlist.map((id) => byId.get(id)).filter((t): t is Trial => !!t)
   return (
     <main className="page narrow">
@@ -550,7 +544,7 @@ export function Summary() {
       </p>
       <h1>Clinical trial options to discuss</h1>
       <p className="meta">
-        Prepared by the patient or a relative on {new Date().toISOString().slice(0, 10)} using TrialBase (prototype). The information below is self-reported and
+        Prepared by the patient or a relative on {now().toISOString().slice(0, 10)} using TrialBase (prototype). The information below is self-reported and
         compared automatically with public registry data. It is not a medical assessment and may contain errors. Eligibility must be confirmed by the treating team and the trial site.
       </p>
       <h2>Situation as reported by the patient</h2>
@@ -595,6 +589,18 @@ export function Summary() {
 }
 
 
+const CRYPTO_MESSAGE: Record<CryptoError, string> = {
+  unsupported: "This browser connection cannot encrypt files. Open the site over HTTPS or on localhost.",
+  "not-trialbase": "This is not a TrialBase file.",
+  "wrong-passphrase": "Wrong passphrase, or the file is damaged.",
+  damaged: "This file is damaged and cannot be read."
+}
+
+const WIPE_MESSAGE: Record<StoreError, string> = {
+  unavailable: "Your browser would not delete the saved data. Clear this site's data in the browser settings instead.",
+  blocked: "Another TrialBase tab is still open. Close it and try again."
+}
+
 export function Privacy() {
   const { profile, shortlist, replaceAll, wipe, bundle } = useApp()
   const [pass, setPass] = useState("")
@@ -602,7 +608,9 @@ export function Privacy() {
   const [confirmWipe, setConfirmWipe] = useState(false)
   const doExport = async () => {
     if (pass.length < 8) return setMsg("Please choose a passphrase of at least 8 characters. We cannot recover it for you.")
-    const blob = new Blob([await encryptJson({ profile, shortlist }, pass)], { type: "application/json" })
+    const file = await encryptJson({ profile, shortlist }, pass)
+    if (!file.ok) return setMsg(CRYPTO_MESSAGE[file.error])
+    const blob = new Blob([file.value], { type: "application/json" })
     const a = document.createElement("a")
     a.href = URL.createObjectURL(blob)
     a.download = "trialbase-profile.tfprofile"
@@ -611,13 +619,11 @@ export function Privacy() {
   }
   const doImport = async (f: File | undefined) => {
     if (!f) return
-    try {
-      const d = (await decryptJson(await f.text(), pass)) as { profile: Profile; shortlist: string[] }
-      replaceAll(d.profile, d.shortlist ?? [])
-      setMsg("Imported. Your answers are loaded on this device.")
-    } catch (e) {
-      setMsg((e as Error).message)
-    }
+    const opened = await decryptJson(await f.text(), pass)
+    if (!opened.ok) return setMsg(CRYPTO_MESSAGE[opened.error])
+    const d = opened.value as { profile: Profile; shortlist?: string[] }
+    replaceAll(d.profile, d.shortlist ?? [])
+    setMsg("Imported. Your answers are loaded on this device.")
   }
   return (
     <main className="page narrow">
@@ -656,7 +662,13 @@ export function Privacy() {
       <p>Removes your answers, shortlist and saved state from this browser in one step.</p>
       {confirmWipe ? (
         <p className="actions">
-          <button className="btn danger" onClick={async () => { await wipe(); setConfirmWipe(false); setMsg("Everything was deleted from this browser."); go("/") }}>Yes, delete everything</button>
+          <button className="btn danger" onClick={async () => {
+            const wiped = await wipe()
+            setConfirmWipe(false)
+            if (!wiped.ok) return setMsg(WIPE_MESSAGE[wiped.error])
+            setMsg("Everything was deleted from this browser.")
+            go("/")
+          }}>Yes, delete everything</button>
           <button className="btn" onClick={() => setConfirmWipe(false)}>Cancel</button>
         </p>
       ) : (

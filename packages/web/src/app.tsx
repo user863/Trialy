@@ -1,7 +1,8 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react"
 import { emptyProfile, type Bundle, type LatLon, type Profile, type Trial } from "@trial-finder/domain"
 import { config } from "./config"
-import { kvGet, kvSet, wipeAll } from "./store"
+import { valueOr, type Result } from "./result"
+import { kvGet, kvSet, wipeAll, type StoreError } from "./store"
 import type { Summary } from "./worker"
 
 interface Impact {
@@ -34,8 +35,12 @@ interface App {
   prevSnapshot: Snapshot | null
   dismissSnapshot: () => void
   replaceAll: (p: Profile, shortlist: string[]) => void
-  wipe: () => Promise<void>
+  wipe: () => Promise<Result<void, StoreError>>
+  now: () => Date
+  storageOk: boolean
 }
+
+export const systemClock = (): Date => new Date()
 
 const Ctx = createContext<App>(null as unknown as App)
 export const useApp = () => useContext(Ctx)
@@ -65,8 +70,9 @@ const normalise = (p: Partial<Profile> | undefined): Profile => {
   }
 }
 
-export function AppProvider({ children }: { children: ReactNode }) {
+export function AppProvider({ children, now = systemClock }: { children: ReactNode; now?: () => Date }) {
   const [loaded, setLoaded] = useState(false)
+  const [storageOk, setStorageOk] = useState(true)
   const [profile, setProfileState] = useState<Profile>(emptyProfile())
   const [started, setStarted] = useState(false)
   const [shortlist, setShortlist] = useState<string[]>([])
@@ -82,18 +88,26 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const reqId = useRef(0)
   const snapshotPending = useRef(false)
 
+  const persist = useCallback((key: string, value: unknown) => {
+    void kvSet(key, value).then((saved) => {
+      if (!saved.ok) setStorageOk(false)
+    })
+  }, [])
+
   useEffect(() => {
     ;(async () => {
-      const [p, s, st, snap] = await Promise.all([
+      const reads = await Promise.all([
         kvGet<Partial<Profile>>("profile"),
         kvGet<string[]>("shortlist"),
         kvGet<boolean>("started"),
         kvGet<Snapshot>("snapshot")
       ])
-      setProfileState(normalise(p))
-      setShortlist(s ?? [])
-      setStarted(!!st)
-      setPrevSnapshot(snap ?? null)
+      const [p, s, st, snap] = reads
+      if (reads.some((read) => !read.ok)) setStorageOk(false)
+      setProfileState(normalise(valueOr(p, undefined)))
+      setShortlist(valueOr(s, undefined) ?? [])
+      setStarted(!!valueOr(st, undefined))
+      setPrevSnapshot(valueOr(snap, undefined) ?? null)
       setLoaded(true)
     })()
   }, [])
@@ -177,50 +191,52 @@ export function AppProvider({ children }: { children: ReactNode }) {
     snapshotPending.current = false
     const snap: Snapshot = {
       version: bundle.version,
-      at: new Date().toISOString(),
+      at: now().toISOString(),
       fits: Object.fromEntries(summaries.map((s) => [s.nctId, { met: s.met, unknown: s.unknown, hidden: s.hidden }]))
     }
-    kvSet("snapshot", snap)
-  }, [summaries, bundle, started])
+    persist("snapshot", snap)
+  }, [summaries, bundle, started, persist, now])
 
   const setProfile = useCallback((f: (p: Profile) => Profile) => {
     setProfileState((p) => {
       const next = f(p)
-      void kvSet("profile", next)
+      persist("profile", next)
       return next
     })
-  }, [])
+  }, [persist])
 
   const markStarted = useCallback(() => {
     setStarted(true)
-    void kvSet("started", true)
-  }, [])
+    persist("started", true)
+  }, [persist])
 
   const toggleShortlist = useCallback((id: string) => {
     setShortlist((s) => {
       const next = s.includes(id) ? s.filter((x) => x !== id) : s.length >= config.maxShortlist ? s : [...s, id]
-      void kvSet("shortlist", next)
+      persist("shortlist", next)
       return next
     })
-  }, [])
+  }, [persist])
 
   const replaceAll = useCallback((p: Profile, sl: string[]) => {
     const n = normalise(p)
     setProfileState(n)
     setShortlist(sl)
     setStarted(true)
-    void kvSet("profile", n)
-    void kvSet("shortlist", sl)
-    void kvSet("started", true)
-  }, [])
+    persist("profile", n)
+    persist("shortlist", sl)
+    persist("started", true)
+  }, [persist])
 
   const wipe = useCallback(async () => {
-    await wipeAll()
+    const wiped = await wipeAll()
+    if (!wiped.ok) return wiped
     setProfileState(emptyProfile())
     setShortlist([])
     setStarted(false)
     setPrevSnapshot(null)
     snapshotPending.current = false
+    return wiped
   }, [])
 
   const value: App = {
@@ -242,7 +258,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
     prevSnapshot,
     dismissSnapshot: () => setPrevSnapshot(null),
     replaceAll,
-    wipe
+    wipe,
+    now,
+    storageOk
   }
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>
 }
