@@ -1,5 +1,5 @@
 import "@fontsource-variable/inter"
-import { StrictMode, useEffect, useState } from "react"
+import { StrictMode, startTransition, useEffect, useState } from "react"
 import { createRoot } from "react-dom/client"
 import { AppProvider, useApp, useHashRoute } from "./app"
 import { Finder } from "./finder"
@@ -9,35 +9,50 @@ import { Logo } from "./ui"
 import { pref } from "./store"
 import "./styles.css"
 
-type Theme = "light" | "dark" | "system"
+type Theme = "light" | "dark"
 
-const NEXT_THEME: Record<Theme, Theme> = { light: "dark", dark: "system", system: "light" }
-const THEME_LABEL: Record<Theme, string> = { light: "Light", dark: "Dark", system: "Automatic" }
-
-function useTheme() {
-  const [theme, setTheme] = useState<Theme>(() => (pref.get("theme") as Theme | null) ?? "light")
-
-  useEffect(() => {
-    const query = window.matchMedia("(prefers-color-scheme: dark)")
-    const apply = () => document.documentElement.classList.toggle("dark", theme === "dark" || (theme === "system" && query.matches))
-    apply()
-    query.addEventListener("change", apply)
-    pref.set("theme", theme)
-    return () => query.removeEventListener("change", apply)
-  }, [theme])
-
-  return [theme, () => setTheme((t) => NEXT_THEME[t])] as const
+const storedTheme = (): Theme => {
+  const saved = pref.get("theme")
+  if (saved === "dark" || saved === "light") return saved
+  return saved === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
 }
 
-function useLargeText() {
-  const [large, setLarge] = useState(() => pref.get("big") === "1")
+const applyTheme = (theme: Theme) => document.documentElement.classList.toggle("dark", theme === "dark")
+
+const initialTheme = storedTheme()
+applyTheme(initialTheme)
+
+function useTheme() {
+  const [theme, setTheme] = useState<Theme>(initialTheme)
 
   useEffect(() => {
-    document.documentElement.classList.toggle("big", large)
-    pref.set("big", large ? "1" : "0")
-  }, [large])
+    pref.set("theme", theme)
+  }, [theme])
 
-  return [large, () => setLarge((v) => !v)] as const
+  // read the live class, not state, so rapid clicks always flip
+  const toggle = () => {
+    const next: Theme = document.documentElement.classList.contains("dark") ? "light" : "dark"
+    applyTheme(next)
+    startTransition(() => setTheme(next))
+  }
+  return [theme, toggle] as const
+}
+
+const LANGUAGES = [
+  { code: "en", label: "English" },
+  { code: "de", label: "Deutsch" }
+] as const
+
+type Language = (typeof LANGUAGES)[number]["code"]
+
+// placeholder: remembers the choice, but the interface is only written in English so far
+function useLanguage() {
+  const [language, setLanguage] = useState<Language>(() => LANGUAGES.find((l) => l.code === pref.get("lang"))?.code ?? "en")
+  const choose = (code: Language) => {
+    setLanguage(code)
+    pref.set("lang", code)
+  }
+  return [language, choose] as const
 }
 
 const renderPage = ([section, id]: string[]) => {
@@ -64,8 +79,8 @@ const renderPage = ([section, id]: string[]) => {
 function Shell() {
   const [route] = useHashRoute()
   const { shortlist, loaded, storageOk } = useApp()
-  const [theme, cycleTheme] = useTheme()
-  const [largeText, toggleLargeText] = useLargeText()
+  const [theme, toggleTheme] = useTheme()
+  const [language, chooseLanguage] = useLanguage()
   const parts = route.split("/").filter(Boolean)
 
   const links = [
@@ -92,12 +107,20 @@ function Shell() {
             ))}
           </nav>
           <div className="nav-actions">
-            <button className="icon-button" onClick={cycleTheme} title={`Theme: ${THEME_LABEL[theme]}`} aria-label={`Theme: ${THEME_LABEL[theme]}. Change theme`}>
+            <button className="icon-button" onClick={toggleTheme} title={`Switch to ${theme === "dark" ? "light" : "dark"} theme`} aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}>
               ◐
             </button>
-            <button className="icon-button" onClick={toggleLargeText} aria-pressed={largeText} aria-label="Larger text">
-              A+
-            </button>
+            <label className="lang">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z" />
+              </svg>
+              <select value={language} onChange={(e) => chooseLanguage(e.target.value as Language)} aria-label="Language">
+                {LANGUAGES.map(({ code, label }) => (
+                  <option key={code} value={code}>{label}</option>
+                ))}
+              </select>
+            </label>
             <a href="#/questions" className="btn primary small">Start</a>
           </div>
         </div>

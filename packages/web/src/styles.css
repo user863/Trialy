@@ -64,15 +64,12 @@
   --radius-card: 16px;
   --radius-button: 20px;
   --radius-pill: 100px;
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @layer base {
   html {
     font-size: 16px;
-  }
-
-  html.big {
-    font-size: 18px;
   }
 
   body {
@@ -296,6 +293,44 @@
 
   .icon-button:hover,
   .icon-button[aria-pressed="true"] {
+    background: var(--plate);
+  }
+
+  .lang {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    color: var(--ink);
+  }
+
+  .lang svg {
+    position: absolute;
+    left: 11px;
+    width: 16px;
+    height: 16px;
+    pointer-events: none;
+  }
+
+  .lang select {
+    appearance: none;
+    height: 36px;
+    padding: 0 14px 0 34px;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-pill);
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .lang option {
+    background: var(--bg);
+    color: var(--ink);
+  }
+
+  .lang select:hover {
     background: var(--plate);
   }
 
