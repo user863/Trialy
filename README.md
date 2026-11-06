@@ -89,3 +89,8 @@ Tailwind v4 with a small token set, Inter as the only typeface. The home page is
 ## Data
 
 Trial data comes from the ClinicalTrials.gov API v2. Check their terms before redistributing a bundle.
+Postcode tables come from GeoNames, the map outline from `world-atlas` (Natural Earth).
+
+## Licence
+
+Code: [Apache-2.0](LICENSE). The licence does not cover the third-party data above, which stays under its source's terms.
