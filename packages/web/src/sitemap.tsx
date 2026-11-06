@@ -2,7 +2,8 @@ import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react"
 import { feature } from "topojson-client"
 import type { Topology } from "topojson-specification"
 import type { MultiPolygon, Polygon } from "geojson"
-import { DEMO_SITES } from "./demo-sites"
+import type { Trial } from "@trial-finder/domain"
+import { recruitingCities, type City } from "./cities"
 import { A } from "./ui"
 
 const ART = {
@@ -37,7 +38,7 @@ const ART = {
 const RAD = Math.PI / 180
 
 type View = { lat: number; lon: number }
-type Marker = { key: string; lat: number; lon: number; x: number; y: number; facility: string; city: string; country: string; trials: number; featured: boolean }
+type Marker = City & { key: string; x: number; y: number }
 
 const project = (lat: number, lon: number, view: View) => {
   const phi = lat * RAD
@@ -169,13 +170,13 @@ const spread = (star: Marker, pool: Marker[]) => {
   return chosen
 }
 
-const buildMap = (): MapData => {
+const buildMap = (cities: ReadonlyArray<City>): MapData => {
   const { tile } = ART
-  const all: Array<Marker & { depth: number }> = DEMO_SITES.map((site) => {
-    const p = place(site.lat, site.lon)
-    return { ...site, key: site.facility, featured: site.featured === true, x: p.x, y: p.y, depth: p.depth }
+  const all: Array<Marker & { depth: number }> = cities.map((c) => {
+    const p = place(c.lat, c.lon)
+    return { ...c, key: `${c.country}|${c.city}`, x: p.x, y: p.y, depth: p.depth }
   })
-  const star = all.find((m) => m.featured) ?? all[0]
+  const star = all[0]
   if (!star) return { markers: [], tileY: 0 }
 
   const tileY = Math.max(tile.edgeGap, Math.min(ART.height - tile.h - tile.edgeGap, star.y - tile.h / 2))
@@ -193,8 +194,6 @@ const buildMap = (): MapData => {
   })
   return { markers: spread(star, pool), tileY }
 }
-
-const MAP = buildMap()
 
 const graticule = () => {
   const lines: string[] = []
@@ -275,13 +274,13 @@ const paintGlobe = (canvas: HTMLCanvasElement, lines: Path2D, land: Float32Array
 
 const originOf = (m: { x: number; y: number }) => `${((m.x / ART.width) * 100).toFixed(1)}% ${((m.y / ART.height) * 100).toFixed(1)}%`
 
-export function SiteMap() {
-  const { markers, tileY } = MAP
+export function SiteMap({ trials }: { trials: ReadonlyArray<Trial> | undefined }) {
+  const { markers, tileY } = useMemo(() => buildMap(recruitingCities(trials ?? [])), [trials])
   const dots = useLandDots()
   const canvas = useRef<HTMLCanvasElement>(null)
   const lines = useMemo(() => new Path2D(graticule()), [])
 
-  const featured = markers.find((m) => m.featured) ?? markers[0] ?? null
+  const featured = markers[0] ?? null
 
   const land = useMemo(() => {
     const bands: number[][] = Array.from({ length: ART.depthBandCount }, () => [])
@@ -310,12 +309,12 @@ export function SiteMap() {
   return (
     <article className="group relative isolate flex flex-col overflow-hidden rounded-card border border-line bg-plate lg:block lg:min-h-[560px]">
       <div className="relative z-10 flex flex-col items-start gap-[21px] p-[34px] lg:absolute lg:inset-y-0 lg:right-0 lg:w-[34%] lg:justify-center lg:px-10 lg:py-[55px]">
-        <h2 className="text-[34px] leading-[1.2] font-bold lg:text-[38px]">Recruiting sites around the world.</h2>
-        <p className="lead">Sites that say they are recruiting right now. Add your postcode to sort by distance. It is looked up on this device and never sent anywhere.</p>
+        <h2 className="text-[34px] leading-[1.2] font-bold lg:text-[38px]">Where trials are recruiting.</h2>
+        <p className="lead">Cities with sites listed as recruiting in the registry. Add your postcode to sort by distance. It is looked up on this device and never sent anywhere.</p>
         <A to="/results" className="btn outline">Browse trials</A>
       </div>
 
-      <figure className="relative order-first m-0 aspect-[4/3] w-full lg:absolute lg:inset-0 lg:aspect-auto lg:h-full" aria-label={`Map of the world with ${markers.length} sites that are recruiting`}>
+      <figure className="relative order-first m-0 aspect-[4/3] w-full lg:absolute lg:inset-0 lg:aspect-auto lg:h-full" aria-label={`Map with ${markers.length} cities that have recruiting sites`}>
         <div
           className="absolute inset-0 transition-transform duration-[900ms] ease-soft will-change-transform motion-reduce:transition-none lg:group-hover:scale-[var(--zoom)]"
           style={{ transformOrigin: featured ? originOf(featured) : "50% 50%", "--zoom": ART.hoverZoom } as CSSProperties}
@@ -356,10 +355,10 @@ export function SiteMap() {
               <rect x={tile.x + tile.pad} y={tileY + tile.pad} width={104} height={22} rx={11} className="fill-recruiting-bg" />
               <circle cx={tile.x + tile.pad + 12} cy={tileY + tile.pad + 11} r={4} className="fill-recruiting-dot" />
               <text x={tile.x + tile.pad + 23} y={tileY + tile.pad + 15} className="fill-recruiting-ink text-[11px] font-semibold">Recruiting now</text>
-              {wrap(featured.facility, tile.nameLineChars).map((line, i) => (
+              {wrap(featured.city, tile.nameLineChars).map((line, i) => (
                 <text key={line} x={tile.x + tile.pad} y={tileY + 68 + i * 19} className="fill-ink text-[14px] font-semibold">{line}</text>
               ))}
-              <text x={tile.x + tile.pad} y={tileY + tile.h - 38} className="fill-ink-3 text-[13px]">{featured.city}, {featured.country}</text>
+              <text x={tile.x + tile.pad} y={tileY + tile.h - 38} className="fill-ink-3 text-[13px]">{featured.country}</text>
               <text x={tile.x + tile.pad} y={tileY + tile.h - 18} className="fill-ink-3 text-[13px]">{featured.trials} recruiting {featured.trials === 1 ? "trial" : "trials"} here</text>
             </g>
           )}

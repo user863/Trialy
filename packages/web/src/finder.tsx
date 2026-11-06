@@ -133,7 +133,7 @@ export function Finder() {
         </section>
 
         <section className="h-section">
-          <SiteMap />
+          <SiteMap trials={bundle?.trials} />
         </section>
 
         <section className="h-section">
