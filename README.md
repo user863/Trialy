@@ -1,4 +1,4 @@
-# TrialBase
+# Trialy
 
 A clinical trial finder where the patient's answers never leave the browser.
 

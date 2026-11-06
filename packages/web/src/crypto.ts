@@ -1,9 +1,9 @@
 import { attempt, attemptSync, err, ok, type Result } from "./result"
 
-export type CryptoError = "unsupported" | "not-trialbase" | "wrong-passphrase" | "damaged"
+export type CryptoError = "unsupported" | "not-trialy" | "wrong-passphrase" | "damaged"
 
 const ITER = 310_000
-const APPS = ["trialbase", "trial-finder"]
+const APPS = ["trialy", "trialbase", "trial-finder"]
 
 type Envelope = { readonly salt: string; readonly iv: string; readonly data: string }
 
@@ -30,7 +30,7 @@ const readEnvelope = (file: string): Result<Envelope, CryptoError> => {
   const parsed = attemptSync((): unknown => JSON.parse(file), (): CryptoError => "damaged")
   if (!parsed.ok) return parsed
   const json = parsed.value
-  if (typeof json !== "object" || json === null || !APPS.includes((json as { app?: string }).app ?? "")) return err("not-trialbase")
+  if (typeof json !== "object" || json === null || !APPS.includes((json as { app?: string }).app ?? "")) return err("not-trialy")
   return isEnvelope(json) ? ok(json) : err("damaged")
 }
 
@@ -41,7 +41,7 @@ export async function encryptJson(data: unknown, pass: string): Promise<Result<s
     const iv = crypto.getRandomValues(new Uint8Array(new ArrayBuffer(12)))
     const k = await key(pass, salt, ["encrypt"])
     const ct = new Uint8Array(await crypto.subtle.encrypt({ name: "AES-GCM", iv }, k, new TextEncoder().encode(JSON.stringify(data))))
-    return JSON.stringify({ app: "trialbase", v: 1, iter: ITER, salt: b64(salt), iv: b64(iv), data: b64(ct) })
+    return JSON.stringify({ app: "trialy", v: 1, iter: ITER, salt: b64(salt), iv: b64(iv), data: b64(ct) })
   }, (): CryptoError => "unsupported")
 }
 

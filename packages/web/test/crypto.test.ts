@@ -21,8 +21,8 @@ describe("encrypted export", () => {
 
   it("refuses files from other apps", async () => {
     const other = JSON.stringify({ app: "something-else", salt: "a", iv: "b", data: "c" })
-    expect(await decryptJson(other, "pw")).toEqual({ ok: false, error: "not-trialbase" })
-    expect(await decryptJson("[1,2]", "pw")).toEqual({ ok: false, error: "not-trialbase" })
+    expect(await decryptJson(other, "pw")).toEqual({ ok: false, error: "not-trialy" })
+    expect(await decryptJson("[1,2]", "pw")).toEqual({ ok: false, error: "not-trialy" })
   })
 
   it("calls broken files damaged", async () => {

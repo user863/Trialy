@@ -97,7 +97,7 @@ function Shell() {
         <div className="page nav-inner">
           <a href="#/" className="brand">
             <Logo />
-            TrialBase
+            Trialy
           </a>
           <nav aria-label="Main">
             {links.map(({ section, label }) => (

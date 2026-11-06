@@ -544,7 +544,7 @@ export function Summary() {
       </p>
       <h1>Clinical trial options to discuss</h1>
       <p className="meta">
-        Prepared by the patient or a relative on {now().toISOString().slice(0, 10)} using TrialBase (prototype). The information below is self-reported and
+        Prepared by the patient or a relative on {now().toISOString().slice(0, 10)} using Trialy (prototype). The information below is self-reported and
         compared automatically with public registry data. It is not a medical assessment and may contain errors. Eligibility must be confirmed by the treating team and the trial site.
       </p>
       <h2>Situation as reported by the patient</h2>
@@ -591,14 +591,14 @@ export function Summary() {
 
 const CRYPTO_MESSAGE: Record<CryptoError, string> = {
   unsupported: "This browser connection cannot encrypt files. Open the site over HTTPS or on localhost.",
-  "not-trialbase": "This is not a TrialBase file.",
+  "not-trialy": "This is not a Trialy file.",
   "wrong-passphrase": "Wrong passphrase, or the file is damaged.",
   damaged: "This file is damaged and cannot be read."
 }
 
 const WIPE_MESSAGE: Record<StoreError, string> = {
   unavailable: "Your browser would not delete the saved data. Clear this site's data in the browser settings instead.",
-  blocked: "Another TrialBase tab is still open. Close it and try again."
+  blocked: "Another Trialy tab is still open. Close it and try again."
 }
 
 export function Privacy() {
@@ -613,7 +613,7 @@ export function Privacy() {
     const blob = new Blob([file.value], { type: "application/json" })
     const a = document.createElement("a")
     a.href = URL.createObjectURL(blob)
-    a.download = "trialbase-profile.tfprofile"
+    a.download = "trialy-profile.tfprofile"
     a.click()
     setMsg("Saved. Keep the passphrase safe: without it the file cannot be opened.")
   }

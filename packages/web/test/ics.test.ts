@@ -7,7 +7,7 @@ describe("reminder calendar", () => {
 
   it("is stamped from the clock it is given", () => {
     expect(lines).toContain("DTSTAMP:20261104T145200Z")
-    expect(lines).toContain(`UID:${now.getTime()}@trial-finder.local`)
+    expect(lines).toContain(`UID:${now.getTime()}@trialy.local`)
   })
 
   it("starts the reminder the chosen number of months later", () => {

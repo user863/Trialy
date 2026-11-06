@@ -28,7 +28,7 @@ const PRINCIPLES = [
 ]
 
 const FAQ = [
-  ["Is this medical advice?", "No. TrialBase shows which public trials may fit what you tell it. Your treating team decides whether you qualify."],
+  ["Is this medical advice?", "No. Trialy shows which public trials may fit what you tell it. Your treating team decides whether you qualify."],
   ["Where do my answers go?", "Nowhere. Matching runs in your browser and answers are stored only on this device. There are no accounts and no tracking, and you can delete everything at any time."],
   ["Where does the trial data come from?", "ClinicalTrials.gov, the public registry. The list is prepared in advance and downloaded once, so your searches never reach a server."],
   ["Why is a recruiting trial listed without a recruiting site?", "Registries often mark a trial as recruiting overall while no nearby site says so. We keep it, rank it lower and label it, because some are still worth asking about."],

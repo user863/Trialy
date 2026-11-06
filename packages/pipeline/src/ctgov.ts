@@ -102,7 +102,7 @@ const buildUrl = (g: GroupConfig, pageToken?: string) => {
 const fetchJson = (url: string) =>
   Effect.tryPromise({
     try: async () => {
-      const r = await fetch(url, { headers: { accept: "application/json", "user-agent": "trial-finder-prototype" } })
+      const r = await fetch(url, { headers: { accept: "application/json", "user-agent": "trialy-prototype" } })
       if (!r.ok) throw new Error(`HTTP ${r.status}`)
       return (await r.json()) as unknown
     },
