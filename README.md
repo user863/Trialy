@@ -28,7 +28,7 @@ packages/
 ```bash
 npm install
 npm run pipeline    # fetch trials, write packages/web/public/data/
-npm run dev         # http://localhost:5173
+npm run dev         # http://localhost:5173/Trialy/
 npm test
 npm run build       # static site in packages/web/dist
 ```
@@ -74,7 +74,7 @@ On my 35-example gold set (`gold.ts`, not reviewed by a clinician) the 7B model 
 
 ## Frontend
 
-Tailwind v4 with a small token set, Inter as the only typeface. The home page is a condition search; the trial page lists inclusion and exclusion criteria in separate blocks. `design/` has Figma-importable SVGs of the home screen and the tokens as JSON.
+Tailwind v4 with a small token set, Inter as the only typeface. The home page is a condition search; the trial page lists inclusion and exclusion criteria in separate blocks. `design/` holds the logo and design tokens.
 
 ## Not done
 
