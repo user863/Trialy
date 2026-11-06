@@ -67,7 +67,7 @@ export function Finder() {
   }
 
   return (
-    <>
+    <main>
       <section className="finder">
         <h1>Find a clinical trial that fits you.</h1>
         <form className="finder-bar" onSubmit={submit} role="search">
@@ -166,6 +166,6 @@ export function Finder() {
           </button>
         </section>
       </div>
-    </>
+    </main>
   )
 }

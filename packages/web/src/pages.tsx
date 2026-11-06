@@ -31,7 +31,7 @@ export function Wizard({ stepId }: { stepId?: string }) {
   }
   return (
     <main className="page narrow">
-      <p className="progress" aria-label={`Question ${idx + 1} of ${steps.length}`}>
+      <p className="progress" aria-hidden="true">
         <span style={{ width: `${((idx + 1) / steps.length) * 100}%` }} />
       </p>
       <p className="meta">
@@ -333,7 +333,7 @@ const TrialCard = memo(function TrialCard({ row: { s, t }, divider, stale, saved
           {t.phases.map((p) => <span className="pill" key={p}>{phaseLabel(p)}</span>)}
           {stale && <span className="pill muted" title="The registry entry has not been updated for over 6 months. Check that it is still recruiting.">Possibly outdated</span>}
         </div>
-        <h3><A to={`/trial/${t.nctId}`}>{t.title}</A></h3>
+        <h2 className="card-title"><A to={`/trial/${t.nctId}`}>{t.title}</A></h2>
         <div className="meter" role="img" aria-label={fulfilledLine(s.met, total, s.notMet)}>
           <span style={{ width: `${total ? (s.met / total) * 100 : 0}%` }} />
         </div>
@@ -505,7 +505,7 @@ export function Shortlist() {
           const m = matchTrial(t, profile, home)
           return (
             <li className="card" key={t.nctId}>
-              <h3><A to={`/trial/${t.nctId}`}>{t.title}</A></h3>
+              <h2 className="card-title"><A to={`/trial/${t.nctId}`}>{t.title}</A></h2>
               <p className="meta"><strong>{fulfilledLine(m.met, m.results.length, m.notMet)}</strong> · {t.nctId}{m.hidden && " · a criterion is now not met"}</p>
               <button className="btn small" onClick={() => toggleShortlist(t.nctId)}>Remove</button>
             </li>
