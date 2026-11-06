@@ -2,6 +2,8 @@
 
 A clinical trial finder where the patient's answers never leave the browser.
 
+Live demo: https://user863.github.io/Trialy/
+
 You tell it your diagnosis, stage, biomarkers, prior treatments and postcode. It matches that against recruiting trials from ClinicalTrials.gov and shows, criterion by criterion, what you meet, what you don't, and what nobody can tell yet. The matching runs in a web worker on your machine. There is no backend, no account and no analytics.
 
 This is a prototype. It covers lung cancer in Germany, Austria, Switzerland and their neighbours (about 330 trials). It is not medical advice and the UI says so in a few places.
