@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { classify, splitCriteria, structuredCriteria } from "../src/extract.js"
+import { classify, generalCriteria, splitCriteria, structuredCriteria } from "../src/extract.js"
 
 const rule = (text: string, kind: "inclusion" | "exclusion" = "inclusion") => classify(text, kind).rule
 
@@ -211,5 +211,24 @@ describe("structuredCriteria", () => {
   it("no condition rule for baskets", () => {
     const cs = structuredCriteria({ conditions: ["Small Cell Lung Cancer", "Breast Cancer"] }, "N")
     expect(cs).toHaveLength(0)
+  })
+})
+
+describe("generalCriteria", () => {
+  const text = "Inclusion Criteria:\n* Age >= 18 years\n* EGFR mutation positive\nExclusion Criteria:\n* Stage IV lung cancer"
+  const out = generalCriteria("NCT1", text, { minAge: "18 Years", sex: "ALL", conditions: ["Lung Cancer"] })
+
+  it("reads only the registry age and sex fields as rules", () => {
+    expect(out.filter((c) => c.rule._tag !== "other").map((c) => c.rule._tag)).toEqual(["age"])
+  })
+
+  it("keeps every sentence verbatim and unstructured, even ones the lung reader would parse", () => {
+    const fromText = out.filter((c) => c.source === "registry-text")
+    expect(fromText.map((c) => c.text)).toEqual(["Age >= 18 years", "EGFR mutation positive", "Stage IV lung cancer"])
+    expect(fromText.every((c) => c.rule._tag === "other" && c.confidence === "none")).toBe(true)
+  })
+
+  it("adds no disease rule from the registry conditions", () => {
+    expect(out.some((c) => c.rule._tag === "cancerType")).toBe(false)
   })
 })

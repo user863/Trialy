@@ -24,8 +24,38 @@ export const GENES = Gene.literals
 export const CancerTypeKey = S.Literal("nsclc", "sclc", "adenocarcinoma", "squamous")
 export type CancerTypeKey = typeof CancerTypeKey.Type
 
-export const FlagKey = S.Literal("brainMetsAny", "brainMetsActive", "ild", "autoimmune")
+export const FlagKey = S.Literal(
+  "brainMetsAny",
+  "brainMetsActive",
+  "ild",
+  "autoimmune",
+  "pregnancy",
+  "mriUnsuitable",
+  "recentSteroids",
+  "chronicInfection",
+  "cancerHistory"
+)
 export type FlagKey = typeof FlagKey.Type
+
+export const MsCourse = S.Literal("rrms", "spms", "ppms", "cis")
+export type MsCourse = typeof MsCourse.Type
+
+export const MsTherapyCategory = S.Literal(
+  "interferon",
+  "glatiramer",
+  "natalizumab",
+  "antiCd20",
+  "s1p",
+  "fumarate",
+  "teriflunomide",
+  "cladribine",
+  "alemtuzumab"
+)
+export type MsTherapyCategory = typeof MsTherapyCategory.Type
+export const MS_THERAPIES = MsTherapyCategory.literals
+
+export const RelapseAge = S.Literal("lt1", "1to3", "3to12", "12to24", "gt24", "unknown")
+export type RelapseAge = typeof RelapseAge.Type
 
 export const LabAnalyte = S.Literal("anc", "platelets", "hemoglobin", "crcl")
 export type LabAnalyte = typeof LabAnalyte.Type
@@ -66,6 +96,10 @@ const PerformanceStatusRule = S.Struct({
   max: S.optional(S.Number)
 })
 const FlagRule = S.Struct({ _tag: S.Literal("flag"), flag: FlagKey })
+const MsCourseRule = S.Struct({ _tag: S.Literal("msCourse"), courses: S.Array(MsCourse) })
+const EdssRule = S.Struct({ _tag: S.Literal("edss"), min: S.optional(S.Number), max: S.optional(S.Number) })
+const RelapseRule = S.Struct({ _tag: S.Literal("relapse"), withinMonths: S.Number })
+const MsTherapyRule = S.Struct({ _tag: S.Literal("msTherapy"), category: MsTherapyCategory })
 const OtherRule = S.Struct({ _tag: S.Literal("other") })
 
 type Leaf =
@@ -81,6 +115,10 @@ type Leaf =
   | typeof SexRule.Type
   | typeof PerformanceStatusRule.Type
   | typeof FlagRule.Type
+  | typeof MsCourseRule.Type
+  | typeof EdssRule.Type
+  | typeof RelapseRule.Type
+  | typeof MsTherapyRule.Type
   | typeof OtherRule.Type
 
 export type Rule =
@@ -104,6 +142,10 @@ export const Rule: S.Schema<Rule> = S.Union(
   SexRule,
   PerformanceStatusRule,
   FlagRule,
+  MsCourseRule,
+  EdssRule,
+  RelapseRule,
+  MsTherapyRule,
   OtherRule,
   S.Struct({ _tag: S.Literal("anyOf"), rules: S.Array(S.suspend((): S.Schema<Rule> => Rule).annotations({ identifier: "Rule" })) }),
   S.Struct({ _tag: S.Literal("allOf"), rules: S.Array(S.suspend((): S.Schema<Rule> => Rule).annotations({ identifier: "Rule" })) }),
@@ -207,6 +249,15 @@ export const Profile = S.Struct({
   brainMets: BrainMets,
   ild: Tri,
   autoimmune: Tri,
+  msCourse: S.Literal("rrms", "spms", "ppms", "cis", "unknown"),
+  edss: S.NullOr(S.Number),
+  lastRelapse: RelapseAge,
+  msTherapies: S.Record({ key: MsTherapyCategory, value: Tri }),
+  pregnancy: Tri,
+  mriUnsuitable: Tri,
+  recentSteroids: Tri,
+  chronicInfection: Tri,
+  cancerHistory: Tri,
   labs: S.Struct({
     anc: S.NullOr(S.Number),
     platelets: S.NullOr(S.Number),
@@ -240,6 +291,15 @@ export const emptyProfile = (): Profile => ({
   brainMets: "unknown",
   ild: "unknown",
   autoimmune: "unknown",
+  msCourse: "unknown",
+  edss: null,
+  lastRelapse: "unknown",
+  msTherapies: Object.fromEntries(MS_THERAPIES.map((c) => [c, "unknown"])) as Profile["msTherapies"],
+  pregnancy: "unknown",
+  mriUnsuitable: "unknown",
+  recentSteroids: "unknown",
+  chronicInfection: "unknown",
+  cancerHistory: "unknown",
   labs: { anc: null, platelets: null, hemoglobin: null, crcl: null },
   country: "DE",
   postcode: ""

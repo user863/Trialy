@@ -4,6 +4,8 @@ import {
   FlagKey,
   GENES,
   LabAnalyte,
+  MS_THERAPIES,
+  MsCourse,
   TherapyCategory,
   type Criterion,
   type Profile,
@@ -49,6 +51,10 @@ const leaf = fc.oneof(
   ),
   fc.record({ _tag: fc.constant("sex" as const), sex: fc.constantFrom("female", "male" as const) }),
   fc.record({ _tag: fc.constant("flag" as const), flag: fc.constantFrom(...FlagKey.literals) }),
+  fc.record({ _tag: fc.constant("msCourse" as const), courses: fc.uniqueArray(fc.constantFrom(...MsCourse.literals), { minLength: 1 }) }),
+  ranged("edss"),
+  fc.record({ _tag: fc.constant("relapse" as const), withinMonths: fc.integer({ min: 1, max: 36 }) }),
+  fc.record({ _tag: fc.constant("msTherapy" as const), category: fc.constantFrom(...MS_THERAPIES) }),
   fc.constant({ _tag: "other" as const })
 )
 
@@ -83,10 +89,16 @@ export const truth: fc.Arbitrary<Profile> = fc
     brainMets: fc.constantFrom("none", "treated", "active" as const),
     ild: fc.boolean(),
     autoimmune: fc.boolean(),
-    labs: fc.array(fc.integer({ min: 0, max: 400 }), { minLength: 4, maxLength: 4 })
+    labs: fc.array(fc.integer({ min: 0, max: 400 }), { minLength: 4, maxLength: 4 }),
+    msCourse: fc.constantFrom(...MsCourse.literals),
+    edss: fc.integer({ min: 0, max: 20 }),
+    lastRelapse: fc.constantFrom("lt1", "1to3", "3to12", "12to24", "gt24" as const),
+    msTherapies: fc.array(fc.boolean(), { minLength: MS_THERAPIES.length, maxLength: MS_THERAPIES.length }),
+    flags: fc.array(fc.boolean(), { minLength: 5, maxLength: 5 })
   })
   .map((t): Profile => {
     const [chemo, immuno, targeted, radio, surgery] = t.therapies as [boolean, boolean, boolean, boolean, boolean]
+    const [pregnancy, mriUnsuitable, recentSteroids, chronicInfection, cancerHistory] = t.flags as [boolean, boolean, boolean, boolean, boolean]
     const systemic: [boolean, boolean, boolean] = t.lines === 0 ? [false, false, false] : chemo || immuno || targeted ? [chemo, immuno, targeted] : [true, immuno, targeted]
     return {
       ...emptyProfile(),
@@ -111,7 +123,16 @@ export const truth: fc.Arbitrary<Profile> = fc
       brainMets: t.brainMets,
       ild: yesNo(t.ild),
       autoimmune: yesNo(t.autoimmune),
-      labs: { anc: t.labs[0]!, platelets: t.labs[1]!, hemoglobin: t.labs[2]!, crcl: t.labs[3]! }
+      labs: { anc: t.labs[0]!, platelets: t.labs[1]!, hemoglobin: t.labs[2]!, crcl: t.labs[3]! },
+      msCourse: t.msCourse,
+      edss: t.edss / 2,
+      lastRelapse: t.lastRelapse,
+      msTherapies: Object.fromEntries(MS_THERAPIES.map((c, i) => [c, yesNo(t.msTherapies[i]!)])) as Profile["msTherapies"],
+      pregnancy: yesNo(pregnancy && t.sex === "female"),
+      mriUnsuitable: yesNo(mriUnsuitable),
+      recentSteroids: yesNo(recentSteroids),
+      chronicInfection: yesNo(chronicInfection),
+      cancerHistory: yesNo(cancerHistory)
     }
   })
 
@@ -133,7 +154,16 @@ const PATHS: ReadonlyArray<Path> = [
   ["brainMets"],
   ["ild"],
   ["autoimmune"],
-  ...["anc", "platelets", "hemoglobin", "crcl"].map((l) => ["labs", l])
+  ...["anc", "platelets", "hemoglobin", "crcl"].map((l) => ["labs", l]),
+  ["msCourse"],
+  ["edss"],
+  ["lastRelapse"],
+  ...MS_THERAPIES.map((c) => ["msTherapies", c]),
+  ["pregnancy"],
+  ["mriUnsuitable"],
+  ["recentSteroids"],
+  ["chronicInfection"],
+  ["cancerHistory"]
 ]
 
 type Tree = Record<string, unknown>

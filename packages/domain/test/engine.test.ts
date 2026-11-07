@@ -154,3 +154,90 @@ describe("schema", () => {
     expect(() => S.decodeUnknownSync(Rule)({ _tag: "magic" })).toThrow()
   })
 })
+
+describe("answers as data", () => {
+  const answer = (rule: Rule, p: Partial<Profile>) => evalCriterion(crit("inclusion", rule), profile(p)).node.answer
+
+  it("reports what was answered, not how to word it", () => {
+    expect(answer({ _tag: "age", min: 18 }, { age: 62 })).toEqual({ kind: "age", years: 62 })
+    expect(answer({ _tag: "stage", stages: ["IV"] }, { stage: "IV" })).toEqual({ kind: "stage", stage: "IV" })
+    expect(answer({ _tag: "biomarker", gene: "EGFR", state: "positive" }, { biomarkers: { ...emptyProfile().biomarkers, EGFR: "negative" } })).toEqual({ kind: "biomarker", gene: "EGFR", state: "negative" })
+  })
+
+  it("says unanswered when the profile has no value", () => {
+    expect(answer({ _tag: "age", min: 18 }, {})).toEqual({ kind: "unanswered" })
+  })
+
+  it("marks free-text criteria for the doctor", () => {
+    expect(answer({ _tag: "other" }, {})).toEqual({ kind: "manual" })
+  })
+})
+
+describe("multiple sclerosis rules", () => {
+  const status = (rule: Rule, p: Partial<Profile>, kind: Criterion["kind"] = "inclusion") => evalCriterion(crit(kind, rule), profile(p)).status
+
+  it("matches the course the patient named, and stays open when they did not", () => {
+    const rule: Rule = { _tag: "msCourse", courses: ["rrms", "spms"] }
+    expect(status(rule, { msCourse: "rrms" })).toBe("met")
+    expect(status(rule, { msCourse: "ppms" })).toBe("notMet")
+    expect(status(rule, {})).toBe("unknown")
+  })
+
+  it("reads an EDSS range and stays open without a score", () => {
+    const rule: Rule = { _tag: "edss", min: 2, max: 6.5 }
+    expect(status(rule, { edss: 4 })).toBe("met")
+    expect(status(rule, { edss: 7 })).toBe("notMet")
+    expect(status(rule, { edss: 0 })).toBe("notMet")
+    expect(status(rule, {})).toBe("unknown")
+  })
+
+  describe("relapse within a window", () => {
+    const within = (months: number): Rule => ({ _tag: "relapse", withinMonths: months })
+
+    it("is yes when the whole answer bucket falls inside the window", () => {
+      expect(status(within(12), { lastRelapse: "3to12" })).toBe("met")
+      expect(status(within(3), { lastRelapse: "1to3" })).toBe("met")
+    })
+
+    it("is no when the whole bucket is older than the window", () => {
+      expect(status(within(12), { lastRelapse: "12to24" })).toBe("notMet")
+      expect(status(within(3), { lastRelapse: "3to12" })).toBe("notMet")
+    })
+
+    it("is open when the window cuts through the bucket", () => {
+      expect(status(within(6), { lastRelapse: "3to12" })).toBe("unknown")
+      expect(status(within(0.99), { lastRelapse: "lt1" })).toBe("unknown")
+    })
+
+    it("is open without an answer", () => {
+      expect(status(within(12), {})).toBe("unknown")
+    })
+
+    it("excludes a trial that bars recent relapses only for patients inside the window", () => {
+      expect(status(within(3), { lastRelapse: "lt1" }, "exclusion")).toBe("notMet")
+      expect(status(within(3), { lastRelapse: "gt24" }, "exclusion")).toBe("met")
+    })
+  })
+
+  it("matches a drug class from the patient's history", () => {
+    const rule: Rule = { _tag: "msTherapy", category: "natalizumab" }
+    const base = emptyProfile().msTherapies
+    expect(status(rule, { msTherapies: { ...base, natalizumab: "yes" } }, "exclusion")).toBe("notMet")
+    expect(status(rule, { msTherapies: { ...base, natalizumab: "no" } }, "exclusion")).toBe("met")
+    expect(status(rule, {}, "exclusion")).toBe("unknown")
+  })
+
+  describe("pregnancy flag", () => {
+    const rule: Rule = { _tag: "flag", flag: "pregnancy" }
+
+    it("treats men as never pregnant without asking", () => {
+      expect(status(rule, { sex: "male" }, "exclusion")).toBe("met")
+    })
+
+    it("uses the answer for everyone else and stays open when unanswered", () => {
+      expect(status(rule, { sex: "female", pregnancy: "yes" }, "exclusion")).toBe("notMet")
+      expect(status(rule, { sex: "female", pregnancy: "no" }, "exclusion")).toBe("met")
+      expect(status(rule, { sex: "unknown" }, "exclusion")).toBe("unknown")
+    })
+  })
+})

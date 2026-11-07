@@ -17,6 +17,15 @@
     "brainMets",
     "ild",
     "autoimmune",
+    "msCourse",
+    "edss",
+    "lastRelapse",
+    "msTherapies",
+    "pregnancy",
+    "mriUnsuitable",
+    "recentSteroids",
+    "chronicInfection",
+    "cancerHistory",
     "labs",
     "country",
     "postcode"
@@ -284,6 +293,166 @@
       ]
     },
     "autoimmune": {
+      "type": "string",
+      "enum": [
+        "yes",
+        "no",
+        "unknown"
+      ]
+    },
+    "msCourse": {
+      "type": "string",
+      "enum": [
+        "rrms",
+        "spms",
+        "ppms",
+        "cis",
+        "unknown"
+      ]
+    },
+    "edss": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "lastRelapse": {
+      "type": "string",
+      "enum": [
+        "lt1",
+        "1to3",
+        "3to12",
+        "12to24",
+        "gt24",
+        "unknown"
+      ]
+    },
+    "msTherapies": {
+      "type": "object",
+      "required": [
+        "interferon",
+        "glatiramer",
+        "natalizumab",
+        "antiCd20",
+        "s1p",
+        "fumarate",
+        "teriflunomide",
+        "cladribine",
+        "alemtuzumab"
+      ],
+      "properties": {
+        "interferon": {
+          "type": "string",
+          "enum": [
+            "yes",
+            "no",
+            "unknown"
+          ]
+        },
+        "glatiramer": {
+          "type": "string",
+          "enum": [
+            "yes",
+            "no",
+            "unknown"
+          ]
+        },
+        "natalizumab": {
+          "type": "string",
+          "enum": [
+            "yes",
+            "no",
+            "unknown"
+          ]
+        },
+        "antiCd20": {
+          "type": "string",
+          "enum": [
+            "yes",
+            "no",
+            "unknown"
+          ]
+        },
+        "s1p": {
+          "type": "string",
+          "enum": [
+            "yes",
+            "no",
+            "unknown"
+          ]
+        },
+        "fumarate": {
+          "type": "string",
+          "enum": [
+            "yes",
+            "no",
+            "unknown"
+          ]
+        },
+        "teriflunomide": {
+          "type": "string",
+          "enum": [
+            "yes",
+            "no",
+            "unknown"
+          ]
+        },
+        "cladribine": {
+          "type": "string",
+          "enum": [
+            "yes",
+            "no",
+            "unknown"
+          ]
+        },
+        "alemtuzumab": {
+          "type": "string",
+          "enum": [
+            "yes",
+            "no",
+            "unknown"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "pregnancy": {
+      "type": "string",
+      "enum": [
+        "yes",
+        "no",
+        "unknown"
+      ]
+    },
+    "mriUnsuitable": {
+      "type": "string",
+      "enum": [
+        "yes",
+        "no",
+        "unknown"
+      ]
+    },
+    "recentSteroids": {
+      "type": "string",
+      "enum": [
+        "yes",
+        "no",
+        "unknown"
+      ]
+    },
+    "chronicInfection": {
+      "type": "string",
+      "enum": [
+        "yes",
+        "no",
+        "unknown"
+      ]
+    },
+    "cancerHistory": {
       "type": "string",
       "enum": [
         "yes",

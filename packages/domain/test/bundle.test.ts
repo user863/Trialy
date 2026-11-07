@@ -41,3 +41,32 @@ describe.skipIf(!has)("published bundle (real registry data)", () => {
     expect(performance.now() - t0).toBeLessThan(2000)
   })
 })
+
+const msFile = fileURLToPath(new URL("../../web/public/data/ms.json", import.meta.url))
+
+describe.skipIf(!existsSync(msFile))("published multiple sclerosis bundle", () => {
+  const bundle = existsSync(msFile) ? S.decodeUnknownSync(Bundle)(JSON.parse(readFileSync(msFile, "utf8"))) : null!
+
+  it("reads only the common MS criteria as rules, everything else stays registry text", () => {
+    const tags = new Set(bundle.trials.flatMap((t) => t.criteria.map((c) => c.rule._tag)))
+    const allowed = ["age", "sex", "msCourse", "edss", "relapse", "msTherapy", "flag", "anyOf", "allOf", "not", "narrow", "other"]
+    expect([...tags].filter((tag) => !allowed.includes(tag))).toEqual([])
+    expect(tags.has("edss")).toBe(true)
+  })
+
+  it("keeps the sentence text of every criterion", () => {
+    for (const t of bundle.trials) for (const c of t.criteria) expect(c.text.length).toBeGreaterThan(0)
+  })
+
+  it("an empty profile never hides a trial", () => {
+    expect(matchTrials(bundle.trials, emptyProfile(), null).filter((m) => m.hidden)).toHaveLength(0)
+  })
+
+  it("hides a trial whose registry age limit the patient is outside of", () => {
+    const young = { ...emptyProfile(), age: 5 }
+    const adultsOnly = bundle.trials.filter((t) => t.criteria.some((c) => c.rule._tag === "age" && (c.rule as { min?: number }).min! >= 18))
+    expect(adultsOnly.length).toBeGreaterThan(0)
+    const hidden = new Set(matchTrials(bundle.trials, young, null).filter((m) => m.hidden).map((m) => m.trial.nctId))
+    expect(adultsOnly.every((t) => hidden.has(t.nctId))).toBe(true)
+  })
+})

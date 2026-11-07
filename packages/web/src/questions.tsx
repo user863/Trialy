@@ -1,18 +1,23 @@
 import { useEffect, useState, type ReactNode } from "react"
 import type { Gene, Profile, Tri } from "@trial-finder/domain"
-import { GENES } from "@trial-finder/domain"
+import { GENES, MS_THERAPIES } from "@trial-finder/domain"
 import { useApp } from "./app"
 import { config } from "./config"
+import { useI18n, type I18n, type Key } from "./i18n"
 
 type Set = (f: (p: Profile) => Profile) => void
 
 interface Step {
   id: string
-  title: string
-  help: ReactNode
+  title: Key
+  help: Key
+  general?: true
+  only?: string
   skip?: (p: Profile) => boolean
-  body: (p: Profile, set: Set) => ReactNode
+  body: (p: Profile, set: Set, i18n: I18n) => ReactNode
 }
+
+export const HELP_TAGS = { b: (text: string) => <strong>{text}</strong>, em: (text: string) => <em>{text}</em> }
 
 
 function Choice<T extends string>({
@@ -72,10 +77,10 @@ function Segments<T extends string>({
   )
 }
 
-const TRI: Array<{ value: Tri; label: string }> = [
-  { value: "yes", label: "Yes" },
-  { value: "no", label: "No" },
-  { value: "unknown", label: "I don’t know" }
+const triOptions = (t: I18n["t"]): Array<{ value: Tri; label: string }> => [
+  { value: "yes", label: t("answer.yes") },
+  { value: "no", label: t("answer.no") },
+  { value: "unknown", label: t("answer.unknown") }
 ]
 
 function NumberField({
@@ -125,140 +130,106 @@ function NumberField({
 }
 
 
-const GENE_NOTE: Record<Gene, string> = {
-  EGFR: "EGFR mutation (e.g. exon 19 deletion, L858R, exon 20 insertion)",
-  ALK: "ALK rearrangement",
-  ROS1: "ROS1 rearrangement",
-  KRAS: "KRAS mutation (e.g. G12C)",
-  BRAF: "BRAF mutation (e.g. V600E)",
-  MET: "MET exon 14 skipping or amplification",
-  RET: "RET fusion",
-  HER2: "HER2 (ERBB2) mutation",
-  NTRK: "NTRK fusion",
-  NRG1: "NRG1 fusion"
-}
-
-const THERAPIES: Array<{ key: keyof Profile["priorTherapies"]; label: string; hint: string }> = [
-  { key: "chemotherapy", label: "Chemotherapy", hint: "for example cisplatin, carboplatin, pemetrexed, docetaxel, etoposide" },
-  { key: "immunotherapy", label: "Immunotherapy", hint: "for example pembrolizumab (Keytruda), nivolumab, atezolizumab, durvalumab" },
-  { key: "targeted", label: "Targeted therapy (tablets for a gene change)", hint: "for example osimertinib, alectinib, lorlatinib, sotorasib" },
-  { key: "radiotherapy", label: "Radiotherapy", hint: "radiation of the lung, brain or elsewhere" },
-  { key: "surgery", label: "Surgery on the tumour", hint: "removal of part of the lung or other tumour surgery" }
-]
+const THERAPIES = ["chemotherapy", "immunotherapy", "targeted", "radiotherapy", "surgery"] as const satisfies ReadonlyArray<keyof Profile["priorTherapies"]>
 
 export const STEPS: Step[] = [
   {
+    id: "condition",
+    title: "step.condition.title",
+    help: "step.condition.help",
+    general: true,
+    body: () => <ConditionStep />
+  },
+  {
     id: "type",
-    title: "What type of lung cancer was diagnosed?",
-    help: (
-      <>
-        Look under “Diagnosis” (<em>Diagnose</em>) in your doctor’s letter or pathology report. <strong>NSCLC</strong> =
-        non-small cell (<em>nicht-kleinzelliges Lungenkarzinom</em>). <strong>SCLC</strong> = small cell (
-        <em>kleinzelliges Lungenkarzinom</em>). Other types, such as mesothelioma, are not covered yet.
-      </>
-    ),
-    body: (p, set) => (
+    title: "step.type.title",
+    help: "step.type.help",
+    body: (p, set, { t }) => (
       <Choice
-        name="Cancer type"
+        name={t("step.type.name")}
         value={p.cancerType}
         onChange={(v) => set((x) => ({ ...x, cancerType: v }))}
         options={[
-          { value: "nsclc", label: "Non-small cell lung cancer (NSCLC)", hint: "the most common type" },
-          { value: "sclc", label: "Small cell lung cancer (SCLC)" },
-          { value: "unknown", label: "I don’t know" }
+          { value: "nsclc", label: t("step.type.nsclc"), hint: t("step.type.nsclc.hint") },
+          { value: "sclc", label: t("step.type.sclc") },
+          { value: "unknown", label: t("answer.unknown") }
         ]}
       />
     )
   },
   {
     id: "histology",
-    title: "What does the tissue look like under the microscope?",
+    title: "step.histology.title",
     skip: (p) => p.cancerType === "sclc",
-    help: (
-      <>
-        Also in the pathology report (<em>Histologie</em>). <strong>Adenocarcinoma</strong> and <strong>squamous cell
-        carcinoma</strong> (<em>Plattenepithelkarzinom</em>) are the two most common kinds of NSCLC.
-      </>
-    ),
-    body: (p, set) => (
+    help: "step.histology.help",
+    body: (p, set, { t }) => (
       <Choice
-        name="Histology"
+        name={t("step.histology.name")}
         value={p.histology}
         onChange={(v) => set((x) => ({ ...x, histology: v }))}
         options={[
-          { value: "adenocarcinoma", label: "Adenocarcinoma (Adenokarzinom)" },
-          { value: "squamous", label: "Squamous cell carcinoma (Plattenepithelkarzinom)" },
-          { value: "other", label: "Something else" },
-          { value: "unknown", label: "I don’t know" }
+          { value: "adenocarcinoma", label: t("step.histology.adenocarcinoma") },
+          { value: "squamous", label: t("step.histology.squamous") },
+          { value: "other", label: t("step.histology.other") },
+          { value: "unknown", label: t("answer.unknown") }
         ]}
       />
     )
   },
   {
     id: "stage",
-    title: "How far has the cancer spread?",
-    help: (
-      <>
-        Doctors write a stage from I to IV (<em>UICC-Stadium</em>) or describe the disease as “localised”, “locally advanced” or
-        “metastatic” (<em>metastasiert</em>). Stage IV or “metastatic” means it has spread to other organs.
-      </>
-    ),
-    body: (p, set) => (
+    title: "step.stage.title",
+    help: "step.stage.help",
+    body: (p, set, { t }) => (
       <Choice
-        name="Stage"
+        name={t("step.stage.name")}
         value={p.stage}
         onChange={(v) => set((x) => ({ ...x, stage: v }))}
         options={[
-          { value: "I", label: "Stage I", hint: "small, in one place" },
-          { value: "II", label: "Stage II", hint: "larger or in nearby lymph nodes" },
-          { value: "III", label: "Stage III", hint: "locally advanced" },
-          { value: "IV", label: "Stage IV", hint: "metastatic, spread to other organs" },
-          { value: "unknown", label: "I don’t know" }
+          { value: "I", label: t("stage.I"), hint: t("step.stage.I.hint") },
+          { value: "II", label: t("stage.II"), hint: t("step.stage.II.hint") },
+          { value: "III", label: t("stage.III"), hint: t("step.stage.III.hint") },
+          { value: "IV", label: t("stage.IV"), hint: t("step.stage.IV.hint") },
+          { value: "unknown", label: t("answer.unknown") }
         ]}
       />
     )
   },
   {
     id: "extent",
-    title: "Limited or extensive disease?",
+    title: "step.extent.title",
     skip: (p) => p.cancerType !== "sclc",
-    help: <>For small cell lung cancer doctors often say “limited” (<em>limited disease</em>) or “extensive” (<em>extensive disease</em>) instead of a stage.</>,
-    body: (p, set) => (
+    help: "step.extent.help",
+    body: (p, set, { t }) => (
       <Choice
-        name="SCLC extent"
+        name={t("step.extent.name")}
         value={p.sclcExtent}
         onChange={(v) => set((x) => ({ ...x, sclcExtent: v }))}
         options={[
-          { value: "limited", label: "Limited disease", hint: "within one area that can be treated with radiation" },
-          { value: "extensive", label: "Extensive disease" },
-          { value: "unknown", label: "I don’t know" }
+          { value: "limited", label: t("step.extent.limited"), hint: t("step.extent.limited.hint") },
+          { value: "extensive", label: t("step.extent.extensive") },
+          { value: "unknown", label: t("answer.unknown") }
         ]}
       />
     )
   },
   {
     id: "markers",
-    title: "Gene changes found in the tumour",
-    help: (
-      <>
-        These come from molecular testing of the tumour (<em>Molekularpathologie, Next-Generation-Sequencing</em>). Choose “Found” only
-        if your report names a change; choose “Not found” if the test looked and the result was negative. If it was not tested or you
-        can’t tell, leave “I don’t know”. That never excludes a trial.
-      </>
-    ),
-    body: (p, set) => (
+    title: "step.markers.title",
+    help: "step.markers.help",
+    body: (p, set, { t }) => (
       <div className="rows">
         {GENES.map((g) => (
           <Segments
             key={g}
             label={g}
-            hint={GENE_NOTE[g]}
+            hint={t(`gene.${g}`)}
             value={p.biomarkers[g] ?? "unknown"}
             onChange={(v) => set((x) => ({ ...x, biomarkers: { ...x.biomarkers, [g]: v } }))}
             options={[
-              { value: "positive", label: "Found" },
-              { value: "negative", label: "Not found" },
-              { value: "unknown", label: "I don’t know" }
+              { value: "positive", label: t("step.markers.found") },
+              { value: "negative", label: t("step.markers.notFound") },
+              { value: "unknown", label: t("answer.unknown") }
             ]}
           />
         ))}
@@ -267,36 +238,36 @@ export const STEPS: Step[] = [
   },
   {
     id: "pdl1",
-    title: "PD-L1 level",
-    help: <>Reported as a percentage, often “TPS” (<em>Tumor Proportion Score</em>) or “PD-L1-Expression”, from the pathology report.</>,
-    body: (p, set) => (
+    title: "step.pdl1.title",
+    help: "step.pdl1.help",
+    body: (p, set, { t }) => (
       <Choice
-        name="PD-L1"
+        name={t("step.pdl1.name")}
         value={p.pdl1}
         onChange={(v) => set((x) => ({ ...x, pdl1: v }))}
         options={[
-          { value: "ge50", label: "50% or higher" },
-          { value: "1to49", label: "1% to 49%" },
-          { value: "lt1", label: "Below 1% (negative)" },
-          { value: "unknown", label: "I don’t know" }
+          { value: "ge50", label: t("step.pdl1.ge50") },
+          { value: "1to49", label: t("step.pdl1.1to49") },
+          { value: "lt1", label: t("step.pdl1.lt1") },
+          { value: "unknown", label: t("answer.unknown") }
         ]}
       />
     )
   },
   {
     id: "prior",
-    title: "Which treatments have you already had for the cancer?",
-    help: <>See “Therapie” or “bisherige Behandlung” in your letters. Include treatment at any time, also before the cancer spread.</>,
-    body: (p, set) => (
+    title: "step.prior.title",
+    help: "step.prior.help",
+    body: (p, set, { t }) => (
       <div className="rows">
-        {THERAPIES.map((t) => (
+        {THERAPIES.map((key) => (
           <Segments
-            key={t.key}
-            label={t.label}
-            hint={t.hint}
-            value={p.priorTherapies[t.key]}
-            onChange={(v) => set((x) => ({ ...x, priorTherapies: { ...x.priorTherapies, [t.key]: v } }))}
-            options={TRI}
+            key={key}
+            label={t(`therapy.label.${key}`)}
+            hint={t(`therapy.hint.${key}`)}
+            value={p.priorTherapies[key]}
+            onChange={(v) => set((x) => ({ ...x, priorTherapies: { ...x.priorTherapies, [key]: v } }))}
+            options={triOptions(t)}
           />
         ))}
       </div>
@@ -304,97 +275,187 @@ export const STEPS: Step[] = [
   },
   {
     id: "lines",
-    title: "How many rounds of drug treatment for advanced disease?",
-    help: (
-      <>
-        A “line” (<em>Therapielinie</em>) is one treatment plan given because the cancer had spread or come back. A new line starts when the
-        plan is changed because the cancer grew. Treatment given after surgery to prevent a return does not count. If you have not had any
-        drug treatment for advanced disease yet, enter 0.
-      </>
-    ),
-    body: (p, set) => (
+    title: "step.lines.title",
+    help: "step.lines.help",
+    body: (p, set, { t }) => (
       <>
         <NumberField
-          label="Lines of drug treatment so far"
+          label={t("step.lines.label")}
           value={p.priorLines}
           min={0}
           max={15}
-          unit="lines"
+          unit={t("step.lines.unit")}
           onChange={(v) => set((x) => ({ ...x, priorLines: v === null ? null : Math.max(0, Math.round(v)) }))}
         />
-        <p className="muted">Leave empty if you don’t know.</p>
+        <p className="muted">{t("step.lines.empty")}</p>
       </>
     )
   },
   {
     id: "current",
-    title: "What treatment are you on right now?",
-    help: <>Whatever you are currently being treated with. Choose “none” if you are between treatments or not treated at the moment.</>,
-    body: (p, set) => (
+    title: "step.current.title",
+    help: "step.current.help",
+    body: (p, set, { t }) => (
       <Choice
-        name="Current treatment"
+        name={t("step.current.name")}
         value={p.currentTherapy}
         onChange={(v) => set((x) => ({ ...x, currentTherapy: v }))}
         options={[
-          { value: "none", label: "No treatment right now" },
-          { value: "chemotherapy", label: "Chemotherapy" },
-          { value: "immunotherapy", label: "Immunotherapy" },
-          { value: "targeted", label: "Targeted therapy" },
-          { value: "radiotherapy", label: "Radiotherapy" },
-          { value: "unknown", label: "I don’t know" }
+          { value: "none", label: t("step.current.none") },
+          { value: "chemotherapy", label: t("therapy.label.chemotherapy") },
+          { value: "immunotherapy", label: t("therapy.label.immunotherapy") },
+          { value: "targeted", label: t("step.current.targeted") },
+          { value: "radiotherapy", label: t("therapy.label.radiotherapy") },
+          { value: "unknown", label: t("answer.unknown") }
         ]}
       />
     )
   },
   {
     id: "health",
-    title: "Other health conditions that trials often ask about",
-    help: <>Check your letters for “Hirnmetastasen”, “Lungenfibrose / interstitielle Lungenerkrankung (ILD)” or “Autoimmunerkrankung”.</>,
-    body: (p, set) => (
+    title: "step.health.title",
+    help: "step.health.help",
+    body: (p, set, { t }) => (
       <div className="rows">
         <Segments
-          label="Cancer in the brain (brain metastases)"
+          label={t("step.health.brain")}
           value={p.brainMets}
           onChange={(v) => set((x) => ({ ...x, brainMets: v }))}
           options={[
-            { value: "none", label: "None" },
-            { value: "treated", label: "Yes, treated and stable" },
-            { value: "active", label: "Yes, untreated or causing symptoms" },
-            { value: "unknown", label: "I don’t know" }
+            { value: "none", label: t("step.health.brain.none") },
+            { value: "treated", label: t("step.health.brain.treated") },
+            { value: "active", label: t("step.health.brain.active") },
+            { value: "unknown", label: t("answer.unknown") }
           ]}
         />
         <Segments
-          label="Scarring or inflammation of the lung tissue"
-          hint="interstitial lung disease, pulmonary fibrosis, pneumonitis"
+          label={t("step.health.ild")}
+          hint={t("step.health.ild.hint")}
           value={p.ild}
           onChange={(v) => set((x) => ({ ...x, ild: v }))}
-          options={TRI}
+          options={triOptions(t)}
         />
         <Segments
-          label="An autoimmune disease"
-          hint="for example rheumatoid arthritis, lupus, Crohn’s disease, multiple sclerosis"
+          label={t("step.health.autoimmune")}
+          hint={t("step.health.autoimmune.hint")}
           value={p.autoimmune}
           onChange={(v) => set((x) => ({ ...x, autoimmune: v }))}
-          options={TRI}
+          options={triOptions(t)}
         />
       </div>
     )
   },
   {
+    id: "mscourse",
+    title: "step.mscourse.title",
+    help: "step.mscourse.help",
+    only: "ms",
+    body: (p, set, { t }) => (
+      <Choice
+        name={t("step.mscourse.name")}
+        value={p.msCourse}
+        onChange={(v) => set((x) => ({ ...x, msCourse: v }))}
+        options={[
+          { value: "rrms", label: t("step.mscourse.rrms"), hint: t("step.mscourse.rrms.hint") },
+          { value: "spms", label: t("step.mscourse.spms"), hint: t("step.mscourse.spms.hint") },
+          { value: "ppms", label: t("step.mscourse.ppms"), hint: t("step.mscourse.ppms.hint") },
+          { value: "cis", label: t("step.mscourse.cis"), hint: t("step.mscourse.cis.hint") },
+          { value: "unknown", label: t("answer.unknown") }
+        ]}
+      />
+    )
+  },
+  {
+    id: "edss",
+    title: "step.edss.title",
+    help: "step.edss.help",
+    only: "ms",
+    body: (p, set, { t }) => (
+      <NumberField
+        label={t("step.edss.label")}
+        hint={t("step.edss.hint")}
+        value={p.edss}
+        min={0}
+        max={10}
+        step={0.5}
+        onChange={(v) => set((x) => ({ ...x, edss: v === null ? null : Math.min(10, Math.max(0, Math.round(v * 2) / 2)) }))}
+      />
+    )
+  },
+  {
+    id: "relapse",
+    title: "step.relapse.title",
+    help: "step.relapse.help",
+    only: "ms",
+    body: (p, set, { t }) => (
+      <Choice
+        name={t("step.relapse.name")}
+        value={p.lastRelapse}
+        onChange={(v) => set((x) => ({ ...x, lastRelapse: v }))}
+        options={[
+          { value: "lt1", label: t("step.relapse.lt1") },
+          { value: "1to3", label: t("step.relapse.1to3") },
+          { value: "3to12", label: t("step.relapse.3to12") },
+          { value: "12to24", label: t("step.relapse.12to24") },
+          { value: "gt24", label: t("step.relapse.gt24") },
+          { value: "unknown", label: t("answer.unknown") }
+        ]}
+      />
+    )
+  },
+  {
+    id: "mstherapy",
+    title: "step.mstherapy.title",
+    help: "step.mstherapy.help",
+    only: "ms",
+    body: (p, set, { t }) => (
+      <div className="rows">
+        {MS_THERAPIES.map((key) => (
+          <Segments
+            key={key}
+            label={t(`mstherapy.${key}`)}
+            hint={t(`mstherapy.${key}.hint`)}
+            value={p.msTherapies[key]}
+            onChange={(v) => set((x) => ({ ...x, msTherapies: { ...x.msTherapies, [key]: v } }))}
+            options={triOptions(t)}
+          />
+        ))}
+      </div>
+    )
+  },
+  {
+    id: "mshealth",
+    title: "step.mshealth.title",
+    help: "step.mshealth.help",
+    only: "ms",
+    body: (p, set, { t }) => (
+      <div className="rows">
+        {p.sex !== "male" && (
+          <Segments label={t("step.mshealth.pregnancy")} value={p.pregnancy} onChange={(v) => set((x) => ({ ...x, pregnancy: v }))} options={triOptions(t)} />
+        )}
+        <Segments label={t("step.mshealth.mri")} hint={t("step.mshealth.mri.hint")} value={p.mriUnsuitable} onChange={(v) => set((x) => ({ ...x, mriUnsuitable: v }))} options={triOptions(t)} />
+        <Segments label={t("step.mshealth.steroids")} hint={t("step.mshealth.steroids.hint")} value={p.recentSteroids} onChange={(v) => set((x) => ({ ...x, recentSteroids: v }))} options={triOptions(t)} />
+        <Segments label={t("step.mshealth.infection")} hint={t("step.mshealth.infection.hint")} value={p.chronicInfection} onChange={(v) => set((x) => ({ ...x, chronicInfection: v }))} options={triOptions(t)} />
+        <Segments label={t("step.mshealth.cancer")} hint={t("step.mshealth.cancer.hint")} value={p.cancerHistory} onChange={(v) => set((x) => ({ ...x, cancerHistory: v }))} options={triOptions(t)} />
+      </div>
+    )
+  },
+  {
     id: "person",
-    title: "About you",
-    help: <>Age and sex are used for the age and sex limits many trials have. Nothing here is sent anywhere.</>,
-    body: (p, set) => (
+    title: "step.person.title",
+    help: "step.person.help",
+    general: true,
+    body: (p, set, { t }) => (
       <>
-        <NumberField label="Age" value={p.age} min={18} max={110} unit="years" onChange={(v) => set((x) => ({ ...x, age: v }))} />
+        <NumberField label={t("step.person.age")} value={p.age} min={18} max={110} unit={t("step.person.years")} onChange={(v) => set((x) => ({ ...x, age: v }))} />
         <Choice
-          name="Sex"
+          name={t("step.person.sex")}
           value={p.sex}
           onChange={(v) => set((x) => ({ ...x, sex: v }))}
           options={[
-            { value: "female", label: "Female" },
-            { value: "male", label: "Male" },
-            { value: "unknown", label: "Prefer not to say" }
+            { value: "female", label: t("step.person.female") },
+            { value: "male", label: t("step.person.male") },
+            { value: "unknown", label: t("step.person.unknown") }
           ]}
         />
       </>
@@ -402,27 +463,22 @@ export const STEPS: Step[] = [
   },
   {
     id: "fitness",
-    title: "How are you managing day to day?",
-    help: (
-      <>
-        Doctors summarise this as the “ECOG performance status” (<em>ECOG-Performance-Status</em>, 0 to 4). If your letter names a number you can pick
-        the matching description. Otherwise choose the one that fits best.
-      </>
-    ),
-    body: (p, set) => {
+    title: "step.fitness.title",
+    help: "step.fitness.help",
+    body: (p, set, { t }) => {
       const val = p.ecog === null ? "unknown" : String(p.ecog)
       return (
         <Choice
-          name="Day-to-day condition"
+          name={t("step.fitness.name")}
           value={val}
           onChange={(v) => set((x) => ({ ...x, ecog: v === "unknown" ? null : Number(v) }))}
           options={[
-            { value: "0", label: "Fully active", hint: "I can do everything as before the illness (ECOG 0)" },
-            { value: "1", label: "Slightly limited", hint: "I tire more easily but can walk and do light work (ECOG 1)" },
-            { value: "2", label: "Up and about, but can’t work", hint: "I look after myself and am up more than half the day (ECOG 2)" },
-            { value: "3", label: "Limited self-care", hint: "I am in bed or a chair more than half the day (ECOG 3)" },
-            { value: "4", label: "Needing full care", hint: "I can’t look after myself at all (ECOG 4)" },
-            { value: "unknown", label: "I don’t know" }
+            { value: "0", label: t("step.fitness.0"), hint: t("step.fitness.0.hint") },
+            { value: "1", label: t("step.fitness.1"), hint: t("step.fitness.1.hint") },
+            { value: "2", label: t("step.fitness.2"), hint: t("step.fitness.2.hint") },
+            { value: "3", label: t("step.fitness.3"), hint: t("step.fitness.3.hint") },
+            { value: "4", label: t("step.fitness.4"), hint: t("step.fitness.4.hint") },
+            { value: "unknown", label: t("answer.unknown") }
           ]}
         />
       )
@@ -430,46 +486,56 @@ export const STEPS: Step[] = [
   },
   {
     id: "labs",
-    title: "Blood test values (optional)",
-    help: <>Only if you have a recent blood count handy (<em>Blutbild</em>). Leave anything you can’t find empty. It is perfectly fine to skip this page.</>,
-    body: (p, set) => (
+    title: "step.labs.title",
+    help: "step.labs.help",
+    body: (p, set, { t }) => (
       <div className="rows">
-        <NumberField label="Neutrophils (ANC)" unit="×10⁹/L" hint="also “Neutrophile”; 1500/µL = 1.5" value={p.labs.anc} onChange={(v) => set((x) => ({ ...x, labs: { ...x.labs, anc: v } }))} />
-        <NumberField label="Platelets" unit="×10⁹/L" hint="“Thrombozyten”; 150 000/µL = 150" value={p.labs.platelets} onChange={(v) => set((x) => ({ ...x, labs: { ...x.labs, platelets: v } }))} />
-        <NumberField label="Hemoglobin" unit="g/dL" hint="“Hämoglobin”; 90 g/L = 9" value={p.labs.hemoglobin} onChange={(v) => set((x) => ({ ...x, labs: { ...x.labs, hemoglobin: v } }))} />
-        <NumberField label="Creatinine clearance" unit="mL/min" hint="kidney function (“GFR”, “Kreatinin-Clearance”)" value={p.labs.crcl} onChange={(v) => set((x) => ({ ...x, labs: { ...x.labs, crcl: v } }))} />
+        <NumberField label={t("step.labs.anc")} unit="×10⁹/L" hint={t("step.labs.anc.hint")} value={p.labs.anc} onChange={(v) => set((x) => ({ ...x, labs: { ...x.labs, anc: v } }))} />
+        <NumberField label={t("step.labs.platelets")} unit="×10⁹/L" hint={t("step.labs.platelets.hint")} value={p.labs.platelets} onChange={(v) => set((x) => ({ ...x, labs: { ...x.labs, platelets: v } }))} />
+        <NumberField label={t("step.labs.hemoglobin")} unit="g/dL" hint={t("step.labs.hemoglobin.hint")} value={p.labs.hemoglobin} onChange={(v) => set((x) => ({ ...x, labs: { ...x.labs, hemoglobin: v } }))} />
+        <NumberField label={t("step.labs.crcl")} unit="mL/min" hint={t("step.labs.crcl.hint")} value={p.labs.crcl} onChange={(v) => set((x) => ({ ...x, labs: { ...x.labs, crcl: v } }))} />
       </div>
     )
   },
   {
     id: "where",
-    title: "Where do you live?",
-    help: (
-      <>
-        Used to sort trials by distance. Your postcode is looked up in a table inside this page. It is <strong>not</strong> sent to any
-        routing or map service. Distances are straight-line estimates.
-      </>
-    ),
+    title: "step.where.title",
+    help: "step.where.help",
+    general: true,
     body: (p, set) => <WhereStep p={p} set={set} />
   }
 ]
 
+function ConditionStep() {
+  const { t, tOr } = useI18n()
+  const { groups, group, setGroup } = useApp()
+  return (
+    <Choice
+      name={t("step.condition.name")}
+      value={group}
+      onChange={setGroup}
+      options={groups.map((g) => ({ value: g.id, label: tOr(`group.${g.id}`, g.label), hint: tOr(`step.condition.${g.id}.hint`, "") || undefined }))}
+    />
+  )
+}
+
 function WhereStep({ p, set }: { p: Profile; set: Set }) {
+  const { t, countryName } = useI18n()
   const { postcodeStatus, home } = useApp()
   return (
     <>
       <Choice
-        name="Country"
+        name={t("where.country")}
         value={p.country}
         onChange={(v) => set((x) => ({ ...x, country: v, postcode: "" }))}
         options={[
-          { value: "DE", label: "Germany" },
-          { value: "AT", label: "Austria" },
-          { value: "CH", label: "Switzerland" }
+          { value: "DE", label: countryName("Germany") },
+          { value: "AT", label: countryName("Austria") },
+          { value: "CH", label: countryName("Switzerland") }
         ]}
       />
       <label className="field">
-        <span>Postcode</span>
+        <span>{t("step.where.postcode")}</span>
         <input
           inputMode="numeric"
           autoComplete="postal-code"
@@ -479,18 +545,22 @@ function WhereStep({ p, set }: { p: Profile; set: Set }) {
         />
       </label>
       <p className="muted" aria-live="polite">
-        {postcodeStatus === "found" && home && "Found. Distances will be shown from the centre of this postcode area."}
-        {postcodeStatus === "unknown" && "We don’t know this postcode, so distances stay hidden. You can still use every other feature."}
-        {postcodeStatus === "empty" && "Optional. Without it, trials are not sorted by distance."}
+        {postcodeStatus === "found" && home && t("step.where.found")}
+        {postcodeStatus === "unknown" && t("step.where.unknown")}
+        {postcodeStatus === "empty" && t("step.where.empty")}
       </p>
     </>
   )
 }
 
+export const stepsFor = (group: string, profile: Profile): Step[] =>
+  STEPS.filter((s) => (s.general || (s.only ?? config.group) === group) && !s.skip?.(profile))
+
 export const STEP_FOR_FIELD = (field: string): string => {
   if (field.startsWith("biomarker:")) return "markers"
   if (field.startsWith("priorTherapy:")) return "prior"
   if (field.startsWith("lab:")) return "labs"
+  if (field.startsWith("msTherapy:")) return "mstherapy"
   const map: Record<string, string> = {
     cancerType: "type",
     histology: "histology",
@@ -504,29 +574,51 @@ export const STEP_FOR_FIELD = (field: string): string => {
     ecog: "fitness",
     brainMets: "health",
     ild: "health",
-    autoimmune: "health"
+    autoimmune: "health",
+    msCourse: "mscourse",
+    edss: "edss",
+    lastRelapse: "relapse",
+    pregnancy: "mshealth",
+    mriUnsuitable: "mshealth",
+    recentSteroids: "mshealth",
+    chronicInfection: "mshealth",
+    cancerHistory: "mshealth"
   }
   return map[field] ?? "type"
 }
 
-export const FIELD_LABEL = (field: string): string => {
-  if (field.startsWith("biomarker:")) return `${field.slice(10)} gene result`
-  if (field.startsWith("priorTherapy:")) return `previous ${field.slice(13) === "systemic" ? "drug treatment" : field.slice(13)}`
-  if (field.startsWith("lab:")) return `blood value (${field.slice(4)})`
-  const map: Record<string, string> = {
-    cancerType: "lung cancer type",
-    histology: "tissue type",
-    stage: "stage",
-    sclcExtent: "limited or extensive disease",
-    pdl1: "PD-L1 level",
-    priorLines: "lines of drug treatment",
-    currentTherapy: "current treatment",
-    age: "age",
-    sex: "sex",
-    ecog: "day-to-day condition",
-    brainMets: "brain metastases",
-    ild: "lung scarring / inflammation",
-    autoimmune: "autoimmune disease"
+const FIELD_KEYS = [
+  "cancerType",
+  "histology",
+  "stage",
+  "sclcExtent",
+  "pdl1",
+  "priorLines",
+  "currentTherapy",
+  "age",
+  "sex",
+  "ecog",
+  "brainMets",
+  "ild",
+  "autoimmune",
+  "msCourse",
+  "edss",
+  "lastRelapse",
+  "pregnancy",
+  "mriUnsuitable",
+  "recentSteroids",
+  "chronicInfection",
+  "cancerHistory"
+] as const
+
+export const fieldLabel = (t: I18n["t"], tOr: I18n["tOr"], field: string): string => {
+  if (field.startsWith("biomarker:")) return t("field.biomarker", { gene: field.slice(10) })
+  if (field.startsWith("priorTherapy:")) {
+    const therapy = field.slice(13)
+    return t("field.priorTherapy", { therapy: tOr(`therapy.${therapy}`, therapy) })
   }
-  return map[field] ?? field
+  if (field.startsWith("lab:")) return t("field.lab", { lab: field.slice(4) })
+  if (field.startsWith("msTherapy:")) return t("field.msTherapy", { therapy: tOr(`mstherapy.${field.slice(10)}`, field.slice(10)) })
+  const known = FIELD_KEYS.find((k) => k === field)
+  return known ? t(`field.${known}`) : field
 }

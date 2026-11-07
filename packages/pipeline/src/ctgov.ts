@@ -1,6 +1,7 @@
 import { Data, Duration, Effect, Schedule, Schema as S } from "effect"
 import type { Site, Trial } from "@trial-finder/domain"
-import { extractCriteria } from "./extract.js"
+import { extractCriteria, generalCriteria } from "./extract.js"
+import { msCriteria } from "./extract-ms.js"
 import { config } from "./config.js"
 import { COUNTRIES, type GroupConfig } from "./groups.js"
 
@@ -147,6 +148,8 @@ const classifyIds = (ids: ReadonlyArray<string>) => {
 
 const trimmed = (s?: string) => (s && s.trim() ? s.trim() : undefined)
 
+const READERS = { lung: extractCriteria, ms: msCriteria, general: generalCriteria } as const
+
 const toTrial = (study: CtgStudy, g: GroupConfig): Trial | null => {
   const p = study.protocolSection
   const id = p.identificationModule
@@ -199,7 +202,7 @@ const toTrial = (study: CtgStudy, g: GroupConfig): Trial | null => {
     ...(central ? { centralContact: { ...(central.name ? { name: central.name } : {}), ...(central.email ? { email: central.email } : {}), ...(central.phone ? { phone: central.phone } : {}) } } : {}),
     sites,
     eligibilityText,
-    criteria: extractCriteria(id.nctId, eligibilityText, {
+    criteria: READERS[g.reader](id.nctId, eligibilityText, {
       minAge: p.eligibilityModule?.minimumAge,
       maxAge: p.eligibilityModule?.maximumAge,
       sex: p.eligibilityModule?.sex,

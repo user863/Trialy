@@ -1,1 +1,1 @@
-{"groups":[{"id":"lung","label":"Lung cancer","version":"202610122117","trials":328,"file":"lung.json"}],"generatedAt":"2026-10-12T21:17:21.477Z"}
+{"groups":[{"id":"lung","label":"Lung cancer","version":"202610122117","trials":328,"file":"lung.json"},{"id":"ms","label":"Multiple sclerosis","version":"202611071041","trials":81,"file":"ms.json"}],"generatedAt":"2026-11-07T10:41:23.604Z"}

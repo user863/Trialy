@@ -1,5 +1,5 @@
 import { and, not, or } from "./kleene.js"
-import type { Criterion, Profile, Rule, Site, Trial, Tri } from "./schema.js"
+import type { Criterion, MsCourse, MsTherapyCategory, Profile, RelapseAge, Rule, Site, Trial, Tri } from "./schema.js"
 
 export type Status = "met" | "notMet" | "unknown"
 
@@ -19,13 +19,43 @@ export type ProfileField =
   | "brainMets"
   | "ild"
   | "autoimmune"
+  | "msCourse"
+  | "edss"
+  | "lastRelapse"
+  | `msTherapy:${string}`
+  | "pregnancy"
+  | "mriUnsuitable"
+  | "recentSteroids"
+  | "chronicInfection"
+  | "cancerHistory"
   | `lab:${string}`
+
+export type Answer =
+  | { readonly kind: "none" }
+  | { readonly kind: "unanswered" }
+  | { readonly kind: "manual" }
+  | { readonly kind: "cancerType"; readonly cancer: "nsclc" | "sclc"; readonly histology?: "adenocarcinoma" | "squamous" }
+  | { readonly kind: "extent"; readonly extent: "limited" | "extensive" }
+  | { readonly kind: "stage"; readonly stage: string }
+  | { readonly kind: "biomarker"; readonly gene: string; readonly state: "positive" | "negative" }
+  | { readonly kind: "pdl1"; readonly level: "lt1" | "1to49" | "ge50" }
+  | { readonly kind: "yesNo"; readonly value: "yes" | "no" }
+  | { readonly kind: "priorLines"; readonly lines: number }
+  | { readonly kind: "currentTherapy"; readonly therapy: string }
+  | { readonly kind: "lab"; readonly value: number }
+  | { readonly kind: "age"; readonly years: number }
+  | { readonly kind: "sex"; readonly sex: string }
+  | { readonly kind: "ecog"; readonly ecog: number }
+  | { readonly kind: "brainMets"; readonly state: "none" | "treated" | "active" }
+  | { readonly kind: "msCourse"; readonly course: MsCourse }
+  | { readonly kind: "edss"; readonly value: number }
+  | { readonly kind: "relapse"; readonly age: Exclude<RelapseAge, "unknown"> }
 
 export interface EvalNode {
   readonly tag: Rule["_tag"]
   readonly result: Tri
   readonly rule: string
-  readonly answer: string
+  readonly answer: Answer
   readonly field?: ProfileField
   readonly children?: ReadonlyArray<EvalNode>
 }
@@ -85,7 +115,29 @@ const FLAG_LABEL: Record<string, string> = {
   brainMetsAny: "brain metastases",
   brainMetsActive: "untreated or symptomatic brain metastases",
   ild: "interstitial lung disease or pneumonitis",
-  autoimmune: "an autoimmune disease"
+  autoimmune: "an autoimmune disease",
+  pregnancy: "pregnancy, breastfeeding or planning pregnancy",
+  mriUnsuitable: "a reason an MRI scan is not possible",
+  recentSteroids: "recent steroid treatment",
+  chronicInfection: "HIV, hepatitis B or C, or tuberculosis",
+  cancerHistory: "a history of cancer"
+}
+const MS_COURSE_LABEL: Record<MsCourse, string> = {
+  rrms: "relapsing-remitting MS",
+  spms: "secondary progressive MS",
+  ppms: "primary progressive MS",
+  cis: "a first episode (clinically isolated syndrome)"
+}
+const MS_THERAPY_LABEL: Record<MsTherapyCategory, string> = {
+  interferon: "interferon beta",
+  glatiramer: "glatiramer acetate",
+  natalizumab: "natalizumab",
+  antiCd20: "an anti-CD20 antibody",
+  s1p: "an S1P modulator",
+  fumarate: "a fumarate",
+  teriflunomide: "teriflunomide",
+  cladribine: "cladribine",
+  alemtuzumab: "alemtuzumab"
 }
 const LAB_LABEL: Record<string, string> = {
   anc: "neutrophil count (ANC, ×10⁹/L)",
@@ -93,9 +145,9 @@ const LAB_LABEL: Record<string, string> = {
   hemoglobin: "hemoglobin (g/dL)",
   crcl: "creatinine clearance (mL/min)"
 }
-const ANSWER_UNKNOWN = "you answered “I don’t know” (or have not answered yet)"
+const UNANSWERED: Answer = { kind: "unanswered" }
 
-const yn = (t: Tri) => (t === "yes" ? "yes" : t === "no" ? "no" : "don’t know")
+const yesNo = (t: Tri): Answer => (t === "unknown" ? UNANSWERED : { kind: "yesNo", value: t })
 
 
 export const describeRule = (rule: Rule): string => {
@@ -126,6 +178,14 @@ export const describeRule = (rule: Rule): string => {
       return `everyday fitness (ECOG ${describeRange(rule.min, rule.max)})`
     case "flag":
       return `has ${FLAG_LABEL[rule.flag]}`
+    case "msCourse":
+      return rule.courses.map((c) => MS_COURSE_LABEL[c]).join(" or ")
+    case "edss":
+      return `EDSS ${describeRange(rule.min, rule.max)}`
+    case "relapse":
+      return `a relapse within the last ${rule.withinMonths} months`
+    case "msTherapy":
+      return `has had ${MS_THERAPY_LABEL[rule.category]}`
     case "other":
       return "needs a check we cannot do automatically"
     case "anyOf":
@@ -140,10 +200,11 @@ export const describeRule = (rule: Rule): string => {
 }
 
 
-const PD_RANGES = { lt1: [0, 0.999], "1to49": [1, 49.999], ge50: [50, 100] } as const
-const PD_LABEL = { lt1: "below 1%", "1to49": "1–49%", ge50: "50% or higher" } as const
+const RELAPSE_MONTHS = { lt1: [0, 1], "1to3": [1, 3], "3to12": [3, 12], "12to24": [12, 24], gt24: [24, Infinity] } as const
 
-const leaf = (rule: Rule, result: Tri, answer: string, field?: ProfileField): EvalNode => ({
+const PD_RANGES = { lt1: [0, 0.999], "1to49": [1, 49.999], ge50: [50, 100] } as const
+
+const leaf = (rule: Rule, result: Tri, answer: Answer, field?: ProfileField): EvalNode => ({
   tag: rule._tag,
   result,
   rule: describeRule(rule),
@@ -162,11 +223,11 @@ export const evalRule = (rule: Rule, p: Profile): EvalNode => {
         return tri(p.histology === t)
       })
       const field: ProfileField = p.cancerType === "unknown" ? "cancerType" : "histology"
-      const label =
+      const answer: Answer =
         p.cancerType === "unknown"
-          ? ANSWER_UNKNOWN
-          : `${CANCER_LABEL[p.cancerType]}${p.histology !== "unknown" && p.histology !== "other" ? `, ${CANCER_LABEL[p.histology]}` : ""}`
-      return leaf(rule, or(parts), `you said: ${label}`, field)
+          ? UNANSWERED
+          : { kind: "cancerType", cancer: p.cancerType, ...(p.histology === "adenocarcinoma" || p.histology === "squamous" ? { histology: p.histology } : {}) }
+      return leaf(rule, or(parts), answer, field)
     }
     case "stage": {
       if (rule.extent) {
@@ -180,29 +241,24 @@ export const evalRule = (rule: Rule, p: Profile): EvalNode => {
         return leaf(
           rule,
           r,
-          p.sclcExtent !== "unknown" ? `you said: ${p.sclcExtent}-stage` : ANSWER_UNKNOWN,
+          p.sclcExtent !== "unknown" ? { kind: "extent", extent: p.sclcExtent } : UNANSWERED,
           "sclcExtent"
         )
       }
-      if (p.stage === "unknown") return leaf(rule, "unknown", ANSWER_UNKNOWN, "stage")
-      return leaf(rule, tri(rule.stages.includes(p.stage)), `you said: stage ${p.stage}`, "stage")
+      if (p.stage === "unknown") return leaf(rule, "unknown", UNANSWERED, "stage")
+      return leaf(rule, tri(rule.stages.includes(p.stage)), { kind: "stage", stage: p.stage }, "stage")
     }
     case "biomarker": {
       const s = p.biomarkers[rule.gene] ?? "unknown"
-      if (s === "unknown") return leaf(rule, "unknown", ANSWER_UNKNOWN, `biomarker:${rule.gene}`)
-      return leaf(
-        rule,
-        tri(s === rule.state),
-        `you said: ${rule.gene} ${s === "positive" ? "alteration present" : "no alteration"}`,
-        `biomarker:${rule.gene}`
-      )
+      if (s === "unknown") return leaf(rule, "unknown", UNANSWERED, `biomarker:${rule.gene}`)
+      return leaf(rule, tri(s === rule.state), { kind: "biomarker", gene: rule.gene, state: s }, `biomarker:${rule.gene}`)
     }
     case "pdl1": {
-      if (p.pdl1 === "unknown") return leaf(rule, "unknown", ANSWER_UNKNOWN, "pdl1")
+      if (p.pdl1 === "unknown") return leaf(rule, "unknown", UNANSWERED, "pdl1")
       const [lo, hi] = PD_RANGES[p.pdl1]
       const inside = (rule.min === undefined || lo >= rule.min) && (rule.max === undefined || hi <= rule.max)
       const outside = (rule.min !== undefined && hi < rule.min) || (rule.max !== undefined && lo > rule.max)
-      return leaf(rule, inside ? "yes" : outside ? "no" : "unknown", `you said: PD-L1 ${PD_LABEL[p.pdl1]}`, "pdl1")
+      return leaf(rule, inside ? "yes" : outside ? "no" : "unknown", { kind: "pdl1", level: p.pdl1 }, "pdl1")
     }
     case "priorTherapy": {
       const f: ProfileField = `priorTherapy:${rule.category}`
@@ -210,60 +266,85 @@ export const evalRule = (rule: Rule, p: Profile): EvalNode => {
         const parts = (["chemotherapy", "immunotherapy", "targeted"] as const).map((c) => p.priorTherapies[c])
         let r = or(parts)
         if (p.priorLines !== null && p.priorLines > 0) r = "yes"
-        return leaf(rule, r, r === "unknown" ? ANSWER_UNKNOWN : `you said: ${yn(r)}`, f)
+        return leaf(rule, r, yesNo(r), f)
       }
       const v = p.priorTherapies[rule.category as keyof Profile["priorTherapies"]]
-      return leaf(rule, v, v === "unknown" ? ANSWER_UNKNOWN : `you said: ${yn(v)}`, f)
+      return leaf(rule, v, yesNo(v), f)
     }
     case "priorLines": {
-      if (p.priorLines === null) return leaf(rule, "unknown", ANSWER_UNKNOWN, "priorLines")
-      return leaf(rule, tri(inRange(p.priorLines, rule.min, rule.max)), `you said: ${p.priorLines} line(s)`, "priorLines")
+      if (p.priorLines === null) return leaf(rule, "unknown", UNANSWERED, "priorLines")
+      return leaf(rule, tri(inRange(p.priorLines, rule.min, rule.max)), { kind: "priorLines", lines: p.priorLines }, "priorLines")
     }
     case "currentTherapy": {
-      if (p.currentTherapy === "unknown") return leaf(rule, "unknown", ANSWER_UNKNOWN, "currentTherapy")
+      if (p.currentTherapy === "unknown") return leaf(rule, "unknown", UNANSWERED, "currentTherapy")
       const cur = p.currentTherapy
       const r =
         rule.category === "systemic"
           ? tri(cur === "chemotherapy" || cur === "immunotherapy" || cur === "targeted")
           : tri(cur === rule.category)
-      return leaf(rule, r, `you said: currently ${cur === "none" ? "no treatment" : THERAPY_LABEL[cur]}`, "currentTherapy")
+      return leaf(rule, r, { kind: "currentTherapy", therapy: cur }, "currentTherapy")
     }
     case "lab": {
       const v = p.labs[rule.analyte]
-      if (v === null) return leaf(rule, "unknown", "no value entered", `lab:${rule.analyte}`)
-      return leaf(rule, tri(inRange(v, rule.min, rule.max)), `you entered: ${v}`, `lab:${rule.analyte}`)
+      if (v === null) return leaf(rule, "unknown", UNANSWERED, `lab:${rule.analyte}`)
+      return leaf(rule, tri(inRange(v, rule.min, rule.max)), { kind: "lab", value: v }, `lab:${rule.analyte}`)
     }
     case "age": {
-      if (p.age === null) return leaf(rule, "unknown", ANSWER_UNKNOWN, "age")
-      return leaf(rule, tri(inRange(p.age, rule.min, rule.max)), `you said: ${p.age} years`, "age")
+      if (p.age === null) return leaf(rule, "unknown", UNANSWERED, "age")
+      return leaf(rule, tri(inRange(p.age, rule.min, rule.max)), { kind: "age", years: p.age }, "age")
     }
     case "sex": {
-      if (p.sex === "unknown") return leaf(rule, "unknown", ANSWER_UNKNOWN, "sex")
-      return leaf(rule, tri(p.sex === rule.sex), `you said: ${p.sex}`, "sex")
+      if (p.sex === "unknown") return leaf(rule, "unknown", UNANSWERED, "sex")
+      return leaf(rule, tri(p.sex === rule.sex), { kind: "sex", sex: p.sex }, "sex")
     }
     case "performanceStatus": {
-      if (p.ecog === null) return leaf(rule, "unknown", ANSWER_UNKNOWN, "ecog")
-      return leaf(rule, tri(inRange(p.ecog, rule.min, rule.max)), `you said: ECOG ${p.ecog}`, "ecog")
+      if (p.ecog === null) return leaf(rule, "unknown", UNANSWERED, "ecog")
+      return leaf(rule, tri(inRange(p.ecog, rule.min, rule.max)), { kind: "ecog", ecog: p.ecog }, "ecog")
     }
+    case "msCourse": {
+      if (p.msCourse === "unknown") return leaf(rule, "unknown", UNANSWERED, "msCourse")
+      return leaf(rule, tri(rule.courses.includes(p.msCourse)), { kind: "msCourse", course: p.msCourse }, "msCourse")
+    }
+    case "edss": {
+      if (p.edss === null) return leaf(rule, "unknown", UNANSWERED, "edss")
+      return leaf(rule, tri(inRange(p.edss, rule.min, rule.max)), { kind: "edss", value: p.edss }, "edss")
+    }
+    case "relapse": {
+      if (p.lastRelapse === "unknown") return leaf(rule, "unknown", UNANSWERED, "lastRelapse")
+      const [lo, hi] = RELAPSE_MONTHS[p.lastRelapse]
+      const within: Tri = hi <= rule.withinMonths ? "yes" : lo >= rule.withinMonths ? "no" : "unknown"
+      return leaf(rule, within, { kind: "relapse", age: p.lastRelapse }, "lastRelapse")
+    }
+    case "msTherapy":
+      return leaf(rule, p.msTherapies[rule.category], yesNo(p.msTherapies[rule.category]), `msTherapy:${rule.category}`)
     case "flag": {
       switch (rule.flag) {
         case "brainMetsAny":
         case "brainMetsActive": {
           const b = p.brainMets
-          if (b === "unknown") return leaf(rule, "unknown", ANSWER_UNKNOWN, "brainMets")
+          if (b === "unknown") return leaf(rule, "unknown", UNANSWERED, "brainMets")
           const present = rule.flag === "brainMetsAny" ? b !== "none" : b === "active"
-          const lbl = b === "none" ? "no brain metastases" : b === "treated" ? "brain metastases, treated and stable" : "brain metastases, active"
-          return leaf(rule, tri(present), `you said: ${lbl}`, "brainMets")
+          return leaf(rule, tri(present), { kind: "brainMets", state: b }, "brainMets")
         }
         case "ild":
-          return leaf(rule, p.ild, p.ild === "unknown" ? ANSWER_UNKNOWN : `you said: ${yn(p.ild)}`, "ild")
+          return leaf(rule, p.ild, yesNo(p.ild), "ild")
         case "autoimmune":
-          return leaf(rule, p.autoimmune, p.autoimmune === "unknown" ? ANSWER_UNKNOWN : `you said: ${yn(p.autoimmune)}`, "autoimmune")
+          return leaf(rule, p.autoimmune, yesNo(p.autoimmune), "autoimmune")
+        case "pregnancy":
+          return p.sex === "male" ? leaf(rule, "no", { kind: "sex", sex: "male" }, "pregnancy") : leaf(rule, p.pregnancy, yesNo(p.pregnancy), "pregnancy")
+        case "mriUnsuitable":
+          return leaf(rule, p.mriUnsuitable, yesNo(p.mriUnsuitable), "mriUnsuitable")
+        case "recentSteroids":
+          return leaf(rule, p.recentSteroids, yesNo(p.recentSteroids), "recentSteroids")
+        case "chronicInfection":
+          return leaf(rule, p.chronicInfection, yesNo(p.chronicInfection), "chronicInfection")
+        case "cancerHistory":
+          return leaf(rule, p.cancerHistory, yesNo(p.cancerHistory), "cancerHistory")
       }
-      return leaf(rule, "unknown", ANSWER_UNKNOWN)
+      return leaf(rule, "unknown", UNANSWERED)
     }
     case "other":
-      return leaf(rule, "unknown", "to be checked with your doctor")
+      return leaf(rule, "unknown", { kind: "manual" })
     case "anyOf":
     case "allOf": {
       const children = rule.rules.map((r) => evalRule(r, p))
@@ -272,7 +353,7 @@ export const evalRule = (rule: Rule, p: Profile): EvalNode => {
         tag: rule._tag,
         result: rule._tag === "anyOf" ? or(results) : and(results),
         rule: describeRule(rule),
-        answer: "",
+        answer: { kind: "none" },
         children
       }
     }

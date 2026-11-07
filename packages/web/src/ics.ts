@@ -1,4 +1,6 @@
-export const reminderCalendar = (now: Date, months: number): string => {
+const escapeText = (text: string) => text.replace(/[\\;,]/g, (c) => `\\${c}`).replace(/\n/g, "\\n")
+
+export const reminderCalendar = (now: Date, months: number, text: { summary: string; description: string }): string => {
   const due = new Date(now)
   due.setMonth(due.getMonth() + months)
   return [
@@ -9,8 +11,8 @@ export const reminderCalendar = (now: Date, months: number): string => {
     `UID:${now.getTime()}@trialy.local`,
     `DTSTAMP:${now.toISOString().replace(/[-:]/g, "").slice(0, 15)}Z`,
     `DTSTART;VALUE=DATE:${due.toISOString().slice(0, 10).replace(/-/g, "")}`,
-    "SUMMARY:Check again for clinical trials",
-    "DESCRIPTION:Open Trialy, update anything that changed (new scan, new treatment, new test result) and see what is new.",
+    `SUMMARY:${escapeText(text.summary)}`,
+    `DESCRIPTION:${escapeText(text.description)}`,
     "END:VEVENT",
     "END:VCALENDAR"
   ].join("\r\n")

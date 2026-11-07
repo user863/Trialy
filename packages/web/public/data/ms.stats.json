@@ -1,0 +1,16 @@
+{
+  "trials": 81,
+  "textCriteria": 1185,
+  "structured": 204,
+  "coverage": 17.2,
+  "highConfidence": 99,
+  "lowConfidence": 105,
+  "ruleTypes": {
+    "other": 1066,
+    "edss": 34,
+    "flag": 93,
+    "msCourse": 38,
+    "relapse": 27,
+    "msTherapy": 36
+  }
+}

@@ -12,7 +12,8 @@
     "build": "npm run build -w @trial-finder/web",
     "test": "vitest run",
     "typecheck": "tsc -p packages/domain && tsc -p packages/pipeline && tsc -p packages/web",
-    "schema": "npm run schema -w @trial-finder/domain"
+    "schema": "npm run schema -w @trial-finder/domain",
+    "release:data": "bash scripts/pack-data.sh"
   },
   "devDependencies": {
     "fake-indexeddb": "^6.2.7",

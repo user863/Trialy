@@ -674,3 +674,10 @@ export const extractCriteria = (nctId: string, eligibilityText: string, f: Struc
   })
   return [...structuredCriteria(f, nctId), ...fromText]
 }
+
+export const generalCriteria = (nctId: string, eligibilityText: string, f: StructuredFields): Criterion[] => [
+  ...structuredCriteria({ ...f, conditions: [] }, nctId),
+  ...splitCriteria(eligibilityText).map(
+    (it, i): Criterion => ({ id: `${nctId}-${i}`, kind: it.kind, text: it.text, rule: OTHER, source: "registry-text", confidence: "none" })
+  )
+]

@@ -1,4 +1,7 @@
 import type { ReactNode } from "react"
+import { useApp } from "./app"
+import { config } from "./config"
+import { useI18n } from "./i18n"
 
 export const go = (to: string) => {
   window.location.hash = to
@@ -13,38 +16,42 @@ export function A({ to, children, className }: { to: string; children: ReactNode
 }
 
 export function Support() {
+  const { rich } = useI18n()
+  const { group } = useApp()
+  if (group !== config.group) return null
   return (
     <p className="support">
-      Need to talk to someone? The <a href="https://www.krebsinformationsdienst.de" rel="noreferrer noopener">Krebsinformationsdienst</a> (DKFZ) answers
-      questions free of charge on <strong>0800 420 30 40</strong>, and the{" "}
-      <a href="https://www.krebshilfe.de/informieren/ueber-krebs/infonetz-krebs/" rel="noreferrer noopener">INFONETZ KREBS</a> on{" "}
-      <strong>0800 80708877</strong>. Both can also point you to psycho-oncology support.
+      {rich("support.text", {
+        link1: (name) => <a href="https://www.krebsinformationsdienst.de" rel="noreferrer noopener">{name}</a>,
+        link2: (name) => <a href="https://www.krebshilfe.de/informieren/ueber-krebs/infonetz-krebs/" rel="noreferrer noopener">{name}</a>,
+        b: (text) => <strong>{text}</strong>
+      })}
     </p>
   )
 }
 
 export function Disclaimer() {
-  return (
-    <p className="disclaimer">
-      These are <strong>possible fits to discuss with your doctor</strong>, not a promise that a trial will help or that you qualify. Data comes from public
-      registries and may be incomplete or out of date. The treating team always decides.
-    </p>
-  )
+  const { rich } = useI18n()
+  return <p className="disclaimer">{rich("disclaimer.text", { b: (text) => <strong>{text}</strong> })}</p>
 }
 
-export const NO_RECRUITING_SITE =
-  "ClinicalTrials.gov lists this study as recruiting overall, but none of its sites in Germany, Austria, Switzerland or the neighbouring countries say they are recruiting. It stays in the list, ranked lower. Ask the study team before travelling."
+export function RegistryEnglishNote() {
+  const { language, t } = useI18n()
+  return language === "en" ? null : <p className="meta">{t("language.registryEnglish")}</p>
+}
 
 export function TierBadge({ tier, sites }: { tier: 0 | 1 | 2; sites: number }) {
-  if (tier === 2) return <span className="pill live">Recruiting · {sites} site{sites === 1 ? "" : "s"}</span>
-  if (tier === 1) return <span className="pill caution" title="The registry does not state whether the sites are recruiting. Confirm with the study team.">Site status not stated</span>
-  return <span className="pill caution" title={NO_RECRUITING_SITE}>No recruiting site listed</span>
+  const { t } = useI18n()
+  if (tier === 2) return <span className="pill live">{t("tier.recruiting", { count: sites })}</span>
+  if (tier === 1) return <span className="pill caution" title={t("tier.unstated.title")}>{t("tier.unstated")}</span>
+  return <span className="pill caution" title={t("tier.none.title")}>{t("tier.none")}</span>
 }
 
-export const formatKm = (km: number | null) => (km === null ? null : km < 10 ? `${km.toFixed(1)} km` : `${Math.round(km)} km`)
-
-export const fulfilledLine = (met: number, total: number, notMet: number) =>
-  `${met} of ${total} criteria fulfilled${notMet > 0 ? ` · ${notMet} not fulfilled` : ""}`
+export const useFulfilledLine = () => {
+  const { t } = useI18n()
+  return (met: number, total: number, notMet: number) =>
+    [t("fulfilled.line", { met, total }), ...(notMet > 0 ? [t("fulfilled.notMet", { notMet })] : [])].join(" · ")
+}
 
 const LOGO_CLIP = "M32 0 L64 0 C81.673 0 96 14.327 96 32 L96 64 C96 81.673 81.673 96 64 96 L32 96 C14.327 96 0 81.673 0 64 L0 32 C0 14.327 14.327 0 32 0 Z"
 const brand = { fill: "var(--brand)" }

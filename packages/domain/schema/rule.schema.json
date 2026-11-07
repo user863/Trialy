@@ -316,7 +316,110 @@
                 "brainMetsAny",
                 "brainMetsActive",
                 "ild",
-                "autoimmune"
+                "autoimmune",
+                "pregnancy",
+                "mriUnsuitable",
+                "recentSteroids",
+                "chronicInfection",
+                "cancerHistory"
+              ]
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "_tag",
+            "courses"
+          ],
+          "properties": {
+            "_tag": {
+              "type": "string",
+              "enum": [
+                "msCourse"
+              ]
+            },
+            "courses": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "rrms",
+                  "spms",
+                  "ppms",
+                  "cis"
+                ]
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "_tag"
+          ],
+          "properties": {
+            "_tag": {
+              "type": "string",
+              "enum": [
+                "edss"
+              ]
+            },
+            "min": {
+              "type": "number"
+            },
+            "max": {
+              "type": "number"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "_tag",
+            "withinMonths"
+          ],
+          "properties": {
+            "_tag": {
+              "type": "string",
+              "enum": [
+                "relapse"
+              ]
+            },
+            "withinMonths": {
+              "type": "number"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "_tag",
+            "category"
+          ],
+          "properties": {
+            "_tag": {
+              "type": "string",
+              "enum": [
+                "msTherapy"
+              ]
+            },
+            "category": {
+              "type": "string",
+              "enum": [
+                "interferon",
+                "glatiramer",
+                "natalizumab",
+                "antiCd20",
+                "s1p",
+                "fumarate",
+                "teriflunomide",
+                "cladribine",
+                "alemtuzumab"
               ]
             }
           },
@@ -736,7 +839,110 @@
             "brainMetsAny",
             "brainMetsActive",
             "ild",
-            "autoimmune"
+            "autoimmune",
+            "pregnancy",
+            "mriUnsuitable",
+            "recentSteroids",
+            "chronicInfection",
+            "cancerHistory"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "_tag",
+        "courses"
+      ],
+      "properties": {
+        "_tag": {
+          "type": "string",
+          "enum": [
+            "msCourse"
+          ]
+        },
+        "courses": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "rrms",
+              "spms",
+              "ppms",
+              "cis"
+            ]
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "_tag"
+      ],
+      "properties": {
+        "_tag": {
+          "type": "string",
+          "enum": [
+            "edss"
+          ]
+        },
+        "min": {
+          "type": "number"
+        },
+        "max": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "_tag",
+        "withinMonths"
+      ],
+      "properties": {
+        "_tag": {
+          "type": "string",
+          "enum": [
+            "relapse"
+          ]
+        },
+        "withinMonths": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "_tag",
+        "category"
+      ],
+      "properties": {
+        "_tag": {
+          "type": "string",
+          "enum": [
+            "msTherapy"
+          ]
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "interferon",
+            "glatiramer",
+            "natalizumab",
+            "antiCd20",
+            "s1p",
+            "fumarate",
+            "teriflunomide",
+            "cladribine",
+            "alemtuzumab"
           ]
         }
       },

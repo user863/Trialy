@@ -1,59 +1,51 @@
 import { useMemo, useRef, useState, type FormEvent } from "react"
-import type { Profile } from "@trial-finder/domain"
 import { useApp } from "./app"
+import { readCondition } from "./conditions"
 import { CONDITIONS, LivePreview } from "./home"
 import { SiteMap } from "./sitemap"
+import { recruitingStats } from "./stats"
+import { useI18n } from "./i18n"
 import { go } from "./ui"
 
-const readCondition = (text: string): Profile["cancerType"] | null => {
-  const t = text.toLowerCase()
-  if (/non[\s-]?small|nsclc/.test(t)) return "nsclc"
-  if (/small[\s-]?cell|sclc/.test(t)) return "sclc"
-  if (/lung/.test(t)) return "unknown"
-  return null
-}
-
-const EXAMPLES = CONDITIONS.slice(0, 2)
+const EXAMPLES = CONDITIONS.filter((c) => c.value !== "unknown")
 
 const STEPS = [
-  { title: "Name your condition", text: "One search. No account, no form to fill in first." },
-  { title: "Answer what you know", text: "Every question accepts “I don’t know”, and that never rules a trial out." },
-  { title: "See why each trial fits", text: "Each criterion is marked fulfilled, not fulfilled or open, beside the registry’s own wording." }
-]
+  { title: "finder.step1.title", text: "finder.step1.text" },
+  { title: "finder.step2.title", text: "finder.step2.text" },
+  { title: "finder.step3.title", text: "finder.step3.text" }
+] as const
 
 const PRINCIPLES = [
-  { title: "Unknown never excludes", text: "A trial is hidden only when one of your answers clearly fails a criterion. Gaps stay open for your doctor." },
-  { title: "Recruiting first", text: "Trials with a site that says it is recruiting come first. The rest stay visible and are labelled." },
-  { title: "The registry’s own words", text: "Every criterion shows the original sentence, so you can check how it was read." }
-]
+  { title: "finder.principle1.title", text: "finder.principle1.text" },
+  { title: "finder.principle2.title", text: "finder.principle2.text" },
+  { title: "finder.principle3.title", text: "finder.principle3.text" }
+] as const
 
 const FAQ = [
-  ["Is this medical advice?", "No. Trialy shows which public trials may fit what you tell it. Your treating team decides whether you qualify."],
-  ["Where do my answers go?", "Nowhere. Matching runs in your browser and answers are stored only on this device. There are no accounts and no tracking, and you can delete everything at any time."],
-  ["Where does the trial data come from?", "ClinicalTrials.gov, the public registry. The list is prepared in advance and downloaded once, so your searches never reach a server."],
-  ["Why is a recruiting trial listed without a recruiting site?", "Registries often mark a trial as recruiting overall while no nearby site says so. We keep it, rank it lower and label it, because some are still worth asking about."],
-  ["What if I do not know an answer?", "Choose “I don’t know”. The trial stays in the list and the criterion is marked open."],
-  ["Which conditions and countries are covered?", "Lung cancer so far, with sites in Germany, Austria, Switzerland and their neighbours. More conditions are next."]
+  ["finder.faq1.q", "finder.faq1.a"],
+  ["finder.faq2.q", "finder.faq2.a"],
+  ["finder.faq3.q", "finder.faq3.a"],
+  ["finder.faq4.q", "finder.faq4.a"],
+  ["finder.faq5.q", "finder.faq5.a"],
+  ["finder.faq6.q", "finder.faq6.a"]
 ] as const
 
 export function Finder() {
-  const { setProfile, bundle, loadError } = useApp()
+  const { t } = useI18n()
+  const { setProfile, setGroup, bundle, loadError } = useApp()
   const [text, setText] = useState("")
   const [unsupported, setUnsupported] = useState(false)
   const input = useRef<HTMLInputElement>(null)
 
-  const stats = useMemo(() => {
-    if (!bundle) return null
-    const sites = bundle.trials.flatMap((t) => t.sites)
-    return { trials: bundle.trials.length, countries: new Set(sites.map((s) => s.country)).size }
-  }, [bundle])
+  const stats = useMemo(() => (bundle ? recruitingStats(bundle.trials) : null), [bundle])
 
   const start = (value: string) => {
-    const cancerType = readCondition(value)
-    setUnsupported(cancerType === null)
-    if (cancerType === null) return
-    setProfile((p) => ({ ...p, cancerType }))
-    go("/questions")
+    const selection = readCondition(value)
+    setUnsupported(selection === null)
+    if (selection === null) return
+    setGroup(selection.group)
+    if (selection.group === "lung") setProfile((p) => ({ ...p, cancerType: selection.cancerType }))
+    go(selection.group === "lung" ? "/questions/type" : "/questions/person")
   }
 
   const submit = (event: FormEvent) => {
@@ -69,14 +61,14 @@ export function Finder() {
   return (
     <main>
       <section className="finder">
-        <h1>Find a clinical trial that fits you.</h1>
+        <h1>{t("finder.title")}</h1>
         <form className="finder-bar" onSubmit={submit} role="search">
           <input
             ref={input}
             list="conditions"
-            aria-label="Your condition"
+            aria-label={t("finder.conditionLabel")}
             aria-invalid={unsupported}
-            placeholder="Search your condition"
+            placeholder={t("finder.placeholder")}
             autoComplete="off"
             value={text}
             onChange={(e) => {
@@ -86,10 +78,10 @@ export function Finder() {
           />
           <datalist id="conditions">
             {CONDITIONS.map((c) => (
-              <option key={c.value} value={c.label} />
+              <option key={c.value} value={t(c.label)} />
             ))}
           </datalist>
-          <button type="submit" className="finder-go" aria-label="Continue to questions">
+          <button type="submit" className="finder-go" aria-label={t("finder.go")}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
               <circle cx="10.5" cy="10.5" r="6.5" />
               <path d="M15.5 15.5L20 20" />
@@ -98,27 +90,27 @@ export function Finder() {
         </form>
         <div className="chips">
           {EXAMPLES.map((c) => (
-            <button key={c.value} type="button" className="chip" onClick={() => start(c.label)}>
-              {c.label}
+            <button key={c.value} type="button" className="chip" onClick={() => start(t(c.label))}>
+              {t(c.label)}
             </button>
           ))}
         </div>
         <p className={unsupported ? "error" : "meta"} role={unsupported ? "alert" : undefined}>
           {unsupported
-            ? "Only lung cancer is covered so far."
-            : (loadError ?? (stats ? `${stats.trials} recruiting trials in ${stats.countries} countries · No account · Answers stay on this device` : "Loading trials…"))}
+            ? t("finder.unsupported")
+            : (loadError ?? (stats ? t("finder.stats", { count: stats.trials, countries: stats.countries }) : t("finder.loadingTrials")))}
         </p>
       </section>
 
       <div className="page home">
         <section className="h-section" aria-labelledby="how">
-          <h2 id="how" className="h-label">How it works</h2>
+          <h2 id="how" className="h-label">{t("finder.how")}</h2>
           <ol className="h-steps">
             {STEPS.map((s, i) => (
               <li key={s.title}>
                 <span className="h-num">{i + 1}</span>
-                <h3>{s.title}</h3>
-                <p>{s.text}</p>
+                <h3>{t(s.title)}</h3>
+                <p>{t(s.text)}</p>
               </li>
             ))}
           </ol>
@@ -126,8 +118,8 @@ export function Finder() {
 
         <section className="h-section h-split">
           <div>
-            <h2>See exactly why a trial fits.</h2>
-            <p className="lead">Inclusion and exclusion criteria are listed separately. What you fulfil is marked, so what is left to discuss is clear at a glance.</p>
+            <h2>{t("finder.why.title")}</h2>
+            <p className="lead">{t("finder.why.lead")}</p>
           </div>
           <LivePreview />
         </section>
@@ -140,29 +132,29 @@ export function Finder() {
           <ul className="h-principles">
             {PRINCIPLES.map((p) => (
               <li key={p.title}>
-                <h3>{p.title}</h3>
-                <p>{p.text}</p>
+                <h3>{t(p.title)}</h3>
+                <p>{t(p.text)}</p>
               </li>
             ))}
           </ul>
         </section>
 
         <section className="h-section h-split faq" aria-labelledby="faq">
-          <h2 id="faq">Questions</h2>
+          <h2 id="faq">{t("finder.faq")}</h2>
           <div>
             {FAQ.map(([q, a]) => (
               <details key={q}>
-                <summary>{q}</summary>
-                <p>{a}</p>
+                <summary>{t(q)}</summary>
+                <p>{t(a)}</p>
               </details>
             ))}
           </div>
         </section>
 
         <section className="h-section h-close">
-          <h2>See which trials fit you.</h2>
+          <h2>{t("finder.close.title")}</h2>
           <button type="button" className="btn primary" onClick={focusSearch}>
-            Search my condition
+            {t("finder.close.button")}
           </button>
         </section>
       </div>

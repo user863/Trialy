@@ -6,7 +6,7 @@ import { emptyProfile } from "../src/index.js"
 
 const read = (path: string) => JSON.parse(readFileSync(fileURLToPath(new URL(path, import.meta.url)), "utf8"))
 const ajv = new Ajv({ strict: false })
-const bundlePath = new URL("../../web/public/data/lung.json", import.meta.url)
+const bundlePaths = ["lung", "ms"].map((group) => ({ group, url: new URL(`../../web/public/data/${group}.json`, import.meta.url) }))
 
 describe("published JSON Schema", () => {
   it("accepts an empty profile", () => {
@@ -25,8 +25,9 @@ describe("published JSON Schema", () => {
     expect(validate({ _tag: "narrow", rule: { _tag: "other" } })).toBe(true)
   })
 
-  it.skipIf(!existsSync(bundlePath))("accepts the published bundle", () => {
+  it.each(bundlePaths)("accepts the published $group bundle", ({ url }) => {
+    if (!existsSync(url)) return
     const validate = ajv.compile(read("../schema/bundle.schema.json"))
-    expect(validate(JSON.parse(readFileSync(bundlePath, "utf8"))), JSON.stringify(validate.errors?.slice(0, 3))).toBe(true)
+    expect(validate(JSON.parse(readFileSync(url, "utf8"))), JSON.stringify(validate.errors?.slice(0, 3))).toBe(true)
   })
 })

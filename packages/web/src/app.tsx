@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react"
 import { emptyProfile, type Bundle, type LatLon, type Profile, type Trial } from "@trial-finder/domain"
 import { config } from "./config"
+import { useI18n } from "./i18n"
 import { valueOr, type Result } from "./result"
 import { kvGet, kvSet, wipeAll, type StoreError } from "./store"
 import type { Summary } from "./worker"
@@ -16,8 +17,18 @@ interface Snapshot {
   fits: Record<string, { met: number; unknown: number; hidden: boolean }>
 }
 
+export interface ManifestGroup {
+  id: string
+  label: string
+  trials: number
+  file: string
+}
+
 interface App {
   loaded: boolean
+  groups: ReadonlyArray<ManifestGroup>
+  group: string
+  setGroup: (id: string) => void
   profile: Profile
   setProfile: (f: (p: Profile) => Profile) => void
   started: boolean
@@ -34,13 +45,20 @@ interface App {
   impact: Impact[]
   prevSnapshot: Snapshot | null
   dismissSnapshot: () => void
-  replaceAll: (p: Profile, shortlist: string[]) => void
+  replaceAll: (p: Profile, shortlist: string[], group?: string) => void
   wipe: () => Promise<Result<void, StoreError>>
   now: () => Date
   storageOk: boolean
 }
 
 export const systemClock = (): Date => new Date()
+
+const scoped = (key: string, group: string) => (group === config.group ? key : `${key}:${group}`)
+
+const loadScoped = async (group: string) => {
+  const [shortlist, snapshot] = await Promise.all([kvGet<string[]>(scoped("shortlist", group)), kvGet<Snapshot>(scoped("snapshot", group))])
+  return { shortlist: valueOr(shortlist, undefined) ?? [], snapshot: valueOr(snapshot, undefined) ?? null, ok: shortlist.ok && snapshot.ok }
+}
 
 const Ctx = createContext<App>(null as unknown as App)
 export const useApp = () => useContext(Ctx)
@@ -66,18 +84,23 @@ const normalise = (p: Partial<Profile> | undefined): Profile => {
     ...p,
     biomarkers: { ...e.biomarkers, ...(p.biomarkers ?? {}) },
     priorTherapies: { ...e.priorTherapies, ...(p.priorTherapies ?? {}) },
+    msTherapies: { ...e.msTherapies, ...(p.msTherapies ?? {}) },
     labs: { ...e.labs, ...(p.labs ?? {}) }
   }
 }
 
 export function AppProvider({ children, now = systemClock }: { children: ReactNode; now?: () => Date }) {
+  const { t } = useI18n()
   const [loaded, setLoaded] = useState(false)
+  const [groups, setGroups] = useState<ReadonlyArray<ManifestGroup>>([])
+  const [group, setGroupState] = useState<string>(config.group)
   const [storageOk, setStorageOk] = useState(true)
   const [profile, setProfileState] = useState<Profile>(emptyProfile())
   const [started, setStarted] = useState(false)
   const [shortlist, setShortlist] = useState<string[]>([])
   const [bundle, setBundle] = useState<Bundle | null>(null)
-  const [loadError, setLoadError] = useState<string | null>(null)
+  const [loadReason, setLoadReason] = useState<string | null>(null)
+  const loadError = loadReason === null ? null : t("error.dataLoad", { reason: loadReason })
   const [home, setHome] = useState<LatLon | null>(null)
   const [postcodeStatus, setPostcodeStatus] = useState<App["postcodeStatus"]>("empty")
   const [summaries, setSummaries] = useState<Summary[] | null>(null)
@@ -96,33 +119,47 @@ export function AppProvider({ children, now = systemClock }: { children: ReactNo
 
   useEffect(() => {
     ;(async () => {
-      const reads = await Promise.all([
-        kvGet<Partial<Profile>>("profile"),
-        kvGet<string[]>("shortlist"),
-        kvGet<boolean>("started"),
-        kvGet<Snapshot>("snapshot")
-      ])
-      const [p, s, st, snap] = reads
-      if (reads.some((read) => !read.ok)) setStorageOk(false)
+      const stored = await kvGet<string>("group")
+      const initial = valueOr(stored, undefined) ?? config.group
+      const [p, st, scopedData] = await Promise.all([kvGet<Partial<Profile>>("profile"), kvGet<boolean>("started"), loadScoped(initial)])
+      if (!stored.ok || !p.ok || !st.ok || !scopedData.ok) setStorageOk(false)
+      setGroupState(initial)
       setProfileState(normalise(valueOr(p, undefined)))
-      setShortlist(valueOr(s, undefined) ?? [])
+      setShortlist(scopedData.shortlist)
       setStarted(!!valueOr(st, undefined))
-      setPrevSnapshot(valueOr(snap, undefined) ?? null)
+      setPrevSnapshot(scopedData.snapshot)
       setLoaded(true)
     })()
   }, [])
 
   useEffect(() => {
-    fetch(`${config.dataUrl}/${config.group}.json`)
-      .then((r) => {
-        if (!r.ok) throw new Error(`HTTP ${r.status}`)
-        return r.json() as Promise<Bundle>
-      })
-      .then(setBundle)
-      .catch((e) =>
-        setLoadError(`The trial data could not be loaded (${e.message}). Run "npm run pipeline" to build it, then reload.`)
-      )
+    fetch(`${config.dataUrl}/manifest.json`)
+      .then((r) => (r.ok ? (r.json() as Promise<{ groups: ManifestGroup[] }>) : Promise.reject(new Error(`HTTP ${r.status}`))))
+      .then((m) => setGroups(m.groups))
+      .catch((e) => setLoadReason(e.message))
   }, [])
+
+  useEffect(() => {
+    if (groups.length && !groups.some((g) => g.id === group)) setGroupState(config.group)
+  }, [groups, group])
+
+  useEffect(() => {
+    if (!loaded) return
+    let cancelled = false
+    setBundle(null)
+    setSummaries(null)
+    fetch(`${config.dataUrl}/${group}.json`)
+      .then((r) => (r.ok ? (r.json() as Promise<Bundle>) : Promise.reject(new Error(`HTTP ${r.status}`))))
+      .then((b) => {
+        if (cancelled) return
+        setBundle(b)
+        setLoadReason(null)
+      })
+      .catch((e) => !cancelled && setLoadReason(e.message))
+    return () => {
+      cancelled = true
+    }
+  }, [group, loaded])
 
   const trials = useMemo<ReadonlyArray<Trial>>(() => bundle?.trials ?? [], [bundle])
   const byId = useMemo(() => new Map(trials.map((t) => [t.nctId, t])), [trials])
@@ -187,15 +224,29 @@ export function AppProvider({ children, now = systemClock }: { children: ReactNo
   }, [profile, home, ready, loaded])
 
   useEffect(() => {
-    if (!summaries || !bundle || !started || !snapshotPending.current) return
+    if (!summaries || !bundle || bundle.group !== group || !started || !snapshotPending.current) return
     snapshotPending.current = false
     const snap: Snapshot = {
       version: bundle.version,
       at: now().toISOString(),
       fits: Object.fromEntries(summaries.map((s) => [s.nctId, { met: s.met, unknown: s.unknown, hidden: s.hidden }]))
     }
-    persist("snapshot", snap)
-  }, [summaries, bundle, started, persist, now])
+    persist(scoped("snapshot", group), snap)
+  }, [summaries, bundle, group, started, persist, now])
+
+  const setGroup = useCallback(
+    (id: string) => {
+      if (id === group) return
+      setGroupState(id)
+      persist("group", id)
+      void loadScoped(id).then((data) => {
+        setShortlist(data.shortlist)
+        setPrevSnapshot(data.snapshot)
+        if (!data.ok) setStorageOk(false)
+      })
+    },
+    [group, persist]
+  )
 
   const setProfile = useCallback((f: (p: Profile) => Profile) => {
     setProfileState((p) => {
@@ -213,25 +264,30 @@ export function AppProvider({ children, now = systemClock }: { children: ReactNo
   const toggleShortlist = useCallback((id: string) => {
     setShortlist((s) => {
       const next = s.includes(id) ? s.filter((x) => x !== id) : s.length >= config.maxShortlist ? s : [...s, id]
-      persist("shortlist", next)
+      persist(scoped("shortlist", group), next)
       return next
     })
-  }, [persist])
+  }, [persist, group])
 
-  const replaceAll = useCallback((p: Profile, sl: string[]) => {
+  const replaceAll = useCallback((p: Profile, sl: string[], importedGroup?: string) => {
     const n = normalise(p)
+    const target = importedGroup && groups.some((g) => g.id === importedGroup) ? importedGroup : group
     setProfileState(n)
+    setGroupState(target)
+    setPrevSnapshot(null)
     setShortlist(sl)
     setStarted(true)
     persist("profile", n)
-    persist("shortlist", sl)
+    persist("group", target)
+    persist(scoped("shortlist", target), sl)
     persist("started", true)
-  }, [persist])
+  }, [persist, groups, group])
 
   const wipe = useCallback(async () => {
     const wiped = await wipeAll()
     if (!wiped.ok) return wiped
     setProfileState(emptyProfile())
+    setGroupState(config.group)
     setShortlist([])
     setStarted(false)
     setPrevSnapshot(null)
@@ -241,6 +297,9 @@ export function AppProvider({ children, now = systemClock }: { children: ReactNo
 
   const value: App = {
     loaded,
+    groups,
+    group,
+    setGroup,
     profile,
     setProfile,
     started,

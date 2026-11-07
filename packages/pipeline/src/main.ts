@@ -50,6 +50,7 @@ const program = Effect.gen(function* () {
 
   const extractor = arg("extractor") ?? "rules"
   if (!["rules", "llm", "hybrid"].includes(extractor)) return yield* Effect.fail(new Error(`unknown --extractor "${extractor}"`))
+  if (group.reader !== "lung" && extractor !== "rules") return yield* Effect.fail(new Error(`group "${group.id}" has no disease-specific extractor; use --extractor rules`))
   if (extractor === "llm" || extractor === "hybrid") {
     const cfg = config.llm
     yield* Effect.log(`extracting criteria with ${cfg.model} (${extractor}); results are cached, reruns are fast`)
@@ -113,7 +114,11 @@ const program = Effect.gen(function* () {
   )
   yield* Effect.tryPromise(async () => {
     await writeFile(prevPath, JSON.stringify(bundle))
-    await writeFile(join(out, "manifest.json"), JSON.stringify({ groups: [{ id: group.id, label: group.label, version, trials: trials.length, file: `${group.id}.json` }], generatedAt: bundle.generatedAt }))
+    const manifestPath = join(out, "manifest.json")
+    const earlier = await readFile(manifestPath, "utf8").then((s) => (JSON.parse(s) as { groups: Array<{ id: string }> }).groups, () => [])
+    const entry = { id: group.id, label: group.label, version, trials: trials.length, file: `${group.id}.json` }
+    const groups = [...earlier.filter((g) => g.id !== group.id), entry].sort((a, b) => a.id.localeCompare(b.id))
+    await writeFile(manifestPath, JSON.stringify({ groups, generatedAt: bundle.generatedAt }))
     await writeFile(join(out, `${group.id}.stats.json`), JSON.stringify(s, null, 2))
     await writeFile(join(out, `${group.id}.review-queue.json`), JSON.stringify(review, null, 2))
   })

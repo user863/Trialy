@@ -6,7 +6,7 @@ Live demo: https://user863.github.io/Trialy/
 
 You tell it your diagnosis, stage, biomarkers, prior treatments and postcode. It matches that against recruiting trials from ClinicalTrials.gov and shows, criterion by criterion, what you meet, what you don't, and what nobody can tell yet. The matching runs in a web worker on your machine. There is no backend, no account and no analytics.
 
-This is a prototype. It covers lung cancer in Germany, Austria, Switzerland and their neighbours (about 330 trials). It is not medical advice and the UI says so in a few places.
+This is a prototype. It covers lung cancer (about 330 trials) and, in a thinner version, multiple sclerosis (about 80 trials) in Germany, Austria, Switzerland and their neighbours. It is not medical advice and the UI says so in a few places.
 
 ## Why
 
@@ -67,6 +67,10 @@ On my 35-example gold set (`gold.ts`, not reviewed by a clinician) the 7B model 
 
 `npm run schema` writes schemas for rules, bundles and profiles to `packages/domain/schema/`. A test validates the real bundle against them with ajv. The idea is that anyone can read the same data from another language without pulling in the TypeScript code.
 
+## Languages
+
+The interface is available in English and German (language picker in the header). Each UI string lives in `packages/web/src/i18n/messages/` with both languages side by side, so a missing translation fails the typecheck. A test checks that placeholders and markup match between the two. Trial titles, summaries and criteria come from the registry and are shown as published, in English.
+
 ## Privacy
 
 - Matching happens in a web worker. Answers are stored in IndexedDB only.
@@ -84,13 +88,14 @@ Tailwind v4 with a small token set, Inter as the only typeface. The home page is
 - Per-trial public pages (it's a single page app)
 - Editorial content, which needs medical review
 - EU CTIS and DRKS aren't ingested, only linked when ClinicalTrials.gov lists their ids
-- Only one cancer group so far, and the UI is English only
+- Two conditions so far. Lung cancer is matched criterion by criterion; multiple sclerosis is a thinner version that matches age, sex, MS type, EDSS, last relapse, earlier MS drugs and a few yes/no exclusions, and shows every other criterion as the registry wrote it
+- The German UI has not been reviewed by a native speaker. Trial titles and criteria stay in the registry's English
 - Distance is straight-line
 - Notifications for new matching trials (there is a design for a background update check, nothing built)
 
 ## Data
 
-Trial data comes from the ClinicalTrials.gov API v2. Check their terms before redistributing a bundle.
+Trial data comes from the ClinicalTrials.gov API v2. Bundle format, schema, versioning and data terms are in [docs/data.md](docs/data.md). `npm run release:data` packs the bundle for a release.
 Postcode tables come from GeoNames, the map outline from `world-atlas` (Natural Earth).
 
 ## Licence
