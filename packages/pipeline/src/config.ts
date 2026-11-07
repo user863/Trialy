@@ -21,7 +21,7 @@ export const config = {
   },
   geonames: {
     baseUrl: process.env.GEONAMES_URL ?? "https://download.geonames.org/export/zip",
-    countries: (process.env.GEO_COUNTRIES ?? "DE,AT,CH").split(",")
+    countries: (process.env.GEO_COUNTRIES ?? "DE,AT,CH,NL,BE,LU,FR,DK,PL,CZ").split(",")
   },
   llm: {
     baseUrl: process.env.OLLAMA_URL ?? "http://127.0.0.1:11434",

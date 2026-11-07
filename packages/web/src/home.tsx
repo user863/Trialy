@@ -1,6 +1,6 @@
 import { useMemo, useState, type FormEvent } from "react"
-import { emptyProfile, matchTrial, recruitingTier, type Profile } from "@trial-finder/domain"
-import { useApp } from "./app"
+import { emptyProfile, groupTrials, matchTrial, recruitingTier, type Profile } from "@trial-finder/domain"
+import { useApp, useFullTrials } from "./app"
 import { config } from "./config"
 import { CriteriaSections } from "./criteria"
 import { useI18n } from "./i18n"
@@ -131,11 +131,14 @@ function ConditionSearch() {
 export function LivePreview() {
   const { t } = useI18n()
   const fulfilledLine = useFulfilledLine()
-  const { trials } = useApp()
-  const sample = useMemo(
+  const { index } = useApp()
+  const trials = useMemo(() => (index ? groupTrials(index, config.group) : []), [index])
+  const pick = useMemo(
     () => trials.find((t) => t.criteria.length >= 8 && t.criteria.length <= 24 && recruitingTier(t) === 2 && t.criteria.some((c) => c.rule._tag === "age")),
     [trials]
   )
+  const ids = useMemo(() => (pick ? [pick.nctId] : []), [pick])
+  const sample = useFullTrials(ids).trials[0]
   const match = useMemo(() => (sample ? matchTrial(sample, EXAMPLE_PROFILE, null) : null), [sample])
 
   return (

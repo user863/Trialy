@@ -76,31 +76,34 @@ const CtgStudy = S.Struct({
 })
 type CtgStudy = typeof CtgStudy.Type
 
-const Page = S.Struct({
+export const Page = S.Struct({
   studies: S.Array(S.Unknown),
   nextPageToken: Opt(S.String),
   totalCount: Opt(S.Number)
 })
 
-const buildUrl = (g: GroupConfig, pageToken?: string) => {
+const countriesOf = (g: GroupConfig) => g.countries ?? COUNTRIES
+
+export const buildUrl = (g: GroupConfig, pageToken?: string, fields = "protocolSection") => {
+  const countries = countriesOf(g)
   const adv = [
     "AREA[StudyType]INTERVENTIONAL",
     "AREA[StdAge](ADULT OR OLDER_ADULT)",
-    `AREA[LocationCountry](${COUNTRIES.join(" OR ")})`
+    ...(countries === "world" ? [] : [`AREA[LocationCountry](${countries.join(" OR ")})`])
   ].join(" AND ")
   const p = new URLSearchParams({
-    "query.cond": g.condQuery,
     "filter.overallStatus": "RECRUITING,NOT_YET_RECRUITING",
     "filter.advanced": adv,
     countTotal: "true",
     pageSize: String(config.ctgov.pageSize),
-    fields: "protocolSection"
+    fields
   })
+  if (g.condQuery) p.set("query.cond", g.condQuery)
   if (pageToken) p.set("pageToken", pageToken)
   return `${config.ctgov.baseUrl}?${p.toString()}`
 }
 
-const fetchJson = (url: string) =>
+export const fetchJson = (url: string) =>
   Effect.tryPromise({
     try: async () => {
       const r = await fetch(url, { headers: { accept: "application/json", "user-agent": "trialy-prototype" } })
@@ -157,9 +160,10 @@ const toTrial = (study: CtgStudy, g: GroupConfig): Trial | null => {
   const title = id.briefTitle ?? id.officialTitle ?? id.nctId
   if (!g.conditionRe.test(conditions.join(" ") + " " + title)) return null
 
-  const covered = new Set<string>(COUNTRIES)
+  const countries = countriesOf(g)
+  const covered = countries === "world" ? null : new Set<string>(countries)
   const sites: Site[] = (p.contactsLocationsModule?.locations ?? [])
-    .filter((l) => l.country && covered.has(l.country))
+    .filter((l) => l.country && (covered === null || covered.has(l.country)))
     .map((l) => {
       const c = l.contacts?.[0]
       return {

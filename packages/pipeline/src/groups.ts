@@ -2,6 +2,7 @@ export interface GroupConfig {
   readonly id: string
   readonly label: string
   readonly condQuery: string
+  readonly countries?: ReadonlyArray<string> | "world"
   readonly conditionRe: RegExp
   readonly reader: "lung" | "ms" | "general"
 }

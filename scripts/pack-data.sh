@@ -12,7 +12,12 @@ stage="$out/$name"
 
 rm -rf "$stage"
 mkdir -p "$stage/schema"
-cp "$data/$group.json" "$data/manifest.json" "$stage/"
+cp "$data/$group.json" "$stage/"
+node -e "
+const m = require('$data/manifest.json')
+const g = m.groups.find((x) => x.id === '$group')
+require('fs').writeFileSync('$stage/manifest.json', JSON.stringify({ groups: [g], generatedAt: require('$data/$group.json').generatedAt }))
+"
 cp "$root"/packages/domain/schema/*.json "$stage/schema/"
 cp "$root/docs/data.md" "$stage/DATA.md"
 cp "$root/LICENSE" "$stage/LICENSE"
@@ -22,7 +27,7 @@ tar -czf "$out/$name.tar.gz" -C "$out" "$name"
 rm -rf "$stage"
 
 trials="$(node -p "require('$data/manifest.json').groups.find(g => g.id === '$group').trials")"
-generated="$(node -p "require('$data/manifest.json').generatedAt")"
+generated="$(node -p "require('$data/$group.json').generatedAt")"
 cat > "$out/NOTES-$tag.md" <<NOTES
 Trialy data: $group, version $version
 

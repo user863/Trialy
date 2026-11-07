@@ -320,17 +320,153 @@
     }
   },
   {
-    "trial": "NCT04875585",
-    "id": "NCT04875585-25",
-    "kind": "exclusion",
+    "trial": "NCT04886804",
+    "id": "NCT04886804-7",
+    "kind": "inclusion",
+    "confidence": "high",
+    "text": "At least 18 years of age at the time of consent or over the legal age of consent in countries where that is greater than 18 years.",
+    "rule": {
+      "_tag": "age",
+      "min": 18
+    }
+  },
+  {
+    "trial": "NCT04886804",
+    "id": "NCT04886804-14",
+    "kind": "inclusion",
     "confidence": "low",
-    "text": "History of (non-infectious) pneumonitis that required steroids or has current pneumonitis.",
+    "text": "Non-squamous non-small cell lung cancer (NSCLC) patients with documented human epidermal growth factor receptor 2 (HER2) mutation in the tyrosine kinase domain (TKD) as per local lab results.",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "allOf",
+          "rules": [
+            {
+              "_tag": "cancerType",
+              "types": [
+                "nsclc"
+              ]
+            },
+            {
+              "_tag": "not",
+              "rule": {
+                "_tag": "cancerType",
+                "types": [
+                  "squamous"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT04886804",
+    "id": "NCT04886804-20",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "NSCLC Patient with a documented HER2 mutation outside of the tyrosine kinase domain (TKD) as per local lab results or squamous NSCLC patient with mutation in the TKD as per local lab results. After implementation of CTP v8, only non-squamous NSCLC patients with a documented activating HER2 mutation outside of the tyrosine kinase domain (TKD) as per local lab results.",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "cancerType",
+            "types": [
+              "nsclc"
+            ]
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT04886804",
+    "id": "NCT04886804-30",
+    "kind": "inclusion",
+    "confidence": "high",
+    "text": "Non-squamous NSCLC patient with documented HER2 mutation in the TKD as per local lab results.",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "cancerType",
+          "types": [
+            "nsclc"
+          ]
+        },
+        {
+          "_tag": "not",
+          "rule": {
+            "_tag": "cancerType",
+            "types": [
+              "squamous"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT04886804",
+    "id": "NCT04886804-31",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Patient who had received, in the advanced/metastatic setting, at least one line of systemic therapy.",
     "rule": {
       "_tag": "narrow",
       "rule": {
-        "_tag": "flag",
-        "flag": "ild"
+        "_tag": "priorLines",
+        "min": 1
       }
+    }
+  },
+  {
+    "trial": "NCT04886804",
+    "id": "NCT04886804-36",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Patient who had received, in the advanced/metastatic setting, at least one line of systemic therapy.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "priorLines",
+        "min": 1
+      }
+    }
+  },
+  {
+    "trial": "NCT04886804",
+    "id": "NCT04886804-41",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "NSCLC (adenocarcinoma or squamous) patient with documented HER2 mutation in the tyrosine kinase domain (TKD) or non-squamous NSCLC with a documented HER2 mutation in the non tyrosine kinase domain (non TKD) as per local lab results",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "cancerType",
+            "types": [
+              "nsclc",
+              "adenocarcinoma"
+            ]
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
     }
   },
   {
@@ -1527,84 +1663,6 @@
     }
   },
   {
-    "trial": "NCT06417814",
-    "id": "NCT06417814-1",
-    "kind": "inclusion",
-    "confidence": "low",
-    "text": "Must have evidence of documented pre-existing EGFRm information (EGFRm known to be associated with (epidermal growth factor receptor \\[EGFR\\] tyrosine kinase inhibitor \\[TKis\\] sensitivity \\[Ex19del, L858R, G719X, S768I, or L861Q\\], either alone or in combination with other EGFR mutations, which may include T790M).",
-    "rule": {
-      "_tag": "allOf",
-      "rules": [
-        {
-          "_tag": "narrow",
-          "rule": {
-            "_tag": "biomarker",
-            "gene": "EGFR",
-            "state": "positive"
-          }
-        },
-        {
-          "_tag": "other"
-        }
-      ]
-    }
-  },
-  {
-    "trial": "NCT06417814",
-    "id": "NCT06417814-2",
-    "kind": "inclusion",
-    "confidence": "low",
-    "text": "Documented extra-cranial radiologic progression on prior osimertinib monotherapy (as most recent line of treatment) in the adjuvant, locally advanced, or metastatic setting.",
-    "rule": {
-      "_tag": "allOf",
-      "rules": [
-        {
-          "_tag": "narrow",
-          "rule": {
-            "_tag": "priorTherapy",
-            "category": "targeted"
-          }
-        },
-        {
-          "_tag": "other"
-        }
-      ]
-    }
-  },
-  {
-    "trial": "NCT06417814",
-    "id": "NCT06417814-9",
-    "kind": "exclusion",
-    "confidence": "low",
-    "text": "Any evidence of severe or uncontrolled systemic diseases, including, but not limited to active bleeding diseases, active infection, active ILD/pneumonitis, cardiac disease.",
-    "rule": {
-      "_tag": "allOf",
-      "rules": [
-        {
-          "_tag": "flag",
-          "flag": "ild"
-        },
-        {
-          "_tag": "other"
-        }
-      ]
-    }
-  },
-  {
-    "trial": "NCT06417814",
-    "id": "NCT06417814-11",
-    "kind": "exclusion",
-    "confidence": "low",
-    "text": "History of non-infectious ILD/pneumonitis including radiation pneumonitis that required steroids or drug-induced ILD, has current ILD/pneumonitis, or has suspected ILD/pneumonitis that cannot be ruled out by imaging at screening.",
-    "rule": {
-      "_tag": "narrow",
-      "rule": {
-        "_tag": "flag",
-        "flag": "ild"
-      }
-    }
-  },
-  {
     "trial": "NCT06422143",
     "id": "NCT06422143-3",
     "kind": "inclusion",
@@ -2333,35 +2391,6 @@
       "rule": {
         "_tag": "flag",
         "flag": "ild"
-      }
-    }
-  },
-  {
-    "trial": "NCT06780085",
-    "id": "NCT06780085-5",
-    "kind": "inclusion",
-    "confidence": "low",
-    "text": "An Eastern Cooperative Oncology Group (ECOG) performance status of 0 to 1 assessed within 7 days before randomization",
-    "rule": {
-      "_tag": "narrow",
-      "rule": {
-        "_tag": "performanceStatus",
-        "min": 0,
-        "max": 1
-      }
-    }
-  },
-  {
-    "trial": "NCT06780085",
-    "id": "NCT06780085-32",
-    "kind": "exclusion",
-    "confidence": "low",
-    "text": "Has active autoimmune disease that has required systemic treatment in the past 2 years",
-    "rule": {
-      "_tag": "narrow",
-      "rule": {
-        "_tag": "flag",
-        "flag": "autoimmune"
       }
     }
   },
@@ -4083,6 +4112,35 @@
     }
   },
   {
+    "trial": "NCT07365319",
+    "id": "NCT07365319-7",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Participant has an ECOG Performance Status of 0 to 1 assessed no more than 10 days before start of the treatment.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "performanceStatus",
+        "min": 0,
+        "max": 1
+      }
+    }
+  },
+  {
+    "trial": "NCT07365319",
+    "id": "NCT07365319-13",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "has received radiation therapy within 7 days of the first dose of study intervention administration.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "priorTherapy",
+        "category": "radiotherapy"
+      }
+    }
+  },
+  {
     "trial": "NCT07398027",
     "id": "NCT07398027-16",
     "kind": "exclusion",
@@ -4411,6 +4469,20 @@
     }
   },
   {
+    "trial": "NCT07541170",
+    "id": "NCT07541170-3",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Prior treatment with neoadjuvant immune checkpoint inhibitor (pembrolizumab or nivolumab) in combination with histology-based platinum-based doublet chemotherapy",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "priorTherapy",
+        "category": "immunotherapy"
+      }
+    }
+  },
+  {
     "trial": "NCT07554339",
     "id": "NCT07554339-0",
     "kind": "inclusion",
@@ -4634,6 +4706,76 @@
     }
   },
   {
+    "trial": "NCT07739966",
+    "id": "NCT07739966-2",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Histologically documented Stage IIIB, IIIC disease who is not candidate for surgical resection or definitive chemoradiation, or Stage IV NSQ NSCLC.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "cancerType",
+        "types": [
+          "nsclc"
+        ]
+      }
+    }
+  },
+  {
+    "trial": "NCT07739966",
+    "id": "NCT07739966-4",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Eastern Cooperative Oncology Group (ECOG) performance status (PS) of 0 or 1 assessed no more than 14 days prior to initiation of trial interventions.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "performanceStatus",
+        "min": 0,
+        "max": 1
+      }
+    }
+  },
+  {
+    "trial": "NCT07739966",
+    "id": "NCT07739966-9",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Participants without AGA: Participants have been previously treated with platinum-based chemotherapy and anti-programmed death-1 (anti-PD-1)/programmed death-ligand 1 (PD-L1) antibody",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "not",
+          "rule": {
+            "_tag": "narrow",
+            "rule": {
+              "_tag": "priorTherapy",
+              "category": "chemotherapy"
+            }
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07739966",
+    "id": "NCT07739966-12",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Prior systemic anticancer therapy with topoisomerase 1 inhibitor or topoisomerase 1 inhibitor-based antibody-drug conjugate (ADCs) (e.g., datopotamab deruxtexan and Sacituzumab govitecan).",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "priorTherapy",
+        "category": "systemic"
+      }
+    }
+  },
+  {
     "trial": "NCT07759492",
     "id": "NCT07759492-22",
     "kind": "exclusion",
@@ -4819,6 +4961,55 @@
         },
         {
           "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07871214",
+    "id": "NCT07871214-0",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "Participants must have newly diagnosed, previously untreated participants with histologically confirmed non-small cell lung cancer (NSCLC) (squamous or non-squamous histology); resectable Stage IIA to IIIB (N2) disease (American Joint Committee on Cancer (AJCC) 9th edition).",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "cancerType",
+            "types": [
+              "nsclc"
+            ]
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07915037",
+    "id": "NCT07915037-3",
+    "kind": "inclusion",
+    "confidence": "low",
+    "text": "4\\. Have not received prior systemic treatment for their advanced/metastatic NSCLC.",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "priorLines",
+          "max": 0
+        },
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "cancerType",
+            "types": [
+              "nsclc"
+            ]
+          }
         }
       ]
     }

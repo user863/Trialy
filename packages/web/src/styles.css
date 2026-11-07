@@ -1395,3 +1395,25 @@
     margin-top: 24px;
   }
 }
+
+.title-link {
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 3px solid var(--line-strong);
+}
+
+.title-link svg {
+  display: inline-block;
+  vertical-align: -0.08em;
+  margin-left: 0.15em;
+  color: var(--ink);
+}
+
+.title-link:hover,
+.title-link:focus-visible {
+  border-bottom-color: var(--ink);
+}
+
+.nowrap {
+  white-space: nowrap;
+}

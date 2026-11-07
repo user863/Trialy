@@ -96,6 +96,8 @@ Tailwind v4 with a small token set, Inter as the only typeface. The home page is
 ## Data
 
 Trial data comes from the ClinicalTrials.gov API v2. Bundle format, schema, versioning and data terms are in [docs/data.md](docs/data.md). `npm run release:data` packs the bundle for a release.
+
+The web app loads a small index of all trials first (same file for every visitor) and fetches a trial's full text only when it is opened, from a shared bucket that mixes many trials; see [docs/data.md](docs/data.md#index-and-details-what-the-web-app-loads). How big an all-fields index gets, and how fast it loads and matches on a desktop and a throttled phone: [docs/index-size.md](docs/index-size.md).
 Postcode tables come from GeoNames, the map outline from `world-atlas` (Natural Earth).
 
 ## Licence

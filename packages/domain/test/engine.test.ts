@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 import { Schema as S } from "effect"
-import { emptyProfile, evalCriterion, matchTrial, matchTrials, Rule, type Criterion, type Profile, type Trial } from "../src/index.js"
+import { displayPhases, emptyProfile, phaseRank, evalCriterion, matchTrial, matchTrials, Rule, type Criterion, type Profile, type Trial } from "../src/index.js"
 
 const crit = (kind: Criterion["kind"], rule: Rule): Criterion => ({
   id: "c",
@@ -239,5 +239,22 @@ describe("multiple sclerosis rules", () => {
       expect(status(rule, { sex: "female", pregnancy: "no" }, "exclusion")).toBe("met")
       expect(status(rule, { sex: "unknown" }, "exclusion")).toBe("unknown")
     })
+  })
+})
+
+describe("phases", () => {
+  it("hides NA and joins neighbouring phases", () => {
+    expect(displayPhases(["NA"])).toEqual([])
+    expect(displayPhases([])).toEqual([])
+    expect(displayPhases(["PHASE1", "PHASE2"])).toEqual(["PHASE1/PHASE2"])
+    expect(displayPhases(["PHASE2", "PHASE3"])).toEqual(["PHASE2/PHASE3"])
+    expect(displayPhases(["PHASE2"])).toEqual(["PHASE2"])
+  })
+
+  it("ranks later phases higher and unstated phases last", () => {
+    const order = [["NA"], ["EARLY_PHASE1"], ["PHASE1"], ["PHASE1", "PHASE2"], ["PHASE2"], ["PHASE2", "PHASE3"], ["PHASE3"], ["PHASE4"]]
+    const ranks = order.map(phaseRank)
+    expect([...ranks].sort((a, b) => a - b)).toEqual(ranks)
+    expect(new Set(ranks).size).toBe(ranks.length)
   })
 })

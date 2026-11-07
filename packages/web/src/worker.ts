@@ -1,5 +1,5 @@
 /// <reference lib="webworker" />
-import { matchTrials, unknownImpact, type LatLon, type Profile, type Trial } from "@trial-finder/domain"
+import { groupTrials, matchTrials, unknownImpact, type LatLon, type Profile, type Trial, type TrialIndex } from "@trial-finder/domain"
 
 let trials: Trial[] = []
 
@@ -19,9 +19,15 @@ export interface Summary {
 self.onmessage = (e: MessageEvent) => {
   const m = e.data as
     | { type: "init"; trials: Trial[] }
+    | { type: "initIndex"; text: string; group: string }
     | { type: "match"; id: number; profile: Profile; home: LatLon | null }
   if (m.type === "init") {
     trials = m.trials
+    ;(self as unknown as Worker).postMessage({ type: "ready" })
+    return
+  }
+  if (m.type === "initIndex") {
+    trials = groupTrials(JSON.parse(m.text) as TrialIndex, m.group)
     ;(self as unknown as Worker).postMessage({ type: "ready" })
     return
   }

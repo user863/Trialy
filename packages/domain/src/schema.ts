@@ -173,6 +173,7 @@ export const Site = S.Struct({
   status: S.optional(S.String),
   lat: S.optional(S.Number),
   lon: S.optional(S.Number),
+  approxLocation: S.optional(S.Boolean),
   contactName: S.optional(S.String),
   contactEmail: S.optional(S.String),
   contactPhone: S.optional(S.String)
@@ -264,7 +265,7 @@ export const Profile = S.Struct({
     hemoglobin: S.NullOr(S.Number),
     crcl: S.NullOr(S.Number)
   }),
-  country: S.Literal("DE", "AT", "CH"),
+  country: S.Literal("DE", "AT", "CH", "NL", "BE", "LU", "FR", "DK", "PL", "CZ"),
   postcode: S.String
 })
 export type Profile = typeof Profile.Type

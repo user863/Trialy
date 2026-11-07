@@ -524,16 +524,12 @@ function WhereStep({ p, set }: { p: Profile; set: Set }) {
   const { postcodeStatus, home } = useApp()
   return (
     <>
-      <Choice
-        name={t("where.country")}
-        value={p.country}
-        onChange={(v) => set((x) => ({ ...x, country: v, postcode: "" }))}
-        options={[
-          { value: "DE", label: countryName("Germany") },
-          { value: "AT", label: countryName("Austria") },
-          { value: "CH", label: countryName("Switzerland") }
-        ]}
-      />
+      <label className="field">
+        <span>{t("where.country")}</span>
+        <select value={p.country} onChange={(e) => set((x) => ({ ...x, country: e.target.value as Profile["country"], postcode: "" }))}>
+          {config.homeCountries.map((c) => <option key={c.code} value={c.code}>{countryName(c.name)}</option>)}
+        </select>
+      </label>
       <label className="field">
         <span>{t("step.where.postcode")}</span>
         <input

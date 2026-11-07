@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 1060" width="2000" height="1060" font-family="Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif">
+  <title>Trialy architecture</title>
+  <desc>A pipeline reads ClinicalTrials.gov and writes static files. The browser downloads the same files as every other visitor, matches locally in a worker and fetches one shared details file per opened trial.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 20 20" refX="18" refY="10" markerUnits="userSpaceOnUse" markerWidth="24" markerHeight="24" orient="auto-start-reverse">
+      <path d="M0 0 L20 10 L0 20 z" fill="#bdc1c6"/>
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 20 20" refX="10" refY="10" markerUnits="userSpaceOnUse" markerWidth="24" markerHeight="24" orient="auto">
+      <path d="M0 20 L10 0 L20 20 z" fill="#81c995"/>
+    </marker>
+    <marker id="arrow-yellow" viewBox="0 0 20 20" refX="10" refY="10" markerUnits="userSpaceOnUse" markerWidth="24" markerHeight="24" orient="auto">
+      <path d="M0 20 L10 0 L20 20 z" fill="#debc3f"/>
+    </marker>
+  </defs>
+
+  <rect width="2000" height="1060" fill="#202124"/>
+
+  <rect x="380" y="60" width="1040" height="320" rx="36" fill="none" stroke="#5f6368" stroke-width="4" stroke-dasharray="22 14"/>
+  <text x="900" y="112" text-anchor="middle" font-size="32" fill="#9aa0a6">pipeline · build time, not per visitor</text>
+
+  <rect x="40" y="170" width="260" height="140" rx="22" fill="#303134"/>
+  <text x="170" y="232" text-anchor="middle" font-size="30" fill="#e8eaed">ClinicalTrials.gov</text>
+  <text x="170" y="272" text-anchor="middle" font-size="22" fill="#9aa0a6">API v2, public</text>
+  <line x1="300" y1="240" x2="418" y2="240" stroke="#bdc1c6" stroke-width="5" marker-end="url(#arrow)"/>
+
+  <g font-size="27" font-weight="600" fill="#e8eaed" text-anchor="middle">
+    <rect x="430" y="170" width="280" height="140" rx="22" fill="#1e3a2a"/>
+    <text x="570" y="232">Fetch &amp; normalise</text>
+    <text x="570" y="272" font-size="22" font-weight="400" fill="#bdc1c6">one record per trial</text>
+
+    <rect x="760" y="170" width="280" height="140" rx="22" fill="#1e3a2a"/>
+    <text x="900" y="232">Read criteria</text>
+    <text x="900" y="272" font-size="22" font-weight="400" fill="#bdc1c6">rules for lung and MS</text>
+
+    <rect x="1090" y="170" width="280" height="140" rx="22" fill="#1e3a2a"/>
+    <text x="1230" y="232">Split &amp; place</text>
+    <text x="1230" y="272" font-size="22" font-weight="400" fill="#bdc1c6">index, details, sites</text>
+  </g>
+  <line x1="710" y1="240" x2="755" y2="240" stroke="#bdc1c6" stroke-width="5" marker-end="url(#arrow)"/>
+  <line x1="1040" y1="240" x2="1085" y2="240" stroke="#bdc1c6" stroke-width="5" marker-end="url(#arrow)"/>
+  <line x1="1370" y1="240" x2="1498" y2="240" stroke="#bdc1c6" stroke-width="5" marker-end="url(#arrow)"/>
+
+  <rect x="1510" y="110" width="450" height="260" rx="22" fill="#303134"/>
+  <text x="1735" y="165" text-anchor="middle" font-size="30" font-weight="600" fill="#e8eaed">Static files</text>
+  <g font-size="22" fill="#bdc1c6">
+    <text x="1545" y="212">index.json · same for everyone</text>
+    <text x="1545" y="252">details/NNN.json · shared buckets</text>
+    <text x="1545" y="292">postcodes.json · 10 countries</text>
+    <text x="1545" y="332">lung.json, ms.json · release data</text>
+  </g>
+
+  <path d="M1735 370 V500 H565 V668" fill="none" stroke="#bdc1c6" stroke-width="5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+  <text x="1150" y="478" text-anchor="middle" font-size="26" fill="#e8eaed">download, identical for every visitor</text>
+
+  <rect x="380" y="560" width="1300" height="340" rx="36" fill="none" stroke="#5f6368" stroke-width="4" stroke-dasharray="22 14"/>
+  <text x="1030" y="612" text-anchor="middle" font-size="32" fill="#9aa0a6">your browser · answers never leave this device</text>
+
+  <rect x="40" y="670" width="260" height="140" rx="22" fill="#303134"/>
+  <text x="170" y="732" text-anchor="middle" font-size="30" fill="#e8eaed">Your answers</text>
+  <text x="170" y="772" text-anchor="middle" font-size="22" fill="#9aa0a6">and postcode</text>
+  <line x1="300" y1="740" x2="418" y2="740" stroke="#bdc1c6" stroke-width="5" marker-end="url(#arrow)"/>
+
+  <g font-size="27" font-weight="600" fill="#e8eaed" text-anchor="middle">
+    <rect x="430" y="670" width="270" height="140" rx="22" fill="#1e3a2a"/>
+    <text x="565" y="732">Load index</text>
+    <text x="565" y="772" font-size="22" font-weight="400" fill="#bdc1c6">and postcode table</text>
+
+    <rect x="740" y="670" width="270" height="140" rx="22" fill="#1e3a2a"/>
+    <text x="875" y="732">Match in a worker</text>
+    <text x="875" y="772" font-size="22" font-weight="400" fill="#bdc1c6">three-valued rules</text>
+
+    <rect x="1050" y="670" width="270" height="140" rx="22" fill="#1e3a2a"/>
+    <text x="1185" y="732">Sort by distance</text>
+    <text x="1185" y="772" font-size="22" font-weight="400" fill="#bdc1c6">nearest open site</text>
+
+    <rect x="1360" y="670" width="270" height="140" rx="22" fill="#1e3a2a"/>
+    <text x="1495" y="732">Open a trial</text>
+    <text x="1495" y="772" font-size="22" font-weight="400" fill="#bdc1c6">one shared details file</text>
+  </g>
+  <line x1="700" y1="740" x2="735" y2="740" stroke="#bdc1c6" stroke-width="5" marker-end="url(#arrow)"/>
+  <line x1="1010" y1="740" x2="1045" y2="740" stroke="#bdc1c6" stroke-width="5" marker-end="url(#arrow)"/>
+  <line x1="1320" y1="740" x2="1355" y2="740" stroke="#bdc1c6" stroke-width="5" marker-end="url(#arrow)"/>
+
+  <path d="M1185 810 V860 Q1185 872 1173 872 H887 Q875 872 875 860 V818" fill="none" stroke="#81c995" stroke-width="6" marker-end="url(#arrow-green)"/>
+  <text x="1030" y="850" text-anchor="middle" font-size="26" fill="#e8eaed">change an answer</text>
+
+  <rect x="380" y="950" width="760" height="86" rx="22" fill="#3b3217" stroke="#debc3f" stroke-width="4"/>
+  <text x="760" y="1003" text-anchor="middle" font-size="26" fill="#e8eaed">IndexedDB: answers and shortlist stay on the device</text>
+  <path d="M760 950 V908" fill="none" stroke="#debc3f" stroke-width="5" stroke-dasharray="14 10" marker-end="url(#arrow-yellow)"/>
+</svg>

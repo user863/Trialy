@@ -1,0 +1,135 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": [],
+  "properties": {},
+  "additionalProperties": {
+    "type": "object",
+    "required": [
+      "eligibilityText",
+      "texts",
+      "interventionNames",
+      "armLabels",
+      "design",
+      "otherIds",
+      "siteExtras"
+    ],
+    "properties": {
+      "officialTitle": {
+        "type": "string"
+      },
+      "briefSummary": {
+        "type": "string"
+      },
+      "eligibilityText": {
+        "type": "string"
+      },
+      "texts": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "interventionNames": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "armLabels": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "design": {
+        "type": "object",
+        "required": [],
+        "properties": {
+          "allocation": {
+            "type": "string"
+          },
+          "model": {
+            "type": "string"
+          },
+          "masking": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "centralContact": {
+        "type": "object",
+        "required": [],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "otherIds": {
+        "type": "object",
+        "required": [],
+        "properties": {
+          "euCt": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "eudraCt": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "drks": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "siteExtras": {
+        "type": "array",
+        "items": {
+          "anyOf": [
+            {
+              "type": "object",
+              "required": [],
+              "properties": {
+                "zip": {
+                  "type": "string"
+                },
+                "contactName": {
+                  "type": "string"
+                },
+                "contactEmail": {
+                  "type": "string"
+                },
+                "contactPhone": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "additionalProperties": false
+  },
+  "title": "Trialy trial details bucket (tier 2)"
+}

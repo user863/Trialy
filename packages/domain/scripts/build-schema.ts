@@ -3,12 +3,15 @@ import { mkdir, writeFile } from "node:fs/promises"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
 import { Bundle, Profile, Rule } from "../src/schema.js"
+import { DetailBucket, TrialIndex } from "../src/tiered.js"
 
 const outDir = join(dirname(fileURLToPath(import.meta.url)), "../schema")
 
 const documents = {
   "rule.schema.json": { title: "Trialy rule", schema: Rule },
   "bundle.schema.json": { title: "Trialy trial bundle", schema: Bundle },
+  "index.schema.json": { title: "Trialy trial index (tier 1)", schema: TrialIndex },
+  "details.schema.json": { title: "Trialy trial details bucket (tier 2)", schema: DetailBucket },
   "profile.schema.json": { title: "Trialy patient profile", schema: Profile }
 } as const
 

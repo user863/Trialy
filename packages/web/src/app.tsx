@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react"
-import { emptyProfile, type Bundle, type LatLon, type Profile, type Trial } from "@trial-finder/domain"
+import { bucketOf, emptyProfile, fullTrial, groupTrials, type Bundle, type LatLon, type Profile, type Trial, type TrialDetail, type TrialIndex } from "@trial-finder/domain"
 import { config } from "./config"
 import { useI18n } from "./i18n"
 import { valueOr, type Result } from "./result"
@@ -38,6 +38,8 @@ interface App {
   bundle: Bundle | null
   trials: ReadonlyArray<Trial>
   byId: Map<string, Trial>
+  index: TrialIndex | null
+  loadTrials: (ids: ReadonlyArray<string>) => Promise<Trial[]>
   loadError: string | null
   home: LatLon | null
   postcodeStatus: "empty" | "loading" | "found" | "unknown"
@@ -63,17 +65,31 @@ const loadScoped = async (group: string) => {
 const Ctx = createContext<App>(null as unknown as App)
 export const useApp = () => useContext(Ctx)
 
-const postcodeTables = new Map<string, Promise<Record<string, [number, number]>>>()
-const loadPostcodes = (cc: string) => {
-  if (!postcodeTables.has(cc))
-    postcodeTables.set(
-      cc,
-      fetch(`${config.dataUrl}/postcodes-${cc}.json`).then((r) => {
-        if (!r.ok) throw new Error("no postcode table")
-        return r.json()
-      })
+type PostcodeTables = Record<string, Record<string, [number, number]>>
+
+let postcodeTables: Promise<PostcodeTables> | null = null
+const loadPostcodes = () => {
+  postcodeTables ??= fetch(`${config.dataUrl}/postcodes.json`).then((r) => {
+    if (!r.ok) throw new Error("no postcode table")
+    return r.json() as Promise<PostcodeTables>
+  })
+  return postcodeTables
+}
+
+const detailBuckets = new Map<string, Promise<Record<string, TrialDetail>>>()
+const loadBucket = (n: number) => {
+  const file = `${String(n).padStart(3, "0")}.json`
+  if (!detailBuckets.has(file))
+    detailBuckets.set(
+      file,
+      fetch(`${config.dataUrl}/details/${file}`)
+        .then((r) => (r.ok ? (r.json() as Promise<Record<string, TrialDetail>>) : Promise.reject(new Error(`HTTP ${r.status}`))))
+        .catch((e) => {
+          detailBuckets.delete(file)
+          throw e
+        })
     )
-  return postcodeTables.get(cc)!
+  return detailBuckets.get(file)!
 }
 
 const normalise = (p: Partial<Profile> | undefined): Profile => {
@@ -92,13 +108,13 @@ const normalise = (p: Partial<Profile> | undefined): Profile => {
 export function AppProvider({ children, now = systemClock }: { children: ReactNode; now?: () => Date }) {
   const { t } = useI18n()
   const [loaded, setLoaded] = useState(false)
-  const [groups, setGroups] = useState<ReadonlyArray<ManifestGroup>>([])
   const [group, setGroupState] = useState<string>(config.group)
   const [storageOk, setStorageOk] = useState(true)
   const [profile, setProfileState] = useState<Profile>(emptyProfile())
   const [started, setStarted] = useState(false)
   const [shortlist, setShortlist] = useState<string[]>([])
-  const [bundle, setBundle] = useState<Bundle | null>(null)
+  const [index, setIndex] = useState<TrialIndex | null>(null)
+  const indexText = useRef("")
   const [loadReason, setLoadReason] = useState<string | null>(null)
   const loadError = loadReason === null ? null : t("error.dataLoad", { reason: loadReason })
   const [home, setHome] = useState<LatLon | null>(null)
@@ -133,33 +149,31 @@ export function AppProvider({ children, now = systemClock }: { children: ReactNo
   }, [])
 
   useEffect(() => {
-    fetch(`${config.dataUrl}/manifest.json`)
-      .then((r) => (r.ok ? (r.json() as Promise<{ groups: ManifestGroup[] }>) : Promise.reject(new Error(`HTTP ${r.status}`))))
-      .then((m) => setGroups(m.groups))
+    if (!loaded) return
+    fetch(`${config.dataUrl}/index.json`)
+      .then((r) => (r.ok ? r.text() : Promise.reject(new Error(`HTTP ${r.status}`))))
+      .then((text) => {
+        indexText.current = text
+        setIndex(JSON.parse(text) as TrialIndex)
+        setLoadReason(null)
+      })
       .catch((e) => setLoadReason(e.message))
-  }, [])
+    void loadPostcodes().catch(() => undefined)
+  }, [loaded])
+
+  const groups = useMemo<ReadonlyArray<ManifestGroup>>(() => (index?.groups ?? []).map((g) => ({ id: g.id, label: g.label, trials: g.trials, file: "" })), [index])
 
   useEffect(() => {
     if (groups.length && !groups.some((g) => g.id === group)) setGroupState(config.group)
   }, [groups, group])
 
-  useEffect(() => {
-    if (!loaded) return
-    let cancelled = false
-    setBundle(null)
-    setSummaries(null)
-    fetch(`${config.dataUrl}/${group}.json`)
-      .then((r) => (r.ok ? (r.json() as Promise<Bundle>) : Promise.reject(new Error(`HTTP ${r.status}`))))
-      .then((b) => {
-        if (cancelled) return
-        setBundle(b)
-        setLoadReason(null)
-      })
-      .catch((e) => !cancelled && setLoadReason(e.message))
-    return () => {
-      cancelled = true
-    }
-  }, [group, loaded])
+  const bundle = useMemo<Bundle | null>(() => {
+    const g = index?.groups.find((x) => x.id === group)
+    if (!index || !g) return null
+    return { group: g.id, groupLabel: g.label, version: g.version, generatedAt: g.generatedAt, source: g.source, trials: groupTrials(index, g.id), changes: g.changes }
+  }, [index, group])
+
+  useEffect(() => setSummaries(null), [bundle])
 
   const trials = useMemo<ReadonlyArray<Trial>>(() => bundle?.trials ?? [], [bundle])
   const byId = useMemo(() => new Map(trials.map((t) => [t.nctId, t])), [trials])
@@ -179,9 +193,9 @@ export function AppProvider({ children, now = systemClock }: { children: ReactNo
         setImpact(m.impact)
       }
     }
-    w.postMessage({ type: "init", trials })
+    w.postMessage({ type: "initIndex", text: indexText.current, group })
     return () => w.terminate()
-  }, [trials])
+  }, [trials, group])
   const [ready, setReady] = useState(0)
 
   useEffect(() => {
@@ -198,10 +212,10 @@ export function AppProvider({ children, now = systemClock }: { children: ReactNo
       return
     }
     let cancelled = false
-    loadPostcodes(profile.country)
-      .then((t) => {
+    loadPostcodes()
+      .then((tables) => {
         if (cancelled) return
-        const hit = t[code]
+        const hit = tables[profile.country]?.[code]
         setHome(hit ? { lat: hit[0], lon: hit[1] } : null)
         setPostcodeStatus(hit ? "found" : "unknown")
       })
@@ -283,6 +297,23 @@ export function AppProvider({ children, now = systemClock }: { children: ReactNo
     persist("started", true)
   }, [persist, groups, group])
 
+  const loadTrials = useCallback(
+    async (ids: ReadonlyArray<string>): Promise<Trial[]> => {
+      if (!index) return []
+      const entries = ids.flatMap((id) => {
+        const entry = index.trials.find((e) => e.nctId === id && e.group === group) ?? index.trials.find((e) => e.nctId === id)
+        return entry ? [entry] : []
+      })
+      const buckets = await Promise.all([...new Set(entries.map((e) => bucketOf(e.nctId, index.bucketCount)))].map(async (n) => [n, await loadBucket(n)] as const))
+      const byBucket = new Map(buckets)
+      return entries.flatMap((e) => {
+        const detail = byBucket.get(bucketOf(e.nctId, index.bucketCount))?.[e.nctId]
+        return detail ? [fullTrial(index, e, detail)] : []
+      })
+    },
+    [index, group]
+  )
+
   const wipe = useCallback(async () => {
     const wiped = await wipeAll()
     if (!wiped.ok) return wiped
@@ -309,6 +340,8 @@ export function AppProvider({ children, now = systemClock }: { children: ReactNo
     bundle,
     trials,
     byId,
+    index,
+    loadTrials,
     loadError,
     home,
     postcodeStatus,
@@ -338,3 +371,20 @@ export function useHashRoute(): [string, (to: string) => void] {
   return [route, (to) => (window.location.hash = to)]
 }
 
+
+export function useFullTrials(ids: ReadonlyArray<string>): { trials: Trial[]; ready: boolean; error: string | null } {
+  const { loadTrials } = useApp()
+  const key = ids.join(",")
+  const [state, setState] = useState<{ key: string; trials: Trial[]; error: string | null } | null>(null)
+  useEffect(() => {
+    let cancelled = false
+    loadTrials(key ? key.split(",") : []).then(
+      (trials) => !cancelled && setState({ key, trials, error: null }),
+      (e: Error) => !cancelled && setState({ key, trials: [], error: e.message })
+    )
+    return () => {
+      cancelled = true
+    }
+  }, [key, loadTrials])
+  return { trials: state?.key === key ? state.trials : [], ready: state?.key === key, error: state?.key === key ? state.error : null }
+}

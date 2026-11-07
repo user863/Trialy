@@ -38,6 +38,13 @@ export const pages = messages({
   "impact.item.other": { en: "Your {field} is open in {count} trials", de: "Ihre Angabe zu „{field}“ ist in {count} Studien offen" },
 
   "filters.title": { en: "Filters", de: "Filter" },
+  "filters.sort": { en: "Sort by", de: "Sortieren nach" },
+  "sort.recommended": { en: "Recommended", de: "Empfohlen" },
+  "sort.distance": { en: "Distance, nearest first", de: "Entfernung, nächste zuerst" },
+  "sort.needPostcode": { en: "enter a postcode first", de: "zuerst Postleitzahl eingeben" },
+  "sort.phase": { en: "Phase, latest first", de: "Phase, späteste zuerst" },
+  "sort.updated": { en: "Last updated, newest first", de: "Zuletzt aktualisiert, neueste zuerst" },
+  "sort.sites": { en: "Recruiting sites, most first", de: "Zentren mit Rekrutierung, meiste zuerst" },
   "filters.distance": { en: "Distance", de: "Entfernung" },
   "filters.anyDistance": { en: "Any distance", de: "Beliebige Entfernung" },
   "filters.enterPostcode": { en: "Enter a postcode to filter", de: "Postleitzahl eingeben, um zu filtern" },
@@ -85,6 +92,7 @@ export const pages = messages({
   "card.full": { en: "Shortlist full ({max})", de: "Merkliste voll ({max})" },
   "card.add": { en: "Add to shortlist", de: "Zur Merkliste hinzufügen" },
 
+  "trial.loading": { en: "Loading trial details…", de: "Studiendetails werden geladen …" },
   "trial.notFound": { en: "Trial not found", de: "Studie nicht gefunden" },
   "trial.notFound.text": {
     en: "It may have stopped recruiting since your last visit. <link>Back to results</link>",
@@ -97,10 +105,11 @@ export const pages = messages({
   "trial.outdated": { en: "Possibly outdated: confirm with the site", de: "Möglicherweise veraltet: Fragen Sie beim Zentrum nach" },
   "trial.registryRecruiting": { en: "Registry status: recruiting", de: "Registerstatus: rekrutiert" },
   "trial.registryNotYet": { en: "Registry status: not yet recruiting", de: "Registerstatus: rekrutiert noch nicht" },
+  "trial.openRegistry": { en: "Open the {registry} entry in a new tab", de: "Eintrag bei {registry} in neuem Tab öffnen" },
   "trial.print": { en: "Print this trial", de: "Diese Studie drucken" },
   "trial.contact": { en: "Study contact:", de: "Studienkontakt:" },
 
-  "plain.title": { en: "In plain terms", de: "In einfachen Worten" },
+  "plain.title": { en: "Summary", de: "Zusammenfassung" },
   "plain.note": {
     en: "Assembled from structured registry fields, not written by a person or a language model. Read the full registry entry before deciding anything.",
     de: "Aus strukturierten Registerfeldern zusammengestellt, nicht von einer Person oder einem Sprachmodell geschrieben. Lesen Sie den vollständigen Registereintrag, bevor Sie etwas entscheiden."
@@ -121,6 +130,8 @@ export const pages = messages({
   "phase.PHASE2": { en: "Phase 2", de: "Phase 2" },
   "phase.PHASE3": { en: "Phase 3", de: "Phase 3" },
   "phase.PHASE4": { en: "Phase 4", de: "Phase 4" },
+  "phase.PHASE1/PHASE2": { en: "Phase 1/2", de: "Phase 1/2" },
+  "phase.PHASE2/PHASE3": { en: "Phase 2/3", de: "Phase 2/3" },
   "phase.NA": { en: "n/a", de: "k. A." },
   "phase.text.EARLY_PHASE1": {
     en: "Early phase 1: a very first look at safety in a small group of people.",
@@ -141,6 +152,14 @@ export const pages = messages({
   "phase.text.PHASE4": {
     en: "Phase 4: studies an already approved treatment in everyday use.",
     de: "Phase 4: untersucht eine bereits zugelassene Behandlung im Alltag."
+  },
+  "phase.text.PHASE1/PHASE2": {
+    en: "Phase 1/2: combines a first look at safety and the right dose with a first test of whether the treatment works.",
+    de: "Phase 1/2: verbindet einen ersten Blick auf Sicherheit und die richtige Dosis mit einem ersten Test, ob die Behandlung wirkt."
+  },
+  "phase.text.PHASE2/PHASE3": {
+    en: "Phase 2/3: combines a test of whether the treatment works with a comparison against the current standard.",
+    de: "Phase 2/3: verbindet einen Test, ob die Behandlung wirkt, mit einem Vergleich mit dem aktuellen Standard."
   },
   "phase.text.NA": {
     en: "No phase stated (often the case for non-drug studies).",
@@ -171,7 +190,7 @@ export const pages = messages({
     en: "No placebo is named in the registry entry. Check the full protocol to be sure.",
     de: "Im Registereintrag wird kein Placebo genannt. Prüfen Sie das vollständige Studienprotokoll, um sicherzugehen."
   },
-  "summary.original": { en: "Official summary from the registry (original wording)", de: "Offizielle Zusammenfassung aus dem Register (Originaltext)" },
+  "summary.original": { en: "Original wording", de: "Originaltext" },
 
   "elig.title": { en: "Eligibility criteria", de: "Teilnahmekriterien" },
   "elig.notMet": {
@@ -299,15 +318,15 @@ export const pages = messages({
   },
   "privacy.server.title": { en: "What the server sees", de: "Was der Server sieht" },
   "privacy.server.text": {
-    en: "When you open this page your browser downloads the static page and one public trial file (<code>{file}</code>{trials}) plus a postcode table for your country. So the server can tell that someone interested in trials for {condition} visited, but nothing about you or your answers. There are no cookies, trackers, third-party fonts or analytics in this prototype.",
-    de: "Wenn Sie diese Seite öffnen, lädt Ihr Browser die statische Seite und eine öffentliche Studiendatei (<code>{file}</code>{trials}) sowie eine Postleitzahltabelle für Ihr Land herunter. Der Server kann also erkennen, dass sich jemand für Studien zu {condition} interessiert hat, aber nichts über Sie oder Ihre Angaben. In diesem Prototyp gibt es keine Cookies, Tracker, Schriften von Drittanbietern oder Analysen."
+    en: "When you open this page your browser downloads the static page, one public list of all trials (<code>{file}</code>{trials}) and one postcode table for all supported countries. These files are the same for every visitor, whichever condition you pick, so the server cannot tell what you are interested in. When you open a trial, its full text comes from one of {buckets} shared files that mix many trials, so the server learns at most which of those files you needed, not which trial. Like any website, the server sees your IP address. There are no cookies, trackers, third-party fonts or analytics in this prototype.",
+    de: "Wenn Sie diese Seite öffnen, lädt Ihr Browser die statische Seite, eine öffentliche Liste aller Studien (<code>{file}</code>{trials}) und eine Postleitzahltabelle für alle unterstützten Länder herunter. Diese Dateien sind für alle Besucher gleich, egal welche Erkrankung Sie wählen, der Server kann also nicht erkennen, wofür Sie sich interessieren. Wenn Sie eine Studie öffnen, kommt ihr voller Text aus einer von {buckets} gemeinsamen Dateien, in denen viele Studien gemischt sind. Der Server erfährt höchstens, welche dieser Dateien Sie brauchten, nicht welche Studie. Wie jede Website sieht der Server Ihre IP-Adresse. In diesem Prototyp gibt es keine Cookies, Tracker, Schriften von Drittanbietern oder Analysen."
   },
   "privacy.server.count.one": { en: ", {count} trial", de: ", {count} Studie" },
   "privacy.server.count.other": { en: ", {count} trials", de: ", {count} Studien" },
   "privacy.check.title": { en: "How to check this yourself", de: "So können Sie es selbst überprüfen" },
   "privacy.check.text": {
-    en: "Open your browser’s developer tools, choose the <em>Network</em> tab, then answer a question. You will see that no request is made when you answer. You can also switch off your internet connection after the page has loaded and everything keeps working.",
-    de: "Öffnen Sie die Entwicklerwerkzeuge Ihres Browsers, wählen Sie den Reiter <em>Netzwerk</em> (Network) und beantworten Sie dann eine Frage. Sie sehen, dass beim Antworten keine Anfrage gesendet wird. Sie können auch Ihre Internetverbindung trennen, nachdem die Seite geladen ist, und alles funktioniert weiter."
+    en: "Open your browser’s developer tools, choose the <em>Network</em> tab, then answer a question. You will see that no request is made when you answer. Opening a trial loads one shared details file. You can also switch off your internet connection after the page has loaded and everything keeps working.",
+    de: "Öffnen Sie die Entwicklerwerkzeuge Ihres Browsers, wählen Sie den Reiter <em>Netzwerk</em> (Network) und beantworten Sie dann eine Frage. Sie sehen, dass beim Antworten keine Anfrage gesendet wird. Beim Öffnen einer Studie wird eine gemeinsame Detaildatei geladen. Sie können auch Ihre Internetverbindung trennen, nachdem die Seite geladen ist, und alles funktioniert weiter."
   },
   "privacy.move.title": { en: "Move to another device", de: "Auf ein anderes Gerät übertragen" },
   "privacy.move.text": {

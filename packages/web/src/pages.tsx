@@ -3,14 +3,16 @@ import {
   isStale,
   MS_THERAPIES,
   matchTrial,
+  displayPhases,
   phaseLabel,
+  phaseRank,
   plainFacts,
   registryLinks,
   haversineKm,
   type Profile,
   type Trial
 } from "@trial-finder/domain"
-import { useApp } from "./app"
+import { useApp, useFullTrials } from "./app"
 import { config } from "./config"
 import { fieldLabel, HELP_TAGS, stepsFor, STEP_FOR_FIELD } from "./questions"
 import { CriteriaSections } from "./criteria"
@@ -86,6 +88,27 @@ const treatmentKinds = (t: Trial) => {
   return kinds
 }
 
+const SORTS = ["recommended", "distance", "phase", "updated", "sites"] as const
+type SortKey = (typeof SORTS)[number]
+
+const sortRows = (rows: Row[], key: SortKey): Row[] => {
+  if (key === "recommended") return rows
+  const by: Record<Exclude<SortKey, "recommended">, (a: Row, b: Row) => number> = {
+    distance: (a, b) => {
+      const x = a.s.distanceKm ?? Infinity
+      const y = b.s.distanceKm ?? Infinity
+      return x === y ? 0 : x - y
+    },
+    phase: (a, b) => phaseRank(b.t.phases) - phaseRank(a.t.phases),
+    updated: (a, b) => b.t.lastUpdated.localeCompare(a.t.lastUpdated),
+    sites: (a, b) => b.s.recruitingSites - a.s.recruitingSites
+  }
+  return rows
+    .map((row, i) => ({ row, i }))
+    .sort((a, b) => Number(a.row.s.hidden) - Number(b.row.s.hidden) || by[key](a.row, b.row) || a.i - b.i)
+    .map((x) => x.row)
+}
+
 const tierDivider = (row: Row, previous?: Row): 0 | 1 | null => {
   if (row.s.hidden || row.s.recruiting === 2) return null
   if (previous && !previous.s.hidden && previous.s.recruiting === row.s.recruiting) return null
@@ -114,6 +137,7 @@ export function Results() {
   const [status, setStatus] = useState("")
   const [hideStale, setHideStale] = useState(false)
   const [recruitingOnly, setRecruitingOnly] = useState(false)
+  const [sort, setSort] = useState<SortKey>("recommended")
   const [limit, setLimit] = useState<number>(config.pageSize)
   const now = useMemo(() => clock(), [clock])
 
@@ -139,7 +163,7 @@ export function Results() {
     return changed ? { added, closed, nowFit, nowOut } : null
   }, [prevSnapshot, summaries])
 
-  useEffect(() => setLimit(config.pageSize), [showHidden, maxKm, country, phase, kind, status, hideStale, recruitingOnly])
+  useEffect(() => setLimit(config.pageSize), [showHidden, maxKm, country, phase, kind, status, hideStale, recruitingOnly, sort])
 
   if (loadError) return <main className="page narrow"><p className="error">{loadError}</p></main>
   if (!summaries || !bundle) return <main className="page narrow"><p aria-live="polite">{tr("results.matching")}</p></main>
@@ -155,7 +179,8 @@ export function Results() {
     !(hideStale && isStale(t, now)) &&
     !(recruitingOnly && s.recruiting === 0)
 
-  const filtered = rows.filter(matches)
+  const sortOf = sort === "distance" && postcodeStatus !== "found" ? "recommended" : sort
+  const filtered = sortRows(rows.filter(matches), sortOf)
   const visible = rows.filter((r) => !r.s.hidden).length
   const hiddenCount = rows.length - visible
 
@@ -210,9 +235,12 @@ export function Results() {
         </section>
       )}
 
-      <details className="card filters" open>
+      <details className="card filters">
         <summary>{tr("filters.title")}</summary>
         <div className="filter-grid">
+          <FilterSelect label={tr("filters.sort")} value={sort} onChange={(v) => setSort(v as SortKey)}>
+            {SORTS.map((k) => <option key={k} value={k} disabled={k === "distance" && postcodeStatus !== "found"}>{tr(`sort.${k}`)}{k === "distance" && postcodeStatus !== "found" ? ` (${tr("sort.needPostcode")})` : ""}</option>)}
+          </FilterSelect>
           <FilterSelect label={tr("filters.distance")} value={maxKm} onChange={(v) => setMaxKm(Number(v))} disabled={postcodeStatus !== "found"}>
             <option value={0}>{postcodeStatus === "found" ? tr("filters.anyDistance") : tr("filters.enterPostcode")}</option>
             {[50, 100, 200, 300, 500].map((k) => <option key={k} value={k}>{tr("filters.within", { km: k })}</option>)}
@@ -250,7 +278,7 @@ export function Results() {
           <TrialCard
             key={row.t.nctId}
             row={row}
-            divider={tierDivider(row, list[i - 1])}
+            divider={sortOf === "recommended" ? tierDivider(row, list[i - 1]) : null}
             stale={isStale(row.t, now)}
             saved={shortlist.includes(row.t.nctId)}
             full={shortlist.length >= config.maxShortlist}
@@ -281,9 +309,7 @@ function PostcodeBar() {
       <label className="field">
         <span>{tr("where.country")}</span>
         <select value={profile.country} onChange={(e) => setProfile((p) => ({ ...p, country: e.target.value as Profile["country"], postcode: "" }))}>
-          <option value="DE">{countryName("Germany")}</option>
-          <option value="AT">{countryName("Austria")}</option>
-          <option value="CH">{countryName("Switzerland")}</option>
+          {config.homeCountries.map((c) => <option key={c.code} value={c.code}>{countryName(c.name)}</option>)}
         </select>
       </label>
       <label className="field">
@@ -292,7 +318,7 @@ function PostcodeBar() {
           inputMode="numeric"
           autoComplete="postal-code"
           maxLength={length}
-          placeholder={profile.country === "DE" ? "10115" : "1010"}
+          placeholder={config.homeCountries.find((c) => c.code === profile.country)?.example}
           value={profile.postcode}
           onChange={(e) => setProfile((p) => ({ ...p, postcode: e.target.value.replace(/\D/g, "") }))}
         />
@@ -325,7 +351,7 @@ const TrialCard = memo(function TrialCard({ row: { s, t }, divider, stale, saved
         <div className="pills">
           {s.hidden && <span className="pill">{tr("status.notMet")}</span>}
           <TierBadge tier={s.recruiting} sites={s.recruitingSites} />
-          {t.phases.map((p) => <span className="pill" key={p}>{tOr(`phase.${p}`, phaseLabel(p))}</span>)}
+          {displayPhases(t.phases).map((p) => <span className="pill" key={p}>{tOr(`phase.${p}`, phaseLabel(p))}</span>)}
           {stale && <span className="pill muted" title={tr("card.stale.title")}>{tr("card.stale")}</span>}
         </div>
         <h2 className="card-title"><A to={`/trial/${t.nctId}`}>{t.title}</A></h2>
@@ -353,10 +379,23 @@ const isOpen = (s: { status?: string }) => s.status === "RECRUITING" || s.status
 export function TrialPage({ id }: { id: string }) {
   const { t: tr, rich, formatDate, formatKm, countryName, tOr } = useI18n()
   const fulfilledLine = useFulfilledLine()
-  const { byId, profile, home, shortlist, toggleShortlist, now } = useApp()
-  const t = byId.get(id)
+  const { byId, profile, home, shortlist, toggleShortlist, now, bundle, loadError } = useApp()
+  const slim = byId.get(id)
+  const ids = useMemo(() => [id], [id])
+  const { trials: loaded, ready, error } = useFullTrials(ids)
+  const t = loaded[0]
   const match = useMemo(() => (t ? matchTrial(t, profile, home) : null), [t, profile, home])
-  if (!t || !match) return <main className="page narrow"><h1>{tr("trial.notFound")}</h1><p>{rich("trial.notFound.text", { link: (text) => <A to="/results">{text}</A> })}</p></main>
+  if (loadError) return <main className="page narrow"><p className="error">{loadError}</p></main>
+  if (!bundle) return <main className="page narrow"><p aria-live="polite">{tr("results.matching")}</p></main>
+  if (!slim) return <main className="page narrow"><h1>{tr("trial.notFound")}</h1><p>{rich("trial.notFound.text", { link: (text) => <A to="/results">{text}</A> })}</p></main>
+  if (!t || !match)
+    return (
+      <main className="page narrow">
+        <p><A to="/results">{tr("trial.back")}</A></p>
+        <h1>{slim.title}</h1>
+        {error ? <p className="error">{tr("error.dataLoad", { reason: error })}</p> : <p aria-live="polite">{ready ? tr("trial.notFound") : tr("trial.loading")}</p>}
+      </main>
+    )
   const facts = plainFacts(t)
   const phaseName = (p: string) => tOr(`phase.${p}`, phaseLabel(p))
   const links = registryLinks(t)
@@ -370,14 +409,26 @@ export function TrialPage({ id }: { id: string }) {
       <p><A to="/results">{tr("trial.back")}</A></p>
       <Disclaimer />
       <RegistryEnglishNote />
-      <h1>{t.title}</h1>
+      <h1>
+        <a className="title-link" href={links[0]!.url} target="_blank" rel="noreferrer noopener" aria-label={`${t.title} (${tr("trial.openRegistry", { registry: links[0]!.label })})`} title={tr("trial.openRegistry", { registry: links[0]!.label })}>
+          {t.title.split(" ").slice(0, -1).join(" ")}{" "}
+          <span className="nowrap">
+            {t.title.split(" ").slice(-1)[0]}
+            <svg viewBox="0 0 24 24" width="0.9em" height="0.9em" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+            <path d="M15 3h6v6" />
+            <path d="M10 14 21 3" />
+          </svg>
+          </span>
+        </a>
+      </h1>
       <p className="meta">
-        <span className="nct">{t.nctId}</span> · {t.phases.map(phaseName).join(", ") || tr("trial.noPhase")} · {tr("trial.updated", { date: t.lastUpdated ? formatDate(t.lastUpdated) : tr("trial.unknownDate") })}
+        <span className="nct">{t.nctId}</span> · {displayPhases(t.phases).map(phaseName).join(", ") || tr("trial.noPhase")} · {tr("trial.updated", { date: t.lastUpdated ? formatDate(t.lastUpdated) : tr("trial.unknownDate") })}
         {isStale(t, now()) && <span className="pill muted">{tr("trial.outdated")}</span>}
       </p>
       <p className="pills">
         <TierBadge tier={match.recruiting} sites={match.recruitingSites} />
-        <span className="pill">{t.status === "RECRUITING" ? tr("trial.registryRecruiting") : tr("trial.registryNotYet")}</span>
+        {!(match.recruiting === 2 && t.status === "RECRUITING") && <span className="pill">{t.status === "RECRUITING" ? tr("trial.registryRecruiting") : tr("trial.registryNotYet")}</span>}
       </p>
       {match.recruiting === 0 && <p className="callout">{tr("tier.none.title")}</p>}
       <p className="actions noprint">
@@ -517,9 +568,9 @@ const generalProfileLines = (tr: Translate, tOr: (key: string, fallback: string)
 export function Shortlist() {
   const { t: tr, rich } = useI18n()
   const fulfilledLine = useFulfilledLine()
-  const { shortlist, byId, toggleShortlist, profile, home, now } = useApp()
+  const { shortlist, toggleShortlist, profile, home, now } = useApp()
   const [months, setMonths] = useState(3)
-  const items = shortlist.map((id) => byId.get(id)).filter((t): t is Trial => !!t)
+  const { trials: items, ready: itemsReady } = useFullTrials(shortlist)
   const reminder = () => {
     const ics = reminderCalendar(now(), months, { summary: tr("ics.summary"), description: tr("ics.description") })
     const a = document.createElement("a")
@@ -531,7 +582,8 @@ export function Shortlist() {
     <main className="page narrow">
       <h1>{tr("shortlist.title")}</h1>
       <p className="muted">{tr("shortlist.lead", { max: config.maxShortlist })}</p>
-      {items.length === 0 && <p>{rich("shortlist.empty", { link: (text) => <A to="/results">{text}</A> })}</p>}
+      {shortlist.length === 0 && <p>{rich("shortlist.empty", { link: (text) => <A to="/results">{text}</A> })}</p>}
+      {shortlist.length > 0 && !itemsReady && <p aria-live="polite">{tr("trial.loading")}</p>}
       <ol className="cards">
         {items.map((t) => {
           const m = matchTrial(t, profile, home)
@@ -568,8 +620,8 @@ export function Shortlist() {
 export function Summary() {
   const { t: tr, tOr, formatDate, formatKm } = useI18n()
   const fulfilledLine = useFulfilledLine()
-  const { shortlist, byId, profile, home, now, group } = useApp()
-  const items = shortlist.map((id) => byId.get(id)).filter((t): t is Trial => !!t)
+  const { shortlist, profile, home, now, group } = useApp()
+  const { trials: items, ready: itemsReady } = useFullTrials(shortlist)
   const phaseName = (p: string) => tOr(`phase.${p}`, phaseLabel(p))
   return (
     <main className="page narrow">
@@ -585,7 +637,7 @@ export function Summary() {
         <tbody>{(group === config.group ? profileLines(tr, tOr, profile) : generalProfileLines(tr, tOr, group, profile)).map(([k, v]) => <tr key={k}><th>{k}</th><td>{v}</td></tr>)}</tbody>
       </table>
       <h2>{tr("summary.selected", { count: items.length })}</h2>
-      {items.length === 0 && <p>{tr("summary.none")}</p>}
+      {items.length === 0 && <p aria-live="polite">{itemsReady ? tr("summary.none") : tr("trial.loading")}</p>}
       {items.map((t) => {
         const m = matchTrial(t, profile, home)
         const open = m.results.filter((r) => r.status === "unknown" && r.criterion.rule._tag !== "other" || (r.status === "unknown" && r.criterion.source === "registry-text"))
@@ -597,7 +649,7 @@ export function Summary() {
         return (
           <article key={t.nctId} className="sum-trial">
             <h3>{t.title}</h3>
-            <p><strong>{t.nctId}</strong>{t.otherIds.euCt?.map((x) => ` · EU CT ${x}`)}{t.otherIds.eudraCt?.map((x) => ` · EudraCT ${x}`)}{t.otherIds.drks?.map((x) => ` · ${x}`)} · {t.phases.map(phaseName).join(", ") || tr("trial.noPhase")} · {t.status === "RECRUITING" ? tr("summary.status.recruiting") : tr("summary.status.notYet")} · {tr("trial.updated", { date: t.lastUpdated ? formatDate(t.lastUpdated) : tr("trial.unknownDate") })}</p>
+            <p><strong>{t.nctId}</strong>{t.otherIds.euCt?.map((x) => ` · EU CT ${x}`)}{t.otherIds.eudraCt?.map((x) => ` · EudraCT ${x}`)}{t.otherIds.drks?.map((x) => ` · ${x}`)} · {displayPhases(t.phases).map(phaseName).join(", ") || tr("trial.noPhase")} · {t.status === "RECRUITING" ? tr("summary.status.recruiting") : tr("summary.status.notYet")} · {tr("trial.updated", { date: t.lastUpdated ? formatDate(t.lastUpdated) : tr("trial.unknownDate") })}</p>
             <p>{tr("summary.recruitment", { text: recruitment })}</p>
             <p>{tr("summary.compare", { line: fulfilledLine(m.met, m.results.length, m.notMet) })}</p>
             {failed.length > 0 && (
@@ -627,7 +679,7 @@ export function Summary() {
 
 export function Privacy() {
   const { t: tr, rich, tOr } = useI18n()
-  const { profile, shortlist, replaceAll, wipe, bundle, group } = useApp()
+  const { profile, shortlist, replaceAll, wipe, index, group } = useApp()
   const [pass, setPass] = useState("")
   const [msg, setMsg] = useState("")
   const [confirmWipe, setConfirmWipe] = useState(false)
@@ -638,7 +690,7 @@ export function Privacy() {
     const blob = new Blob([file.value], { type: "application/json" })
     const a = document.createElement("a")
     a.href = URL.createObjectURL(blob)
-    a.download = "trialy-profile.tfprofile"
+    a.download = "trialy-profile.trialy"
     a.click()
     setMsg(tr("privacy.exported"))
   }
@@ -656,7 +708,7 @@ export function Privacy() {
       <h2>{tr("privacy.stays.title")}</h2>
       <p>{tr("privacy.stays.text")}</p>
       <h2>{tr("privacy.server.title")}</h2>
-      <p>{rich("privacy.server.text", { code: (text) => <code>{text}</code> }, { file: `${group}.json`, condition: tOr(`group.${group}`, group), trials: bundle ? tr("privacy.server.count", { count: bundle.trials.length }) : "" })}</p>
+      <p>{rich("privacy.server.text", { code: (text) => <code>{text}</code> }, { file: "index.json", trials: index ? tr("privacy.server.count", { count: index.trials.length }) : "", buckets: String(index?.bucketCount ?? "") })}</p>
       <h2>{tr("privacy.check.title")}</h2>
       <p>{rich("privacy.check.text", { em: (text) => <em>{text}</em> })}</p>
       <h2>{tr("privacy.move.title")}</h2>
@@ -669,7 +721,7 @@ export function Privacy() {
         <button className="btn" onClick={doExport}>{tr("privacy.export")}</button>
         <label className="btn">
           {tr("privacy.import")}
-          <input type="file" accept=".tfprofile,application/json" hidden onChange={(e) => doImport(e.target.files?.[0])} />
+          <input type="file" accept=".trialy,.tfprofile,application/json" hidden onChange={(e) => doImport(e.target.files?.[0])} />
         </label>
       </p>
       <p aria-live="polite" className="muted">{msg}</p>

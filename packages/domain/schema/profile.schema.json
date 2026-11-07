@@ -517,7 +517,14 @@
       "enum": [
         "DE",
         "AT",
-        "CH"
+        "CH",
+        "NL",
+        "BE",
+        "LU",
+        "FR",
+        "DK",
+        "PL",
+        "CZ"
       ]
     },
     "postcode": {

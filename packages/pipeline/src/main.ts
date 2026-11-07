@@ -3,7 +3,9 @@ import { Bundle, type Rule, type Trial } from "@trial-finder/domain"
 import { mkdir, readFile, writeFile } from "node:fs/promises"
 import { join, resolve } from "node:path"
 import { fetchStudies, normalise } from "./ctgov.js"
-import { geoBundles } from "./geo.js"
+import { postcodeBundle } from "./geo.js"
+import { fillLocations } from "./locations.js"
+import { writeTiered } from "./tiered.js"
 import { config } from "./config.js"
 import { extractSection, flushCache } from "./llm.js"
 import { splitCriteria } from "./extract.js"
@@ -38,6 +40,21 @@ const stats = (trials: ReadonlyArray<Trial>) => {
 }
 
 const program = Effect.gen(function* () {
+  if (arg("reindex") !== undefined) {
+    const dir = resolve(arg("out") ?? config.paths.defaultOut)
+    const manifest = yield* Effect.tryPromise(async () => JSON.parse(await readFile(join(dir, "manifest.json"), "utf8")) as { groups: Array<{ id: string; file: string }> })
+    for (const g of manifest.groups) {
+      const bundle = yield* Effect.tryPromise(async () => JSON.parse(await readFile(join(dir, g.file), "utf8")) as Bundle)
+      const located = fillLocations(bundle.trials)
+      yield* Effect.log(`${g.id}: ${located.exact} sites located from the same hospital, ${located.approximate} from the city centre, ${located.missing} still without coordinates`)
+      yield* Effect.tryPromise(() => writeFile(join(dir, g.file), JSON.stringify({ ...bundle, trials: located.trials })))
+    }
+    const counts = yield* postcodeBundle(config.paths.cacheDir, dir)
+    yield* Effect.log(`postcode table: ${JSON.stringify(counts)}`)
+    const tiers = yield* writeTiered(dir)
+    yield* Effect.log(`index: ${tiers.trials} trials, ${tiers.sites} distinct sites, ${tiers.buckets} detail buckets`)
+    return
+  }
   const group = GROUPS[arg("group") ?? "lung"]
   if (!group) return yield* Effect.fail(new Error(`unknown group; known: ${Object.keys(GROUPS).join(", ")}`))
   const out = resolve(arg("out") ?? config.paths.defaultOut)
@@ -47,6 +64,7 @@ const program = Effect.gen(function* () {
 
   const raw = yield* fetchStudies(group, limit)
   let trials = (yield* normalise(raw, group)).sort((a, b) => a.nctId.localeCompare(b.nctId))
+  trials = fillLocations(trials).trials
 
   const extractor = arg("extractor") ?? "rules"
   if (!["rules", "llm", "hybrid"].includes(extractor)) return yield* Effect.fail(new Error(`unknown --extractor "${extractor}"`))
@@ -125,9 +143,11 @@ const program = Effect.gen(function* () {
   yield* Effect.log(`wrote ${trials.length} trials (${s.coverage}% of ${s.textCriteria} text criteria structured; ${review.length} queued for review)`)
 
   if (arg("skip-geo") === undefined) {
-    const counts = yield* geoBundles(config.paths.cacheDir, out)
-    yield* Effect.log(`postcode tables: ${counts.join(", ")} entries (DE, AT, CH)`)
+    const counts = yield* postcodeBundle(config.paths.cacheDir, out)
+    yield* Effect.log(`postcode table: ${JSON.stringify(counts)}`)
   }
+  const tiers = yield* writeTiered(out)
+  yield* Effect.log(`index: ${tiers.trials} trials, ${tiers.sites} distinct sites, ${tiers.buckets} detail buckets`)
 })
 
 Effect.runPromise(program).catch((e) => {

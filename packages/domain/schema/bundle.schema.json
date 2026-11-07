@@ -722,6 +722,9 @@
                 "lon": {
                   "type": "number"
                 },
+                "approxLocation": {
+                  "type": "boolean"
+                },
                 "contactName": {
                   "type": "string"
                 },
