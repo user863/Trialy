@@ -61,7 +61,6 @@ const polygonsOf = (geometry: Polygon | MultiPolygon) => (geometry.type === "Pol
 
 const WRAPS = [-360, 0, 360]
 
-// rings that cross the antimeridian jump by 360 degrees, which breaks the fill; make them continuous and draw copies either side
 const unwrap = (ring: ReadonlyArray<ReadonlyArray<number>>) => {
   let shift = 0
   return ring.map(([lon, lat], i) => {

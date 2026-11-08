@@ -5,7 +5,6 @@
   "type": "module",
   "scripts": {
     "run": "tsx src/main.ts",
-    "eval": "tsx src/eval.ts",
     "poc:fetch": "tsx src/poc/fetch.ts",
     "poc:size": "tsx src/poc/size.ts",
     "poc:tier": "tsx src/poc/tier.ts"

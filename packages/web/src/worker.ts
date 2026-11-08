@@ -1,4 +1,3 @@
-/// <reference lib="webworker" />
 import { groupTrials, matchTrials, unknownImpact, type LatLon, type Profile, type Trial, type TrialIndex } from "@trial-finder/domain"
 
 let trials: Trial[] = []

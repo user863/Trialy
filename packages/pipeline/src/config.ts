@@ -23,17 +23,6 @@ export const config = {
     baseUrl: process.env.GEONAMES_URL ?? "https://download.geonames.org/export/zip",
     countries: (process.env.GEO_COUNTRIES ?? "DE,AT,CH,NL,BE,LU,FR,DK,PL,CZ").split(",")
   },
-  llm: {
-    baseUrl: process.env.OLLAMA_URL ?? "http://127.0.0.1:11434",
-    model: process.env.EXTRACT_MODEL ?? "qwen2.5:7b-instruct",
-    cachePath: process.env.LLM_CACHE ?? join(here, "../.cache/llm-cache.json"),
-    chunkSize: int("LLM_CHUNK_SIZE", 6),
-    contextTokens: int("LLM_CONTEXT_TOKENS", 8192),
-    maxOutputTokens: int("LLM_MAX_OUTPUT_TOKENS", 1500),
-    timeoutMs: int("LLM_TIMEOUT_MS", 180_000),
-    retries: int("LLM_RETRIES", 1),
-    seed: int("LLM_SEED", 7)
-  },
   paths: {
     cacheDir: join(here, "../.cache"),
     defaultOut: join(here, "../../web/public/data")

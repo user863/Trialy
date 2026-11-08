@@ -72,7 +72,6 @@ export const rule = fc.letrec<{ rule: Rule }>((tie) => ({
 
 const yesNo = (b: boolean): Tri => (b ? "yes" : "no")
 
-// Every field answered, and the answers agree with each other.
 export const truth: fc.Arbitrary<Profile> = fc
   .record({
     sclc: fc.boolean(),

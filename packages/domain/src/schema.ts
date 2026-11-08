@@ -60,9 +60,6 @@ export type RelapseAge = typeof RelapseAge.Type
 export const LabAnalyte = S.Literal("anc", "platelets", "hemoglobin", "crcl")
 export type LabAnalyte = typeof LabAnalyte.Type
 
-// A rule is a *predicate about the patient*. Whether the predicate must be
-// true (inclusion) or false (exclusion) is decided by the criterion's kind.
-
 const CancerTypeRule = S.Struct({ _tag: S.Literal("cancerType"), types: S.Array(CancerTypeKey) })
 const StageRule = S.Struct({
   _tag: S.Literal("stage"),
@@ -126,7 +123,6 @@ export type Rule =
   | { readonly _tag: "anyOf"; readonly rules: ReadonlyArray<Rule> }
   | { readonly _tag: "allOf"; readonly rules: ReadonlyArray<Rule> }
   | { readonly _tag: "not"; readonly rule: Rule }
-  // The text restricts more than the rule: "yes" becomes unknown, "no" stays "no".
   | { readonly _tag: "narrow"; readonly rule: Rule }
 
 export const Rule: S.Schema<Rule> = S.Union(

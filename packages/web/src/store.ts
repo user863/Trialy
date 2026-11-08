@@ -7,7 +7,6 @@ export type StoreError = "unavailable" | "blocked"
 
 const unavailable = (): StoreError => "unavailable"
 
-// IndexedDB and localStorage throw in private windows or with blocked site data; the app must still work
 export const pref = {
   get: (key: string) => {
     try {

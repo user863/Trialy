@@ -74,10 +74,8 @@ export interface TrialMatch {
   readonly met: number
   readonly notMet: number
   readonly unknown: number
-  /** of the unknown criteria, how many can only be settled by a person (no profile answer would resolve them) */
   readonly manual: number
   readonly hidden: boolean
-  /** 2 = a site confirms it is recruiting, 1 = site status not stated, 0 = every listed site is closed or not recruiting */
   readonly recruiting: RecruitingTier
   readonly recruitingSites: number
   readonly distanceKm: number | null
@@ -398,11 +396,9 @@ export const recruitingSites = (t: Trial): ReadonlyArray<Site> => t.sites.filter
 
 const unconfirmedSites = (t: Trial): ReadonlyArray<Site> => t.sites.filter((s) => s.status === undefined)
 
-/** Registries often list trials as "recruiting" overall while every site in a region has closed. Such trials stay visible but rank lower. */
 export const recruitingTier = (t: Trial): RecruitingTier =>
   recruitingSites(t).length > 0 ? 2 : unconfirmedSites(t).length > 0 ? 1 : 0
 
-/** Sites to measure distance against: the best available tier, so a closed nearby site never stands in for an open far one. */
 export const openSites = (t: Trial): ReadonlyArray<Site> => {
   const r = recruitingSites(t)
   if (r.length) return r

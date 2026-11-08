@@ -51,18 +51,6 @@ Free-text criteria are the hard part. The current extractor (`packages/pipeline/
 
 Right now it structures roughly 16% of criteria. Everything else is shown verbatim under "for your doctor to check". I audited it from the failure side: matched five made-up patient profiles against all trials and read every criterion that hid a trial against its source sentence (about 450 of them). That is a developer audit, not a clinically reviewed evaluation, and it shouldn't be quoted as one.
 
-### Trying a local LLM
-
-There is an Ollama-backed extractor too (`--extractor llm|hybrid`). Output is constrained by the JSON Schema generated from the `Rule` type and then checked by guardrails: genes, numbers and drug names must appear in the sentence, negation must survive, qualifiers must narrow the rule. Anything that fails becomes `other`.
-
-```bash
-ollama pull qwen2.5:7b-instruct
-npm run eval -w @trial-finder/pipeline -- --extractor rules
-npm run eval -w @trial-finder/pipeline -- --extractor llm
-```
-
-On my 35-example gold set (`gold.ts`, not reviewed by a clinician) the 7B model gets 17 exact and no polarity errors; the rule-based reader gets 33. So for now rules are the default and `hybrid` is there for experiments. Results are cached by content hash, so reruns only call the model on changed text.
-
 ## JSON Schema
 
 `npm run schema` writes schemas for rules, bundles and profiles to `packages/domain/schema/`. A test validates the real bundle against them with ajv. The idea is that anyone can read the same data from another language without pulling in the TypeScript code.
@@ -80,7 +68,7 @@ The interface is available in English and German (language picker in the header)
 
 ## Frontend
 
-Tailwind v4 with a small token set, Inter as the only typeface. The home page is a condition search; the trial page lists inclusion and exclusion criteria in separate blocks. `design/` holds the logo and design tokens.
+Tailwind v4 with a small token set, Inter as the only typeface. The home page is a condition search; the trial page lists inclusion and exclusion criteria in separate blocks.
 
 ## Not done
 

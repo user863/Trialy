@@ -1,6 +1,9 @@
 import { Schema as S } from "effect"
 import { Criterion, Rule, type Bundle, type Site, type Trial } from "./schema.js"
 
+const defined = <K extends string, V>(key: K, value: V | undefined): { [P in K]?: V } =>
+  value === undefined ? {} : ({ [key]: value } as { [P in K]: V })
+
 export const IndexSite = S.Struct({
   facility: S.String,
   city: S.String,
@@ -111,9 +114,9 @@ export const makeSiteTable = () => {
           facility: s.facility,
           city: s.city,
           country: s.country,
-          ...(s.lat !== undefined ? { lat: s.lat } : {}),
-          ...(s.lon !== undefined ? { lon: s.lon } : {}),
-          ...(s.approxLocation !== undefined ? { approxLocation: s.approxLocation } : {})
+          ...defined("lat", s.lat),
+          ...defined("lon", s.lon),
+          ...defined("approxLocation", s.approxLocation)
         })
       }
       return i
@@ -121,23 +124,29 @@ export const makeSiteTable = () => {
   }
 }
 
-export const splitTrial = (t: Trial, group: string, intern: (s: Site) => number): { entry: IndexTrial; detail: TrialDetail } => {
+const siteExtra = (s: Site): SiteExtra | null => {
+  const extra: SiteExtra = {
+    ...defined("zip", s.zip),
+    ...defined("contactName", s.contactName),
+    ...defined("contactEmail", s.contactEmail),
+    ...defined("contactPhone", s.contactPhone)
+  }
+  return Object.keys(extra).length ? extra : null
+}
+
+const splitCriteria = (t: Trial) => {
   const fieldCriteria = t.criteria.filter((c) => c.source === "registry-field")
   const text = t.criteria.filter((c) => c.source === "registry-text")
   text.forEach((c, i) => {
     if (c.id !== `${t.nctId}-${i}`) throw new Error(`${t.nctId}: criterion ${c.id} is not at text position ${i}`)
   })
-  if (t.criteria.some((c, i) => c !== [...fieldCriteria, ...text][i])) throw new Error(`${t.nctId}: registry-field criteria must come before registry-text criteria`)
+  const inOrder = [...fieldCriteria, ...text]
+  if (t.criteria.some((c, i) => c !== inOrder[i])) throw new Error(`${t.nctId}: registry-field criteria must come before registry-text criteria`)
+  return { fieldCriteria, text }
+}
 
-  const extras = t.sites.map((s): SiteExtra | null => {
-    const e: SiteExtra = {
-      ...(s.zip !== undefined ? { zip: s.zip } : {}),
-      ...(s.contactName !== undefined ? { contactName: s.contactName } : {}),
-      ...(s.contactEmail !== undefined ? { contactEmail: s.contactEmail } : {}),
-      ...(s.contactPhone !== undefined ? { contactPhone: s.contactPhone } : {})
-    }
-    return Object.keys(e).length ? e : null
-  })
+export const splitTrial = (t: Trial, group: string, intern: (s: Site) => number): { entry: IndexTrial; detail: TrialDetail } => {
+  const { fieldCriteria, text } = splitCriteria(t)
 
   const entry: IndexTrial = {
     nctId: t.nctId,
@@ -148,7 +157,7 @@ export const splitTrial = (t: Trial, group: string, intern: (s: Site) => number)
     conditions: t.conditions,
     interventionTypes: t.interventions.map((i) => i.type),
     lastUpdated: t.lastUpdated,
-    ...(t.statusVerified !== undefined ? { statusVerified: t.statusVerified } : {}),
+    ...defined("statusVerified", t.statusVerified),
     sites: t.sites.map((s) => (s.status !== undefined ? [intern(s), s.status] : [intern(s)])),
     fieldCriteria,
     kinds: text.map((c) => (c.kind === "inclusion" ? "i" : "e")).join(""),
@@ -156,16 +165,16 @@ export const splitTrial = (t: Trial, group: string, intern: (s: Site) => number)
   }
 
   const detail: TrialDetail = {
-    ...(t.officialTitle !== undefined ? { officialTitle: t.officialTitle } : {}),
-    ...(t.briefSummary !== undefined ? { briefSummary: t.briefSummary } : {}),
+    ...defined("officialTitle", t.officialTitle),
+    ...defined("briefSummary", t.briefSummary),
     eligibilityText: t.eligibilityText,
     texts: text.map((c) => c.text),
     interventionNames: t.interventions.map((i) => i.name),
     armLabels: t.armLabels,
     design: t.design,
-    ...(t.centralContact !== undefined ? { centralContact: t.centralContact } : {}),
+    ...defined("centralContact", t.centralContact),
     otherIds: t.otherIds,
-    siteExtras: extras
+    siteExtras: t.sites.map(siteExtra)
   }
   return { entry, detail }
 }
@@ -176,8 +185,8 @@ export const joinTrial = (e: IndexTrial, table: ReadonlyArray<IndexSite>, d?: Tr
     nctId: e.nctId,
     otherIds: d?.otherIds ?? {},
     title: e.title,
-    ...(d?.officialTitle !== undefined ? { officialTitle: d.officialTitle } : {}),
-    ...(d?.briefSummary !== undefined ? { briefSummary: d.briefSummary } : {}),
+    ...defined("officialTitle", d?.officialTitle),
+    ...defined("briefSummary", d?.briefSummary),
     status: e.status,
     phases: e.phases,
     conditions: e.conditions,
@@ -185,11 +194,11 @@ export const joinTrial = (e: IndexTrial, table: ReadonlyArray<IndexSite>, d?: Tr
     armLabels: d?.armLabels ?? [],
     design: d?.design ?? {},
     lastUpdated: e.lastUpdated,
-    ...(e.statusVerified !== undefined ? { statusVerified: e.statusVerified } : {}),
-    ...(d?.centralContact !== undefined ? { centralContact: d.centralContact } : {}),
+    ...defined("statusVerified", e.statusVerified),
+    ...defined("centralContact", d?.centralContact),
     sites: e.sites.map(([idx, status], i) => ({
       ...table[idx]!,
-      ...(status !== undefined ? { status } : {}),
+      ...defined("status", status),
       ...(d?.siteExtras[i] ?? {})
     })),
     criteria: [

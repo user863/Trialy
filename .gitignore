@@ -1,6 +1,5 @@
 node_modules
 dist
 packages/pipeline/.cache
-packages/pipeline/out-hybrid
 .DS_Store
 release

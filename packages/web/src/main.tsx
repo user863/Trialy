@@ -4,7 +4,12 @@ import { createRoot } from "react-dom/client"
 import { AppProvider, useApp, useHashRoute } from "./app"
 import { Finder } from "./finder"
 import { Landing } from "./home"
-import { Privacy, Results, Shortlist, Summary, TrialPage, Wizard } from "./pages"
+import { Privacy } from "./pages/privacy"
+import { Results } from "./pages/results"
+import { Shortlist } from "./pages/shortlist"
+import { Summary } from "./pages/summary"
+import { TrialPage } from "./pages/trial"
+import { Wizard } from "./pages/wizard"
 import { LANGUAGES, I18nProvider, useI18n, type Language } from "./i18n"
 import { Logo, RegistryEnglishNote } from "./ui"
 import { pref } from "./store"
@@ -30,7 +35,6 @@ function useTheme() {
     pref.set("theme", theme)
   }, [theme])
 
-  // read the live class, not state, so rapid clicks always flip
   const toggle = () => {
     const next: Theme = document.documentElement.classList.contains("dark") ? "light" : "dark"
     applyTheme(next)

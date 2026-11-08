@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react"
-import type { Gene, Profile, Tri } from "@trial-finder/domain"
+import type { Profile, Tri } from "@trial-finder/domain"
 import { GENES, MS_THERAPIES } from "@trial-finder/domain"
 import { useApp } from "./app"
 import { config } from "./config"

@@ -103,6 +103,8 @@ export const buildUrl = (g: GroupConfig, pageToken?: string, fields = "protocolS
   return `${config.ctgov.baseUrl}?${p.toString()}`
 }
 
+const retryPolicy = Schedule.exponential(Duration.millis(config.ctgov.retryBaseMs)).pipe(Schedule.intersect(Schedule.recurs(config.ctgov.retries)))
+
 export const fetchJson = (url: string) =>
   Effect.tryPromise({
     try: async () => {
@@ -111,7 +113,7 @@ export const fetchJson = (url: string) =>
       return (await r.json()) as unknown
     },
     catch: (cause) => new HttpError({ url, cause })
-  }).pipe(Effect.retry(Schedule.exponential(Duration.millis(config.ctgov.retryBaseMs)).pipe(Schedule.intersect(Schedule.recurs(config.ctgov.retries)))))
+  }).pipe(Effect.retry(retryPolicy))
 
 export const fetchStudies = (g: GroupConfig, limit = Infinity) =>
   Effect.gen(function* () {
@@ -132,7 +134,6 @@ export const fetchStudies = (g: GroupConfig, limit = Infinity) =>
     return raw.slice(0, limit)
   })
 
-
 const EU_CT = /^\d{4}-5\d{5}-\d{2}-\d{2}$/
 const EUDRACT = /^\d{4}-\d{6}-\d{2}$/
 const DRKS = /^DRKS\d{8}$/i
@@ -151,77 +152,101 @@ const classifyIds = (ids: ReadonlyArray<string>) => {
 
 const trimmed = (s?: string) => (s && s.trim() ? s.trim() : undefined)
 
+const optional = <K extends string, V>(key: K, value: V | undefined | null | ""): { [P in K]?: V } =>
+  value === undefined || value === null || value === "" ? {} : ({ [key]: value } as { [P in K]: V })
+
 const READERS = { lung: extractCriteria, ms: msCriteria, general: generalCriteria } as const
+
+type Location = NonNullable<NonNullable<CtgStudy["protocolSection"]["contactsLocationsModule"]>["locations"]>[number]
+
+const toSite = (l: Location): Site => {
+  const contact = l.contacts?.[0]
+  return {
+    facility: l.facility ?? "Site",
+    city: l.city ?? "",
+    country: l.country!,
+    ...optional("zip", trimmed(l.zip)),
+    ...optional("status", l.status),
+    ...(l.geoPoint ? { lat: l.geoPoint.lat, lon: l.geoPoint.lon } : {}),
+    ...optional("contactName", trimmed(contact?.name)),
+    ...optional("contactEmail", trimmed(contact?.email)),
+    ...optional("contactPhone", trimmed(contact?.phone))
+  }
+}
+
+const toSites = (study: CtgStudy, g: GroupConfig): Site[] => {
+  const countries = countriesOf(g)
+  const covered = countries === "world" ? null : new Set<string>(countries)
+  return (study.protocolSection.contactsLocationsModule?.locations ?? [])
+    .filter((l) => l.country && (covered === null || covered.has(l.country)))
+    .map(toSite)
+}
+
+const toDesign = (study: CtgStudy): Trial["design"] => {
+  const info = study.protocolSection.designModule?.designInfo
+  return {
+    ...optional("allocation", info?.allocation),
+    ...optional("model", info?.interventionModel),
+    ...optional("masking", info?.maskingInfo?.masking)
+  }
+}
+
+const toCentralContact = (study: CtgStudy): Trial["centralContact"] => {
+  const central = study.protocolSection.contactsLocationsModule?.centralContacts?.[0]
+  if (!central) return undefined
+  return { ...optional("name", central.name), ...optional("email", central.email), ...optional("phone", central.phone) }
+}
+
+const toStatus = (status: string | undefined): Trial["status"] => (status === "RECRUITING" || status === "NOT_YET_RECRUITING" ? status : "OTHER")
 
 const toTrial = (study: CtgStudy, g: GroupConfig): Trial | null => {
   const p = study.protocolSection
   const id = p.identificationModule
   const conditions = p.conditionsModule?.conditions ?? []
   const title = id.briefTitle ?? id.officialTitle ?? id.nctId
-  if (!g.conditionRe.test(conditions.join(" ") + " " + title)) return null
+  if (!g.conditionRe.test(`${conditions.join(" ")} ${title}`)) return null
 
-  const countries = countriesOf(g)
-  const covered = countries === "world" ? null : new Set<string>(countries)
-  const sites: Site[] = (p.contactsLocationsModule?.locations ?? [])
-    .filter((l) => l.country && (covered === null || covered.has(l.country)))
-    .map((l) => {
-      const c = l.contacts?.[0]
-      return {
-        facility: l.facility ?? "Site",
-        city: l.city ?? "",
-        country: l.country!,
-        ...(trimmed(l.zip) ? { zip: trimmed(l.zip)! } : {}),
-        ...(l.status ? { status: l.status } : {}),
-        ...(l.geoPoint ? { lat: l.geoPoint.lat, lon: l.geoPoint.lon } : {}),
-        ...(trimmed(c?.name) ? { contactName: trimmed(c?.name)! } : {}),
-        ...(trimmed(c?.email) ? { contactEmail: trimmed(c?.email)! } : {}),
-        ...(trimmed(c?.phone) ? { contactPhone: trimmed(c?.phone)! } : {})
-      }
-    })
+  const sites = toSites(study, g)
   if (!sites.length) return null
 
-  const status = p.statusModule?.overallStatus
-  const eligibilityText = p.eligibilityModule?.eligibilityCriteria ?? ""
-  const central = p.contactsLocationsModule?.centralContacts?.[0]
-  const d = p.designModule?.designInfo
+  const eligibility = p.eligibilityModule
+  const eligibilityText = eligibility?.eligibilityCriteria ?? ""
+  const centralContact = toCentralContact(study)
 
   return {
     nctId: id.nctId,
     otherIds: classifyIds((id.secondaryIdInfos ?? []).map((s) => s.id ?? "")),
     title,
-    ...(id.officialTitle ? { officialTitle: id.officialTitle } : {}),
-    ...(p.descriptionModule?.briefSummary ? { briefSummary: p.descriptionModule.briefSummary } : {}),
-    status: status === "RECRUITING" || status === "NOT_YET_RECRUITING" ? status : "OTHER",
+    ...optional("officialTitle", id.officialTitle),
+    ...optional("briefSummary", p.descriptionModule?.briefSummary),
+    status: toStatus(p.statusModule?.overallStatus),
     phases: [...(p.designModule?.phases ?? [])],
     conditions: [...conditions],
     interventions: (p.armsInterventionsModule?.interventions ?? []).map((i) => ({ type: i.type ?? "OTHER", name: i.name ?? "" })),
     armLabels: (p.armsInterventionsModule?.armGroups ?? []).map((a) => a.label ?? "").filter(Boolean),
-    design: {
-      ...(d?.allocation ? { allocation: d.allocation } : {}),
-      ...(d?.interventionModel ? { model: d.interventionModel } : {}),
-      ...(d?.maskingInfo?.masking ? { masking: d.maskingInfo.masking } : {})
-    },
+    design: toDesign(study),
     lastUpdated: p.statusModule?.lastUpdatePostDateStruct?.date ?? p.statusModule?.lastUpdateSubmitDate ?? "",
-    ...(p.statusModule?.statusVerifiedDate ? { statusVerified: p.statusModule.statusVerifiedDate } : {}),
-    ...(central ? { centralContact: { ...(central.name ? { name: central.name } : {}), ...(central.email ? { email: central.email } : {}), ...(central.phone ? { phone: central.phone } : {}) } } : {}),
+    ...optional("statusVerified", p.statusModule?.statusVerifiedDate),
+    ...(centralContact ? { centralContact } : {}),
     sites,
     eligibilityText,
     criteria: READERS[g.reader](id.nctId, eligibilityText, {
-      minAge: p.eligibilityModule?.minimumAge,
-      maxAge: p.eligibilityModule?.maximumAge,
-      sex: p.eligibilityModule?.sex,
+      minAge: eligibility?.minimumAge,
+      maxAge: eligibility?.maximumAge,
+      sex: eligibility?.sex,
       conditions
     })
   }
 }
 
+const nctIdOf = (raw: unknown): string =>
+  (raw as { protocolSection?: { identificationModule?: { nctId?: string } } })?.protocolSection?.identificationModule?.nctId ?? "?"
+
 export const normalise = (raw: ReadonlyArray<unknown>, g: GroupConfig) =>
   Effect.forEach(raw, (r) =>
     S.decodeUnknown(CtgStudy)(r).pipe(
-      Effect.mapError(
-        (e) => new DecodeError({ nctId: (r as any)?.protocolSection?.identificationModule?.nctId ?? "?", message: String(e).slice(0, 200) })
-      ),
-      Effect.map((s) => toTrial(s, g)),
+      Effect.mapError((e) => new DecodeError({ nctId: nctIdOf(r), message: String(e).slice(0, 200) })),
+      Effect.map((study) => toTrial(study, g)),
       Effect.catchTag("DecodeError", (e) => Effect.logWarning(`skipped ${e.nctId}: ${e.message}`).pipe(Effect.as(null)))
     )
-  ).pipe(Effect.map((xs) => xs.filter((t): t is Trial => t !== null)))
+  ).pipe(Effect.map((trials) => trials.filter((t): t is Trial => t !== null)))

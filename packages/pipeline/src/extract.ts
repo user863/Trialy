@@ -60,7 +60,6 @@ export const splitCriteria = (raw: string): RawCriterion[] => {
       cur += " " + line.trim()
     } else {
       flush()
-      // unbulleted line: a heading ("Disease characteristics:") is dropped, other prose is its own item
       if (!/:\s*$/.test(line.trim()) || line.trim().length > 90) cur = line.trim()
     }
     afterBlank = false
@@ -116,15 +115,10 @@ const QUAL = new RegExp(
   "i"
 )
 
-export const QUAL_RE = QUAL
-export const NEG_RE = NEG_START
-export const NEG_WORDS_RE = NEG_WORDS
-
 const PERMISSION = /\b(?:allowed|permitted|acceptable|eligible if|may be enrolled|can be enrolled|is not an exclusion|may have|no limit|no restriction|any number of|unlimited|can also be|may also|may be eligible|are eligible|can be eligible|not eligible|ineligible|are excluded|may be included|can be included|be included|will count|counts? as|counted as|defined as|usually|not necessarily|will be considered|considered (?:to be )?(?:post|pre)?menopaus|menopaus|child-?bearing|reproductive potential|contracepti)\b/i
 
 const HAZARD =
   /measurable|recist|bilirubin|\bAST\b|\bALT\b|creatinine(?! clearance)|\bINR\b|albumin|\bULN\b|upper limit|organ function|life expectancy|tissue|biops|archival|contracept|pregnan|lactat|\badequate\b|cardiac|ejection|QTc|hepatitis|\bHIV\b|infection/i
-export const HAZARD_RE = HAZARD
 
 const num = (s: string) => Number(s.replace(/,/g, ""))
 
@@ -142,13 +136,11 @@ const cancerType = (t: string, kind: Kind): Hit | null => {
   if (/adenocarcinoma/i.test(noSq)) types.push("adenocarcinoma")
   if (/squamous/i.test(noSq)) types.push("squamous")
   if (nonSq && types.includes("squamous")) {
-    // "squamous or non-squamous": no restriction on histology
     types.splice(types.indexOf("squamous"), 1)
     if (!types.length) return null
     return { tag: "cancerType", narrow: true, rule: { _tag: "cancerType", types } }
   }
   if (!types.length && !nonSq) return null
-  // "NSCLC of adenocarcinoma histology": keep NSCLC and flag it as narrowed (the histology may restrict further)
   let histNarrow = false
   if (types.includes("nsclc") && (types.includes("adenocarcinoma") || types.includes("squamous"))) {
     for (const h of ["adenocarcinoma", "squamous"] as const) {
@@ -157,7 +149,6 @@ const cancerType = (t: string, kind: Kind): Hit | null => {
     }
     histNarrow = true
   }
-  // a cancer type that only appears after a treatment phrase ("therapy for NSCLC") is not the diagnosis
   if (/\b(?:prior|previous(?:ly)?|treated|received|therapy|regimen|treatment)\b[^.;]{0,40}\b(?:for|of|in)\b[^.;]{0,25}(?:NSCLC|SCLC|lung|adenocarcinoma|squamous)/i.test(stripped)) return null
   const parts: Rule[] = []
   if (types.length) parts.push({ _tag: "cancerType", types })
@@ -177,7 +168,6 @@ const stage = (t: string, kind: Kind): Hit | null => {
   if (/extensive[- ]stage|\bES-SCLC\b|extensive disease/i.test(t)) extent = "extensive"
   else if (/limited[- ]stage|\bLS-SCLC\b|limited disease/i.test(t)) extent = "limited"
   if (/exceed|up to|or (?:lower|less|earlier|higher|greater|more)|at most|at least|below|above|beyond|limited to|no more|not more/i.test(t)) return null
-  // "III B/C" and "IIIB" are the same thing; "IA3" too
   const tt = t.replace(/\b(IV|III|II|I)\s+([ABC])\b/g, "$1$2").replace(/\b((?:IV|III|II|I)[ABC]?)\s*\/\s*[ABC]\b/g, "$1")
   const re = /stages?\s+((?:IV|III|II|I)[ABC]?\d?(?![A-Za-z0-9])(?:\s*(?:,|\/|or|and|-|–|to)\s*(?:stages?\s*)?(?:IV|III|II|I)[ABC]?\d?(?![A-Za-z0-9]))*)/gi
   let found = false
@@ -199,7 +189,6 @@ const stage = (t: string, kind: Kind): Hit | null => {
       } else if (/^\s*(?:-|–|to)\s*$/i.test(tok)) range = true
     }
   }
-  // "primary or metastatic", "metastatic or ..." : alternatives we cannot place
   const metaAlt = /\bor\s+metastatic|metastatic\s+or\b|\band\/or\s+metastatic/i.test(t) && !/advanced\s*(?:or|and|\/)\s*metastatic|metastatic\s*(?:or|and|\/)\s*(?:locally\s+)?advanced|recurrent/i.test(t)
   if (metaAlt) return null
   if (/\bmetastatic\b/i.test(t) && !found) set.add("IV")
@@ -240,7 +229,6 @@ const VARIANT = /G12[A-Z]|exon\s*\d+|T790M|L858R|V600E|del(?:etion)?\s*19|insert
 const biomarker = (t: string, kind: Kind): Hit | null => {
   const genes = GENES.filter((g) => GENE_RE[g].test(t))
   if (!genes.length) return null
-  // gene mentioned as a drug class (EGFR TKI, ALK inhibitor...) is therapy, not biomarker
   if (/\b(?:EGFR|ALK|ROS1|KRAS|BRAF|MET|RET|HER2|NTRK)[- ]?(?:TKI|tyrosine|inhibitor|targeted|directed|antibod)/i.test(t)) return null
   if (/\bTKI\b|inhibitor|\banti-/i.test(t) && /prior|previous|received|treated|therapy/i.test(t)) return null
   if (/test(?:ed|ing)|assay|sample|tissue|biops|archival|sequenc|\bNGS\b|available|provide|submit|status|results?\b|documentation|confirmation/i.test(t)) return null
@@ -326,17 +314,15 @@ const priorTherapy = (t: string, kind: Kind): Hit | null => {
     }
     let g = find(th.generic)
     const s = find(th.specific)
-    // "DLL3-targeted therapy": a named target makes the generic phrase a narrower claim
     const named = th.cat === "targeted" && /\b[A-Z][A-Z0-9-]{1,}[- ]?(?:targeted|directed)\b/.test(cleaned)
     if (named) g = false
     if (g || s || named) cats.push({ cat: th.cat, narrow: (!g && s) || named || th.cat === "surgery" || th.cat === "radiotherapy" })
   }
   const negated = (NEG_START.test(t) || NEG_WORDS.test(t) || MID_NEG.test(t)) && !(kind === "exclusion" && (NEG_START.test(t) || MID_NEG.test(t)))
-  // "treatment-naive" / "no prior systemic therapy for advanced disease" = zero lines
   const naive = /treatment[- ]naive|\bnaive\b|previously untreated|\bno (?:prior|previous|history of)\b/i.test(t) && /treatment|therapy|systemic|\blines?\b|chemo|immuno/i.test(t)
   const systemicOnly = cats.every((c) => c.cat === "systemic")
   const namedTherapy = THERAPY.some((th) => th.generic.test(t) || th.specific?.test(t))
-  if (naive && !cats.length && namedTherapy) return null // "anti-PD-1 naive": about a specific class we could not place
+  if (naive && !cats.length && namedTherapy) return null
   if (naive && (!cats.length || systemicOnly)) {
     return SETTING_ADV.test(t)
       ? { tag: "priorLines", rule: { _tag: "priorLines", max: 0 }, settingOK: true }
@@ -347,7 +333,6 @@ const priorTherapy = (t: string, kind: Kind): Hit | null => {
     const l = priorLines(t)
     return l ? { ...l, narrow: true } : null
   }
-  // "prior systemic therapy for advanced disease" is exactly what the lines question answers
   if (cats.some((c) => c.cat === "systemic") && SETTING_ADV.test(t) && !negated) {
     return { tag: "priorLines", rule: { _tag: "priorLines", min: 1 }, settingOK: true }
   }
@@ -444,7 +429,7 @@ const flags = (t: string, kind: Kind): Hit | null => {
     const base: Rule = { _tag: "flag", flag: active ? "brainMetsActive" : "brainMetsAny" }
     const negated = NEG_START.test(t) || MID_NEG.test(t)
     if (negated && kind === "exclusion") return null
-    if (!negated && kind === "inclusion") return null // an inclusion that *requires* the condition: leave to humans
+    if (!negated && kind === "inclusion") return null
     return { tag: "flag", narrow: eased && !active, rule: negated ? { _tag: "not", rule: base } : base }
   }
   const one = (re: RegExp, flag: "ild" | "autoimmune"): Hit | null => {
@@ -515,7 +500,6 @@ interface Extraction {
 
 const OTHER: Rule = { _tag: "other" }
 
-// narrow belongs below every not: not(narrow(P)) stays unknown, narrow(not(P)) would keep a wrong "no".
 const narrowRule = (r: Rule): Rule => {
   switch (r._tag) {
     case "not":
@@ -542,11 +526,9 @@ const CONDITIONAL = /^\s*(?:in the presence of|in case of|if\b|for (?:patients|p
 
 export const classify = (text: string, kind: Kind): Extraction => {
   if (text.length > 420 || PERMISSION.test(text)) return { rule: OTHER, confidence: "none" }
-  // cohort- or tumour-specific sentences of basket trials say nothing about this patient
   if (SAMPLE_CONTEXT.test(text)) return { rule: OTHER, confidence: "none" }
   if (COHORT.test(text) || (OFFTOPIC.test(text) && !/lung|nsclc|sclc/i.test(text))) return { rule: OTHER, confidence: "none" }
   if (CONDITIONAL_ANY.test(text)) return { rule: OTHER, confidence: "none" }
-  // conditional requirements ("in the presence of EGFR mutation the patient must ...")
   if (kind === "inclusion" && (CONDITIONAL.test(text) || CONDITIONAL_INC.test(text))) return { rule: OTHER, confidence: "none" }
   const hits: Hit[] = []
   const push = (h: Hit | null) => h && hits.push(h)
@@ -556,7 +538,6 @@ export const classify = (text: string, kind: Kind): Extraction => {
   push(lines)
   push(cancerType(text, kind))
   push(stage(text, kind))
-  // a biomarker word inside a therapy statement describes the drug, not the tumour
   if (!th) push(biomarker(text, kind))
   push(pdl1(text))
   push(age(text))
@@ -566,12 +547,10 @@ export const classify = (text: string, kind: Kind): Extraction => {
   hits.push(...labs(text))
 
   if (!hits.length) return { rule: OTHER, confidence: "none" }
-  // a sentence that lists several tumour types describes other cohorts' biomarkers, stages, therapies too
   if (OFFTOPIC.test(text) && hits.some((h) => h.tag !== "cancerType")) return { rule: OTHER, confidence: "none" }
   if (kind === "exclusion" && hits.length > 1) return { rule: OTHER, confidence: "none" }
   const tags = new Set(hits.map((h) => h.tag.split(":")[0]))
   if (kind === "inclusion") {
-    // an "or" that is not part of a recognised list may join an alternative we did not model
     const masked = text
       .replace(/\b(IV|III|II|I)\s+([ABC])\b/g, "$1$2")
       .replace(/\b((?:IV|III|II|I)[ABC]?)\s*\/\s*[ABC]\b/g, "$1")
@@ -587,12 +566,10 @@ export const classify = (text: string, kind: Kind): Extraction => {
     if (/\bor\s+(?:must|have|has|had|progress\w*|are|is|were|who|those|if)\b/i.test(masked)) return { rule: OTHER, confidence: "none" }
   }
 
-  // a long exclusion usually lists several things; a mention inside it may not be the point of the sentence
   const longExclusion = kind === "exclusion" && text.length > 220
   const qualFor = (h: Hit) => longExclusion || QUAL.test(h.settingOK ? text.replace(SETTING_PHRASE, " ") : text)
   const qual = hits.some(qualFor)
   const parts = hits.map((h): Rule => (h.narrow || qualFor(h) ? narrowRule(h.rule) : h.rule))
-  // long inclusion sentences nearly always carry conditions beyond what was modelled
   const hazard = HAZARD.test(text) || (kind === "inclusion" && text.length > 170)
   const all = hazard ? [...parts, OTHER] : parts
   const rule: Rule = all.length === 1 ? all[0]! : { _tag: "allOf", rules: all }
@@ -639,7 +616,6 @@ export const structuredCriteria = (f: StructuredFields, idPrefix: string): Crite
       confidence: "high"
     })
   }
-  // trial is limited to one lung cancer family only if EVERY listed condition says so
   const lung = f.conditions.filter((c) => /lung|nsclc|sclc|pulmonary/i.test(c))
   if (f.conditions.length && lung.length === f.conditions.length) {
     const joined = lung.join(" | ")

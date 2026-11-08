@@ -15,7 +15,6 @@ const rows = (t: Trial): ReadonlyArray<Row> =>
     lat === undefined || lon === undefined ? [] : [{ city, country, lat, lon, nctId: t.nctId }]
   )
 
-/** Cities with a recruiting site, most trials first. A trial counts once per city. Sites without coordinates are skipped. */
 export const recruitingCities = (trials: ReadonlyArray<Trial>): ReadonlyArray<City> => {
   const groups = new Map<string, ReadonlyArray<Row>>()
   for (const row of trials.flatMap(rows)) {

@@ -5,6 +5,10 @@ export const ui = messages({
     en: "Need to talk to someone? The <link1>Krebsinformationsdienst</link1> (DKFZ) answers questions free of charge on <b>0800 420 30 40</b>, and the <link2>INFONETZ KREBS</link2> on <b>0800 80708877</b>. Both can also point you to psycho-oncology support.",
     de: "Möchten Sie mit jemandem sprechen? Der <link1>Krebsinformationsdienst</link1> (DKFZ) beantwortet Fragen kostenlos unter <b>0800 420 30 40</b>, das <link2>INFONETZ KREBS</link2> unter <b>0800 80708877</b>. Beide können Ihnen auch psychoonkologische Unterstützung vermitteln."
   },
+  "support.ms.text": {
+    en: "Need to talk to someone? The <link1>Deutsche Multiple Sklerose Gesellschaft (DMSG)</link1> offers advice and can point you to local support groups, and the <link2>Krankheitsbezogenes Kompetenznetz Multiple Sklerose</link2> explains the condition and its treatments.",
+    de: "Möchten Sie mit jemandem sprechen? Die <link1>Deutsche Multiple Sklerose Gesellschaft (DMSG)</link1> berät und vermittelt Selbsthilfegruppen vor Ort, und das <link2>Krankheitsbezogene Kompetenznetz Multiple Sklerose</link2> informiert über die Erkrankung und ihre Behandlung."
+  },
   "disclaimer.text": {
     en: "These are <b>possible fits to discuss with your doctor</b>, not a promise that a trial will help or that you qualify. Data comes from public registries and may be incomplete or out of date. The treating team always decides.",
     de: "Das sind <b>mögliche Treffer, die Sie mit Ihrer Ärztin oder Ihrem Arzt besprechen können</b>, kein Versprechen, dass eine Studie hilft oder dass Sie teilnehmen können. Die Daten stammen aus öffentlichen Registern und können unvollständig oder veraltet sein. Das behandelnde Team entscheidet immer."
