@@ -2,7 +2,7 @@ import { MS_THERAPIES, matchTrial, displayPhases, phaseLabel, registryLinks, typ
 import { useApp, useFullTrials } from "../app"
 import { config } from "../config"
 import { useI18n, type Key } from "../i18n"
-import { A, RegistryEnglishNote, useFulfilledLine } from "../ui"
+import { A, useFulfilledLine } from "../ui"
 
 type Translate = (key: Key, vars?: Record<string, string | number>) => string
 
@@ -14,7 +14,7 @@ const profileLines = (tr: Translate, tOr: (key: string, fallback: string) => str
   const markers = Object.entries(p.biomarkers).filter(([, v]) => v !== "unknown").map(([gene, v]) => tr(v === "positive" ? "profile.gene.positive" : "profile.gene.negative", { gene }))
   const prior = Object.entries(p.priorTherapies).map(([k, v]) => `${tr(`therapy.${k as keyof typeof p.priorTherapies}`)}: ${triText(v)}`)
   const stage = p.cancerType === "sclc" && p.sclcExtent !== "unknown" ? tr(`profile.extent.${p.sclcExtent}`) : p.stage === "unknown" ? tr("profile.unanswered") : p.stage
-  const pdl1 = p.pdl1 === "unknown" ? tr("profile.notKnown") : p.pdl1 === "ge50" ? "≥ 50%" : p.pdl1 === "1to49" ? "1–49%" : "< 1%"
+  const pdl1 = p.pdl1 === "unknown" ? tr("profile.notKnown") : p.pdl1 === "ge50" ? "≥ 50%" : p.pdl1 === "1to49" ? "1-49%" : "< 1%"
   const brain = p.brainMets === "unknown" ? tr("profile.notKnown") : tr(`profile.brain.${p.brainMets}`)
   return [
     [tr("profile.diagnosis"), cancer + hist],
@@ -27,7 +27,8 @@ const profileLines = (tr: Translate, tOr: (key: string, fallback: string) => str
     [tr("profile.brain"), brain],
     [tr("profile.ild"), answer(p.ild)],
     [tr("profile.autoimmune"), answer(p.autoimmune)],
-    [tr("profile.agesex"), `${answer(p.age)} / ${answer(p.sex)}`],
+    [tr("profile.age"), answer(p.age)],
+    [tr("profile.sex"), answer(p.sex)],
     [tr("profile.ecog"), answer(p.ecog)]
   ]
 }
@@ -35,8 +36,8 @@ const profileLines = (tr: Translate, tOr: (key: string, fallback: string) => str
 const generalProfileLines = (tr: Translate, tOr: (key: string, fallback: string) => string, group: string, p: Profile): Array<[string, string]> => {
   const answer = (v: string | number | null | undefined) => (v === null || v === undefined || v === "unknown" ? tr("profile.unanswered") : tOr(`value.${v}`, String(v)))
   const diagnosis: [string, string] = [tr("profile.diagnosis"), tOr(`group.${group}`, group)]
-  const person: [string, string] = [tr("profile.agesex"), `${answer(p.age)} / ${answer(p.sex)}`]
-  if (group !== "ms") return [diagnosis, person]
+  const person: Array<[string, string]> = [[tr("profile.age"), answer(p.age)], [tr("profile.sex"), answer(p.sex)]]
+  if (group !== "ms") return [diagnosis, ...person]
   const taken = MS_THERAPIES.filter((c) => p.msTherapies[c] === "yes").map((c) => tr(`mstherapy.${c}`))
   const therapies = taken.length ? taken.join("; ") : MS_THERAPIES.every((c) => p.msTherapies[c] === "unknown") ? tr("profile.notKnown") : tr("profile.none")
   return [
@@ -50,7 +51,10 @@ const generalProfileLines = (tr: Translate, tOr: (key: string, fallback: string)
     [tr("profile.steroids"), answer(p.recentSteroids)],
     [tr("profile.infection"), answer(p.chronicInfection)],
     [tr("profile.cancer"), answer(p.cancerHistory)],
-    person
+    [tr("profile.psychiatric"), answer(p.psychiatric)],
+    [tr("profile.otherAutoimmune"), answer(p.otherAutoimmune)],
+    [tr("profile.otherTrial"), answer(p.otherTrial)],
+    ...person
   ]
 }
 
@@ -60,6 +64,9 @@ export function Summary() {
   const { shortlist, profile, home, now, group } = useApp()
   const { trials: items, ready: itemsReady } = useFullTrials(shortlist)
   const phaseName = (p: string) => tOr(`phase.${p}`, phaseLabel(p))
+  const lines = group === config.group ? profileLines(tr, tOr, profile) : generalProfileLines(tr, tOr, group, profile)
+  const unanswered = new Set([tr("profile.unanswered"), tr("profile.notKnown")])
+  const answered = lines.filter(([, v]) => !unanswered.has(v))
   return (
     <main className="page narrow">
       <p className="noprint actions">
@@ -68,11 +75,11 @@ export function Summary() {
       </p>
       <h1>{tr("summary.title")}</h1>
       <p className="meta">{tr("summary.intro", { date: formatDate(now()) })}</p>
-      <RegistryEnglishNote />
       <h2>{tr("summary.situation")}</h2>
       <table className="plain">
-        <tbody>{(group === config.group ? profileLines(tr, tOr, profile) : generalProfileLines(tr, tOr, group, profile)).map(([k, v]) => <tr key={k}><th>{k}</th><td>{v}</td></tr>)}</tbody>
+        <tbody>{answered.map(([k, v]) => <tr key={k}><th>{k}</th><td>{v}</td></tr>)}</tbody>
       </table>
+      {answered.length < lines.length && <p className="meta">{tr("summary.unansweredCount", { count: lines.length - answered.length })}</p>}
       <h2>{tr("summary.selected", { count: items.length })}</h2>
       {items.length === 0 && <p aria-live="polite">{itemsReady ? tr("summary.none") : tr("trial.loading")}</p>}
       {items.map((t) => {

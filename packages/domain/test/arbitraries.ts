@@ -93,11 +93,11 @@ export const truth: fc.Arbitrary<Profile> = fc
     edss: fc.integer({ min: 0, max: 20 }),
     lastRelapse: fc.constantFrom("lt1", "1to3", "3to12", "12to24", "gt24" as const),
     msTherapies: fc.array(fc.boolean(), { minLength: MS_THERAPIES.length, maxLength: MS_THERAPIES.length }),
-    flags: fc.array(fc.boolean(), { minLength: 5, maxLength: 5 })
+    flags: fc.array(fc.boolean(), { minLength: 8, maxLength: 8 })
   })
   .map((t): Profile => {
     const [chemo, immuno, targeted, radio, surgery] = t.therapies as [boolean, boolean, boolean, boolean, boolean]
-    const [pregnancy, mriUnsuitable, recentSteroids, chronicInfection, cancerHistory] = t.flags as [boolean, boolean, boolean, boolean, boolean]
+    const [pregnancy, mriUnsuitable, recentSteroids, chronicInfection, cancerHistory, psychiatric, otherAutoimmune, otherTrial] = t.flags as boolean[] as [boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean]
     const systemic: [boolean, boolean, boolean] = t.lines === 0 ? [false, false, false] : chemo || immuno || targeted ? [chemo, immuno, targeted] : [true, immuno, targeted]
     return {
       ...emptyProfile(),
@@ -131,7 +131,10 @@ export const truth: fc.Arbitrary<Profile> = fc
       mriUnsuitable: yesNo(mriUnsuitable),
       recentSteroids: yesNo(recentSteroids),
       chronicInfection: yesNo(chronicInfection),
-      cancerHistory: yesNo(cancerHistory)
+      cancerHistory: yesNo(cancerHistory),
+      psychiatric: yesNo(psychiatric),
+      otherAutoimmune: yesNo(otherAutoimmune),
+      otherTrial: yesNo(otherTrial)
     }
   })
 
@@ -162,7 +165,10 @@ const PATHS: ReadonlyArray<Path> = [
   ["mriUnsuitable"],
   ["recentSteroids"],
   ["chronicInfection"],
-  ["cancerHistory"]
+  ["cancerHistory"],
+  ["psychiatric"],
+  ["otherAutoimmune"],
+  ["otherTrial"]
 ]
 
 type Tree = Record<string, unknown>

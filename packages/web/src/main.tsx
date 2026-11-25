@@ -3,15 +3,13 @@ import { StrictMode, startTransition, useEffect, useState } from "react"
 import { createRoot } from "react-dom/client"
 import { AppProvider, useApp, useHashRoute } from "./app"
 import { Finder } from "./finder"
-import { Landing } from "./home"
-import { Privacy } from "./pages/privacy"
 import { Results } from "./pages/results"
 import { Shortlist } from "./pages/shortlist"
 import { Summary } from "./pages/summary"
 import { TrialPage } from "./pages/trial"
 import { Wizard } from "./pages/wizard"
 import { LANGUAGES, I18nProvider, useI18n, type Language } from "./i18n"
-import { Logo, RegistryEnglishNote } from "./ui"
+import { Logo } from "./ui"
 import { pref } from "./store"
 import "./styles.css"
 
@@ -47,20 +45,16 @@ const renderPage = ([section, id]: string[]) => {
   switch (section) {
     case "questions":
       return <Wizard stepId={id} />
-    case "find":
-      return <Finder />
     case "results":
       return <Results />
     case "trial":
-      return id ? <TrialPage id={id} /> : <Landing />
+      return id ? <TrialPage id={id} /> : <Finder />
     case "shortlist":
       return <Shortlist />
     case "summary":
       return <Summary />
-    case "privacy":
-      return <Privacy />
     default:
-      return <Landing />
+      return <Finder />
   }
 }
 
@@ -74,8 +68,7 @@ function Shell() {
   const links = [
     { section: "results", label: t("nav.trials") },
     { section: "questions", label: t("nav.answers") },
-    { section: "shortlist", label: shortlist.length > 0 ? t("nav.shortlistCount", { count: shortlist.length }) : t("nav.shortlist") },
-    { section: "privacy", label: t("nav.privacy") }
+    { section: "shortlist", label: shortlist.length > 0 ? t("nav.shortlistCount", { count: shortlist.length }) : t("nav.shortlist") }
   ]
 
   return (
@@ -109,7 +102,6 @@ function Shell() {
                 ))}
               </select>
             </label>
-            <a href="#/questions" className="btn primary small">{t("nav.start")}</a>
           </div>
         </div>
       </header>
@@ -121,7 +113,6 @@ function Shell() {
       <div id="main">{loaded ? renderPage(parts) : <main className="page narrow"><p>{t("common.loading")}</p></main>}</div>
       <footer className="page noprint">
         <p>{t("footer.text")}</p>
-        <RegistryEnglishNote />
       </footer>
     </>
   )

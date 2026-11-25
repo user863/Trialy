@@ -14,6 +14,7 @@ interface Hit {
   readonly rule: Rule
   readonly narrow: boolean
   readonly consumed: RegExp
+  readonly conjunctive?: boolean
 }
 
 const OTHER: Rule = { _tag: "other" }
@@ -213,6 +214,31 @@ const cancerHit = (text: string, kind: Kind): Hit | null => {
   return flagHit("cancer", "cancerHistory", CANCER, CANCER_QUAL.test(text), /malignan\w*|cancers?|neoplas\w*|history|prior|previous|known|active|current|actual|signs?|except|unless|other than|exception|basal|squamous|cell|skin|in situ|adequately|treated|years?|disease[- ]free|recurrence|recurrent|within|having had|\bhad\b/)
 }
 
+const SEVERITY = /clinically|significant|relevant|uncontrolled|unstable|severe|serious|major|active|acute|chronic|known|history|prior|previous|current|concomitant|other|any|disease|diseases|disorders?|conditions?|illness|problems?|abnormalit\w*|impairment|insufficiency|failure|dysfunction|evidence|signs?|symptoms?|treated|requiring|medication|therapy|recent\w*/
+const SEVERITY_NARROW = /clinically|significant|uncontrolled|unstable|severe|serious|major|active|acute|history|prior|previous|recent|within|last|past|moderate|poorly|decompensated|requiring|symptomatic/i
+
+const LIST_MARKERS = /[,;:]|e\.g\.|such as|including|other than|\bor\b|\band\b/i
+const conditionHit = (key: string, flag: FlagKey, trigger: RegExp, extra: RegExp) => (text: string, kind: Kind): Hit | null => {
+  if (kind !== "exclusion" || !trigger.test(text)) return null
+  const hit = flagHit(key, flag, trigger, SEVERITY_NARROW.test(text), new RegExp(`${SEVERITY.source}|${extra.source}`, "gi"))
+  return { ...hit, conjunctive: !LIST_MARKERS.test(text) }
+}
+
+const PSYCHIATRIC = /psychiatr\w*|depress\w*|suicid\w*|psychos[ie]s|psychotic|schizophren\w*|bipolar|mental (?:illness|disorder|health)/i
+const psychiatricCondition = conditionHit("psychiatric", "psychiatric", PSYCHIATRIC, /psychiatr\w*|depress\w*|suicid\w*|psycho\w*|schizophren\w*|bipolar|mental|ideation|behaviou?r|attempts?|risk|major|episode/)
+const psychiatricHit = (text: string, kind: Kind): Hit | null =>
+  /\b(?:drugs?|medications?|antidepress\w*|antipsychotic\w*|anxiolytic\w*|substance|alcohol)\b/i.test(text) ? null : psychiatricCondition(text, kind)
+
+const OTHER_AUTOIMMUNE = /autoimmun\w*|lupus|rheumatoid|neuromyelitis|\bNMO(?:SD)?\b|\bMOG(?:AD)?\b|sarcoid\w*|vasculit\w*|sj[oö]gren|myasthenia|neurodegenerative|other neurolog\w*|neurological (?:disorder|disease|condition)/i
+const otherAutoimmuneHit = conditionHit("autoimmune", "otherAutoimmune", OTHER_AUTOIMMUNE, /autoimmun\w*|lupus|rheumatoid|arthritis|neuromyelitis|optica|\bNMO(?:SD)?\b|\bMOG(?:AD)?\b|sarcoid\w*|vasculit\w*|sj[oö]gren|myasthenia|gravis|neurodegenerative|neurolog\w*|than|ms|multiple sclerosis|systemic|spectrum|systemic/)
+
+const OTHER_TRIAL = /investigational (?:drug|product|agent|medic\w*|treatment|device|compound)|(?:another|other|concurrent|any) (?:interventional )?(?:clinical )?(?:trials?|stud(?:y|ies))|participat\w* in (?:a |an |any )?(?:clinical )?(?:trial|study)/i
+const otherTrialHit = (text: string, kind: Kind): Hit | null => {
+  if (kind !== "exclusion" || !OTHER_TRIAL.test(text)) return null
+  if (/\b(?:allowed|permitted|observational|registry|prior participation|previous participation|this (?:study|trial)|same|hypersensitiv\w*|allerg\w*|contra-?indicat\w*|intoleran\w*|information|experience)\b/i.test(text)) return null
+  return flagHit("otherTrial", "otherTrial", OTHER_TRIAL, true, new RegExp(`${SEVERITY.source}|investigational|drugs?|products?|agents?|medic\\w*|treatments?|devices?|compounds?|interventional|clinical|trials?|stud(?:y|ies)|participat\\w*|enrol\\w*|simultaneous\\w*|concurrent\\w*|another|ongoing|half-?lives|half|lives|days?|weeks?|months?|whichever|longer|ms|multiple sclerosis`, "gi"))
+}
+
 export const classifyMs = (raw: string, kind: Kind): Extraction => {
   const text = raw.replace(/\\([<>[\]_*~#-])/g, "$1").replace(/\s+/g, " ").trim()
   if (text.length > MAX_LENGTH) return NONE
@@ -228,7 +254,10 @@ export const classifyMs = (raw: string, kind: Kind): Extraction => {
     mriHit(text, kind),
     steroidHit(text, kind),
     infectionHit(text, kind),
-    cancerHit(text, kind)
+    cancerHit(text, kind),
+    psychiatricHit(text, kind),
+    otherAutoimmuneHit(text, kind),
+    otherTrialHit(text, kind)
   ].filter((h): h is Hit => h !== null)
   if (!found.length) return NONE
 
@@ -247,7 +276,7 @@ export const classifyMs = (raw: string, kind: Kind): Extraction => {
   }
   if (!hazard) return { rule: withNarrow(hit.rule, narrow), confidence: narrow ? "low" : "high" }
   if (kind === "inclusion" && hit.key === "course") return NONE
-  if (kind === "exclusion") return { rule: { _tag: "anyOf", rules: [withNarrow(hit.rule, true), OTHER] }, confidence: "low" }
+  if (kind === "exclusion") return { rule: { _tag: hit.conjunctive && !hasOr ? "allOf" : "anyOf", rules: [withNarrow(hit.rule, true), OTHER] }, confidence: "low" }
   return { rule: { _tag: hasOr ? "anyOf" : "allOf", rules: [withNarrow(hit.rule, narrow), OTHER] }, confidence: "low" }
 }
 

@@ -39,18 +39,17 @@ export const questions = messages({
 
   "step.type.title": { en: "What type of lung cancer was diagnosed?", de: "Welche Art von Lungenkrebs wurde festgestellt?" },
   "step.type.help": {
-    en: "Look under “Diagnosis” (<em>Diagnose</em>) in your doctor’s letter or pathology report. <b>NSCLC</b> = non-small cell (<em>nicht-kleinzelliges Lungenkarzinom</em>). <b>SCLC</b> = small cell (<em>kleinzelliges Lungenkarzinom</em>). Other types, such as mesothelioma, are not covered yet.",
+    en: "Check your doctor’s letter or pathology report. <b>NSCLC</b> means non-small cell lung cancer, <b>SCLC</b> means small cell lung cancer. Other types, such as mesothelioma, are not covered yet.",
     de: "Schauen Sie unter „Diagnose“ im Arztbrief oder im pathologischen Befund. <b>NSCLC</b> = nicht-kleinzelliges Lungenkarzinom. <b>SCLC</b> = kleinzelliges Lungenkarzinom. Andere Arten, etwa das Mesotheliom, sind noch nicht abgedeckt."
   },
   "step.type.name": { en: "Cancer type", de: "Krebsart" },
   "step.type.nsclc": { en: "Non-small cell lung cancer (NSCLC)", de: "Nicht-kleinzelliges Lungenkarzinom (NSCLC)" },
-  "step.type.nsclc.hint": { en: "the most common type", de: "die häufigste Art" },
   "step.type.sclc": { en: "Small cell lung cancer (SCLC)", de: "Kleinzelliges Lungenkarzinom (SCLC)" },
 
   "step.histology.title": { en: "What does the tissue look like under the microscope?", de: "Wie sieht das Gewebe unter dem Mikroskop aus?" },
   "step.histology.help": {
-    en: "Also in the pathology report (<em>Histologie</em>). <b>Adenocarcinoma</b> and <b>squamous cell carcinoma</b> (<em>Plattenepithelkarzinom</em>) are the two most common kinds of NSCLC.",
-    de: "Ebenfalls im pathologischen Befund (<em>Histologie</em>). <b>Adenokarzinom</b> und <b>Plattenepithelkarzinom</b> sind die beiden häufigsten Formen des NSCLC."
+    en: "Also in the pathology report. <b>Adenocarcinoma</b> and <b>squamous cell carcinoma</b> are the two most common kinds of NSCLC.",
+    de: "Ebenfalls im pathologischen Befund (Histologie). <b>Adenokarzinom</b> und <b>Plattenepithelkarzinom</b> sind die beiden häufigsten Formen des NSCLC."
   },
   "step.histology.name": { en: "Histology", de: "Histologie" },
   "step.histology.adenocarcinoma": { en: "Adenocarcinoma (Adenokarzinom)", de: "Adenokarzinom" },
@@ -59,8 +58,8 @@ export const questions = messages({
 
   "step.stage.title": { en: "How far has the cancer spread?", de: "Wie weit hat sich der Krebs ausgebreitet?" },
   "step.stage.help": {
-    en: "Doctors write a stage from I to IV (<em>UICC-Stadium</em>) or describe the disease as “localised”, “locally advanced” or “metastatic” (<em>metastasiert</em>). Stage IV or “metastatic” means it has spread to other organs.",
-    de: "Ärztinnen und Ärzte geben ein Stadium von I bis IV an (<em>UICC-Stadium</em>) oder beschreiben die Erkrankung als „lokalisiert“, „lokal fortgeschritten“ oder „metastasiert“. Stadium IV oder „metastasiert“ bedeutet, dass sich der Krebs auf andere Organe ausgebreitet hat."
+    en: "Doctors give a stage from I to IV or describe the disease as “localised”, “locally advanced” or “metastatic”. Stage IV or “metastatic” means it has spread to other organs.",
+    de: "Ärztinnen und Ärzte geben ein Stadium von I bis IV an (UICC-Stadium) oder beschreiben die Erkrankung als „lokalisiert“, „lokal fortgeschritten“ oder „metastasiert“. Stadium IV oder „metastasiert“ bedeutet, dass sich der Krebs auf andere Organe ausgebreitet hat."
   },
   "step.stage.name": { en: "Stage", de: "Stadium" },
   "step.stage.I.hint": { en: "small, in one place", de: "klein, an einer Stelle" },
@@ -70,7 +69,7 @@ export const questions = messages({
 
   "step.extent.title": { en: "Limited or extensive disease?", de: "Begrenzte oder ausgedehnte Erkrankung?" },
   "step.extent.help": {
-    en: "For small cell lung cancer doctors often say “limited” (<em>limited disease</em>) or “extensive” (<em>extensive disease</em>) instead of a stage.",
+    en: "For small cell lung cancer doctors often say “limited disease” or “extensive disease” instead of a stage.",
     de: "Beim kleinzelligen Lungenkarzinom sprechen Ärztinnen und Ärzte statt von einem Stadium oft von „limited disease“ (begrenzt) oder „extensive disease“ (ausgedehnt)."
   },
   "step.extent.name": { en: "SCLC extent", de: "Ausdehnung beim SCLC" },
@@ -80,16 +79,16 @@ export const questions = messages({
 
   "step.markers.title": { en: "Gene changes found in the tumour", de: "Im Tumor gefundene Genveränderungen" },
   "step.markers.help": {
-    en: "These come from molecular testing of the tumour (<em>Molekularpathologie, Next-Generation-Sequencing</em>). Choose “Found” only if your report names a change; choose “Not found” if the test looked and the result was negative. If it was not tested or you can’t tell, leave “I don’t know”. That never excludes a trial.",
-    de: "Diese stammen aus der molekularen Untersuchung des Tumors (<em>Molekularpathologie, Next-Generation-Sequencing</em>). Wählen Sie „Gefunden“ nur, wenn Ihr Befund eine Veränderung nennt; wählen Sie „Nicht gefunden“, wenn getestet wurde und das Ergebnis negativ war. Wurde nicht getestet oder können Sie es nicht sagen, lassen Sie „Weiß ich nicht“ stehen. Das schließt nie eine Studie aus."
+    en: "These come from molecular testing of the tumour. Choose “Found” only if your report names a change; choose “Not found” if the test looked and the result was negative. If it was not tested or you can’t tell, leave “I don’t know”. That never excludes a trial.",
+    de: "Diese stammen aus der molekularen Untersuchung des Tumors (Molekularpathologie, Next-Generation-Sequencing). Wählen Sie „Gefunden“ nur, wenn Ihr Befund eine Veränderung nennt; wählen Sie „Nicht gefunden“, wenn getestet wurde und das Ergebnis negativ war. Wurde nicht getestet oder können Sie es nicht sagen, lassen Sie „Weiß ich nicht“ stehen. Das schließt nie eine Studie aus."
   },
   "step.markers.found": { en: "Found", de: "Gefunden" },
   "step.markers.notFound": { en: "Not found", de: "Nicht gefunden" },
 
   "step.pdl1.title": { en: "PD-L1 level", de: "PD-L1-Wert" },
   "step.pdl1.help": {
-    en: "Reported as a percentage, often “TPS” (<em>Tumor Proportion Score</em>) or “PD-L1-Expression”, from the pathology report.",
-    de: "Wird als Prozentwert angegeben, oft als „TPS“ (<em>Tumor Proportion Score</em>) oder „PD-L1-Expression“, im pathologischen Befund."
+    en: "Reported as a percentage, often called “TPS” (tumour proportion score) or “PD-L1 expression”, in the pathology report.",
+    de: "Wird als Prozentwert angegeben, oft als „TPS“ (Tumor Proportion Score) oder „PD-L1-Expression“, im pathologischen Befund."
   },
   "step.pdl1.name": { en: "PD-L1", de: "PD-L1" },
   "step.pdl1.ge50": { en: "50% or higher", de: "50 % oder höher" },
@@ -98,7 +97,7 @@ export const questions = messages({
 
   "step.prior.title": { en: "Which treatments have you already had for the cancer?", de: "Welche Behandlungen haben Sie wegen des Krebses bereits erhalten?" },
   "step.prior.help": {
-    en: "See “Therapie” or “bisherige Behandlung” in your letters. Include treatment at any time, also before the cancer spread.",
+    en: "Check your treatment history in your doctor’s letters. Include treatment at any time, also before the cancer spread.",
     de: "Siehe „Therapie“ oder „bisherige Behandlung“ in Ihren Arztbriefen. Zählen Sie Behandlungen zu jedem Zeitpunkt mit, auch vor der Ausbreitung des Krebses."
   },
 
@@ -107,8 +106,8 @@ export const questions = messages({
     de: "Wie viele Runden medikamentöser Behandlung gab es bei fortgeschrittener Erkrankung?"
   },
   "step.lines.help": {
-    en: "A “line” (<em>Therapielinie</em>) is one treatment plan given because the cancer had spread or come back. A new line starts when the plan is changed because the cancer grew. Treatment given after surgery to prevent a return does not count. If you have not had any drug treatment for advanced disease yet, enter 0.",
-    de: "Eine „Linie“ (<em>Therapielinie</em>) ist ein Behandlungsplan, der gegeben wird, weil sich der Krebs ausgebreitet hat oder zurückgekehrt ist. Eine neue Linie beginnt, wenn der Plan geändert wird, weil der Krebs gewachsen ist. Eine Behandlung nach einer Operation, die ein Wiederkehren verhindern soll, zählt nicht. Wenn Sie bei fortgeschrittener Erkrankung noch keine medikamentöse Behandlung hatten, geben Sie 0 ein."
+    en: "A “line” is one treatment plan given because the cancer had spread or come back. A new line starts when the plan is changed because the cancer grew. Treatment given after surgery to prevent a return does not count. If you have not had any drug treatment for advanced disease yet, enter 0.",
+    de: "Eine „Linie“ (Therapielinie) ist ein Behandlungsplan, der gegeben wird, weil sich der Krebs ausgebreitet hat oder zurückgekehrt ist. Eine neue Linie beginnt, wenn der Plan geändert wird, weil der Krebs gewachsen ist. Eine Behandlung nach einer Operation, die ein Wiederkehren verhindern soll, zählt nicht. Wenn Sie bei fortgeschrittener Erkrankung noch keine medikamentöse Behandlung hatten, geben Sie 0 ein."
   },
   "step.lines.label": { en: "Lines of drug treatment so far", de: "Bisherige Linien medikamentöser Behandlung" },
   "step.lines.unit": { en: "lines", de: "Linien" },
@@ -125,7 +124,7 @@ export const questions = messages({
 
   "step.health.title": { en: "Other health conditions that trials often ask about", de: "Weitere Erkrankungen, nach denen Studien oft fragen" },
   "step.health.help": {
-    en: "Check your letters for “Hirnmetastasen”, “Lungenfibrose / interstitielle Lungenerkrankung (ILD)” or “Autoimmunerkrankung”.",
+    en: "Check your doctor’s letters for brain metastases, lung fibrosis or interstitial lung disease (ILD), and autoimmune disease.",
     de: "Achten Sie in Ihren Arztbriefen auf „Hirnmetastasen“, „Lungenfibrose / interstitielle Lungenerkrankung (ILD)“ oder „Autoimmunerkrankung“."
   },
   "step.health.brain": { en: "Cancer in the brain (brain metastases)", de: "Krebs im Gehirn (Hirnmetastasen)" },
@@ -147,14 +146,18 @@ export const questions = messages({
   },
   "step.person.age": { en: "Age", de: "Alter" },
   "step.person.years": { en: "years", de: "Jahre" },
-  "step.person.sex": { en: "Sex", de: "Geschlecht" },
+  "step.person.sex": { en: "Sex (as used in trial criteria)", de: "Geschlecht (wie in Studienkriterien angegeben)" },
+  "step.person.sex.hint": {
+    en: "Registries list sex, not gender. If you prefer not to say, trials are not filtered by it.",
+    de: "Register geben das biologische Geschlecht an, nicht die Geschlechtsidentität. Ohne Angabe wird nicht danach gefiltert."
+  },
   "step.person.female": { en: "Female", de: "Weiblich" },
   "step.person.male": { en: "Male", de: "Männlich" },
   "step.person.unknown": { en: "Prefer not to say", de: "Möchte ich nicht angeben" },
 
   "step.fitness.title": { en: "How are you managing day to day?", de: "Wie kommen Sie im Alltag zurecht?" },
   "step.fitness.help": {
-    en: "Doctors summarise this as the “ECOG performance status” (<em>ECOG-Performance-Status</em>, 0 to 4). If your letter names a number you can pick the matching description. Otherwise choose the one that fits best.",
+    en: "Doctors summarise this as the “ECOG performance status” (0 to 4). If your letter names a number you can pick the matching description. Otherwise choose the one that fits best.",
     de: "Ärztinnen und Ärzte fassen das als „ECOG-Performance-Status“ (0 bis 4) zusammen. Nennt Ihr Arztbrief eine Zahl, können Sie die passende Beschreibung wählen. Andernfalls wählen Sie die, die am besten passt."
   },
   "step.fitness.name": { en: "Day-to-day condition", de: "Zustand im Alltag" },
@@ -180,7 +183,7 @@ export const questions = messages({
 
   "step.labs.title": { en: "Blood test values (optional)", de: "Blutwerte (optional)" },
   "step.labs.help": {
-    en: "Only if you have a recent blood count handy (<em>Blutbild</em>). Leave anything you can’t find empty. It is perfectly fine to skip this page.",
+    en: "Only if you have a recent blood count handy. Leave anything you can’t find empty. It is perfectly fine to skip this page.",
     de: "Nur, wenn Sie ein aktuelles Blutbild zur Hand haben. Lassen Sie leer, was Sie nicht finden. Sie können diese Seite ohne Weiteres überspringen."
   },
   "step.labs.anc": { en: "Neutrophils (ANC)", de: "Neutrophile Granulozyten (ANC)" },
@@ -230,7 +233,7 @@ export const questions = messages({
 
   "step.condition.title": { en: "Which condition are you looking for trials for?", de: "Für welche Erkrankung suchen Sie Studien?" },
   "step.condition.help": {
-    en: "Trialy matches lung cancer criterion by criterion. For multiple sclerosis it uses your age and sex only and shows every other criterion as the registry wrote it, for you and your doctor to check.",
+    en: "Trialy compares your answers with each trial’s criteria for lung cancer and multiple sclerosis, and shows every criterion as the registry wrote it, for you and your doctor to check.",
     de: "Trialy gleicht Lungenkrebs Kriterium für Kriterium ab. Bei Multipler Sklerose werden nur Alter und Geschlecht verwendet; alle anderen Kriterien werden so gezeigt, wie das Register sie geschrieben hat, damit Sie und Ihre Ärztin oder Ihr Arzt sie prüfen können."
   },
   "step.condition.name": { en: "Condition", de: "Erkrankung" },
@@ -245,7 +248,7 @@ export const questions = messages({
 
   "step.mscourse.title": { en: "Which type of multiple sclerosis do you have?", de: "Welche Verlaufsform der Multiplen Sklerose haben Sie?" },
   "step.mscourse.help": {
-    en: "Your neurologist’s letter usually names it: relapsing-remitting (<em>schubförmig remittierend</em>, RRMS), secondary progressive (<em>sekundär progredient</em>, SPMS) or primary progressive (<em>primär progredient</em>, PPMS).",
+    en: "Your neurologist’s letter usually names it: relapsing-remitting (RRMS), secondary progressive (SPMS) or primary progressive (PPMS).",
     de: "Meist steht sie im Arztbrief unter „Verlaufsform“: schubförmig remittierend (RRMS), sekundär progredient (SPMS) oder primär progredient (PPMS)."
   },
   "step.mscourse.name": { en: "Type of multiple sclerosis", de: "Verlaufsform der Multiplen Sklerose" },
@@ -260,7 +263,7 @@ export const questions = messages({
 
   "step.edss.title": { en: "Your EDSS score (optional)", de: "Ihr EDSS-Wert (optional)" },
   "step.edss.help": {
-    en: "The EDSS (<em>Expanded Disability Status Scale</em>) rates disability from 0 (no signs) to 10 in steps of 0.5. Your neurologist’s letter lists it as “EDSS”. Leave it empty if you don’t know it.",
+    en: "The EDSS (Expanded Disability Status Scale) rates disability from 0 (no signs) to 10 in steps of 0.5. Your neurologist’s letter usually lists it. Leave it empty if you don’t know it.",
     de: "Der EDSS (Expanded Disability Status Scale) bewertet die Beeinträchtigung von 0 (keine Zeichen) bis 10 in Schritten von 0,5. Im Arztbrief steht er als „EDSS“. Lassen Sie das Feld leer, wenn Sie ihn nicht kennen."
   },
   "step.edss.label": { en: "EDSS (0 to 10)", de: "EDSS (0 bis 10)" },
@@ -268,7 +271,7 @@ export const questions = messages({
 
   "step.relapse.title": { en: "When was your last relapse?", de: "Wann war Ihr letzter Schub?" },
   "step.relapse.help": {
-    en: "A relapse (<em>Schub</em>) is new or worsening symptoms lasting at least 24 hours, not caused by fever or an infection. Choose “Longer than 2 years ago, or never” if you have not had one.",
+    en: "A relapse is new or worsening symptoms lasting at least 24 hours, not caused by fever or an infection. Choose “Longer than 2 years ago, or never” if you have not had one.",
     de: "Ein Schub ist das Neuauftreten oder die Verschlechterung von Beschwerden über mindestens 24 Stunden, nicht durch Fieber oder einen Infekt bedingt. Wählen Sie „Länger als 2 Jahre her oder nie“, wenn Sie keinen hatten."
   },
   "step.relapse.name": { en: "Last relapse", de: "Letzter Schub" },
@@ -280,7 +283,7 @@ export const questions = messages({
 
   "step.mstherapy.title": { en: "Which MS treatments have you had before?", de: "Welche MS-Behandlungen hatten Sie schon einmal?" },
   "step.mstherapy.help": {
-    en: "See “Therapie” or “bisherige Behandlung” in your letters. Include treatment at any time, also if you have stopped it.",
+    en: "Check your treatment history in your doctor’s letters. Include treatment at any time, also if you have stopped it.",
     de: "Siehe „Therapie“ oder „bisherige Behandlung“ in Ihren Arztbriefen. Zählen Sie Behandlungen zu jedem Zeitpunkt mit, auch wenn Sie sie beendet haben."
   },
   "mstherapy.interferon": { en: "Interferon beta", de: "Interferon beta" },
@@ -328,6 +331,12 @@ export const questions = messages({
   "step.mshealth.infection.hint": { en: "current or past", de: "aktuell oder früher" },
   "step.mshealth.cancer": { en: "Cancer now or in the past", de: "Krebserkrankung aktuell oder früher" },
   "step.mshealth.cancer.hint": { en: "also cancer that was treated long ago", de: "auch eine Krebserkrankung, die lange zurückliegt" },
+  "step.mshealth.psychiatric": { en: "Psychiatric condition", de: "Psychiatrische Erkrankung" },
+  "step.mshealth.psychiatric.hint": { en: "for example depression or psychosis, current or past", de: "zum Beispiel Depression oder Psychose, aktuell oder früher" },
+  "step.mshealth.autoimmune": { en: "Another autoimmune or neurological disease besides MS", de: "Eine weitere Autoimmun- oder neurologische Erkrankung neben MS" },
+  "step.mshealth.autoimmune.hint": { en: "for example lupus, rheumatoid arthritis, NMOSD or epilepsy", de: "zum Beispiel Lupus, rheumatoide Arthritis, NMOSD oder Epilepsie" },
+  "step.mshealth.trial": { en: "In another study or on an investigational drug", de: "In einer anderen Studie oder mit einem Prüfpräparat behandelt" },
+  "step.mshealth.trial.hint": { en: "now or in the last few months", de: "aktuell oder in den letzten Monaten" },
 
   "field.msCourse": { en: "type of MS", de: "Verlaufsform der MS" },
   "field.edss": { en: "EDSS score", de: "EDSS-Wert" },
@@ -337,5 +346,8 @@ export const questions = messages({
   "field.mriUnsuitable": { en: "ability to have an MRI", de: "Möglichkeit einer MRT-Untersuchung" },
   "field.recentSteroids": { en: "recent steroid treatment", de: "kürzliche Steroidbehandlung" },
   "field.chronicInfection": { en: "HIV, hepatitis or tuberculosis status", de: "HIV, Hepatitis oder Tuberkulose" },
-  "field.cancerHistory": { en: "history of cancer", de: "Krebserkrankung in der Vorgeschichte" }
+  "field.cancerHistory": { en: "history of cancer", de: "Krebserkrankung in der Vorgeschichte" },
+  "field.psychiatric": { en: "psychiatric condition", de: "psychiatrische Erkrankung" },
+  "field.otherAutoimmune": { en: "another autoimmune or neurological disease", de: "weitere Autoimmun- oder neurologische Erkrankung" },
+  "field.otherTrial": { en: "participation in another study", de: "Teilnahme an einer anderen Studie" }
 })

@@ -26,6 +26,9 @@
     "recentSteroids",
     "chronicInfection",
     "cancerHistory",
+    "psychiatric",
+    "otherAutoimmune",
+    "otherTrial",
     "labs",
     "country",
     "postcode"
@@ -453,6 +456,30 @@
       ]
     },
     "cancerHistory": {
+      "type": "string",
+      "enum": [
+        "yes",
+        "no",
+        "unknown"
+      ]
+    },
+    "psychiatric": {
+      "type": "string",
+      "enum": [
+        "yes",
+        "no",
+        "unknown"
+      ]
+    },
+    "otherAutoimmune": {
+      "type": "string",
+      "enum": [
+        "yes",
+        "no",
+        "unknown"
+      ]
+    },
+    "otherTrial": {
       "type": "string",
       "enum": [
         "yes",

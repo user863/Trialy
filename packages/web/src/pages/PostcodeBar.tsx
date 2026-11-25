@@ -9,7 +9,7 @@ export function PostcodeBar() {
   const length = config.postcodeLength[profile.country]
 
   return (
-    <section className="card where" aria-label={tr("where.label")}>
+    <section className="where" aria-label={tr("where.label")}>
       <label className="field">
         <span>{tr("where.country")}</span>
         <select value={profile.country} onChange={(e) => setProfile((p) => ({ ...p, country: e.target.value as Profile["country"], postcode: "" }))}>
@@ -17,7 +17,7 @@ export function PostcodeBar() {
         </select>
       </label>
       <label className="field">
-        <span>{tr("where.postcode", { length })}</span>
+        <span>{tr("where.postcode")}</span>
         <input
           inputMode="numeric"
           autoComplete="postal-code"
@@ -27,7 +27,7 @@ export function PostcodeBar() {
           onChange={(e) => setProfile((p) => ({ ...p, postcode: e.target.value.replace(/\D/g, "") }))}
         />
       </label>
-      <p className="meta" aria-live="polite">{tr(`where.${postcodeStatus}`)}</p>
+      {(postcodeStatus === "loading" || postcodeStatus === "unknown") && <p className="meta" aria-live="polite">{tr(`where.${postcodeStatus}`)}</p>}
     </section>
   )
 }

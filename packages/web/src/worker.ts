@@ -1,4 +1,4 @@
-import { groupTrials, matchTrials, unknownImpact, type LatLon, type Profile, type Trial, type TrialIndex } from "@trial-finder/domain"
+import { groupTrials, matchTrials, type LatLon, type Profile, type Trial, type TrialIndex } from "@trial-finder/domain"
 
 let trials: Trial[] = []
 
@@ -43,5 +43,5 @@ self.onmessage = (e: MessageEvent) => {
     distanceKm: x.distanceKm,
     siteIdx: x.nearestSite ? x.trial.sites.indexOf(x.nearestSite) : -1
   }))
-  ;(self as unknown as Worker).postMessage({ type: "result", id: m.id, summaries, impact: unknownImpact(ms).slice(0, 6) })
+  ;(self as unknown as Worker).postMessage({ type: "result", id: m.id, summaries })
 }

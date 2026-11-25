@@ -5,7 +5,7 @@ import { bundleOf, loadFullTrials } from "./data"
 import { useI18n } from "./i18n"
 import { valueOr, type Result } from "./result"
 import { kvGet, kvSet, wipeAll, type StoreError } from "./store"
-import { useMatching, type Impact } from "./useMatching"
+import { useMatching } from "./useMatching"
 import { usePostcode, type PostcodeStatus } from "./usePostcode"
 import { useTrialIndex } from "./useTrialIndex"
 import type { Summary } from "./worker"
@@ -42,7 +42,6 @@ interface App {
   home: LatLon | null
   postcodeStatus: PostcodeStatus
   summaries: Summary[] | null
-  impact: Impact[]
   prevSnapshot: Snapshot | null
   dismissSnapshot: () => void
   replaceAll: (p: Profile, shortlist: string[], group?: string) => void
@@ -122,7 +121,7 @@ export function AppProvider({ children, now = systemClock }: { children: ReactNo
   const byId = useMemo(() => new Map(trials.map((t) => [t.nctId, t])), [trials])
 
   const { home, status: postcodeStatus } = usePostcode(profile.country, profile.postcode)
-  const { summaries, impact } = useMatching({
+  const { summaries } = useMatching({
     trials,
     indexText,
     group,
@@ -238,7 +237,6 @@ export function AppProvider({ children, now = systemClock }: { children: ReactNo
     home,
     postcodeStatus,
     summaries,
-    impact,
     prevSnapshot,
     dismissSnapshot: () => setPrevSnapshot(null),
     replaceAll,

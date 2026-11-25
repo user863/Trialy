@@ -4,7 +4,7 @@ import { useApp, useFullTrials } from "../app"
 import { config } from "../config"
 import { CriteriaSections } from "../criteria"
 import { useI18n } from "../i18n"
-import { A, Disclaimer, RegistryEnglishNote, TierBadge, useFulfilledLine } from "../ui"
+import { A, TierBadge, useFulfilledLine } from "../ui"
 
 const isOpen = (s: { status?: string }) => s.status === "RECRUITING" || s.status === "NOT_YET_RECRUITING" || s.status === "ENROLLING_BY_INVITATION"
 
@@ -30,8 +30,11 @@ export function TrialPage({ id }: { id: string }) {
     )
   const facts = plainFacts(t)
   const phaseName = (p: string) => tOr(`phase.${p}`, phaseLabel(p))
+  const phases = displayPhases(t.phases).map(phaseName).join(", ")
   const links = registryLinks(t)
   const saved = shortlist.includes(t.nctId)
+  const central = t.centralContact
+  const sameContact = (s: { contactName?: string }) => !!central?.name && s.contactName === central.name
   const sites = [...t.sites]
     .map((s) => ({ s, d: home && s.lat !== undefined && s.lon !== undefined ? haversineKm(home, { lat: s.lat, lon: s.lon }) : null }))
     .sort((a, b) => Number(isOpen(b.s)) - Number(isOpen(a.s)) || (a.d ?? 1e9) - (b.d ?? 1e9))
@@ -39,8 +42,6 @@ export function TrialPage({ id }: { id: string }) {
   return (
     <main className="page">
       <p><A to="/results">{tr("trial.back")}</A></p>
-      <Disclaimer />
-      <RegistryEnglishNote />
       <h1>
         <a className="title-link" href={links[0]!.url} target="_blank" rel="noreferrer noopener" aria-label={`${t.title} (${tr("trial.openRegistry", { registry: links[0]!.label })})`} title={tr("trial.openRegistry", { registry: links[0]!.label })}>
           {t.title.split(" ").slice(0, -1).join(" ")}{" "}
@@ -54,18 +55,19 @@ export function TrialPage({ id }: { id: string }) {
           </span>
         </a>
       </h1>
-      <p className="meta">
-        <span className="nct">{t.nctId}</span> · {displayPhases(t.phases).map(phaseName).join(", ") || tr("trial.noPhase")} · {tr("trial.updated", { date: t.lastUpdated ? formatDate(t.lastUpdated) : tr("trial.unknownDate") })}
-        {isStale(t, now()) && <span className="pill muted">{tr("trial.outdated")}</span>}
-      </p>
       <p className="pills">
         <TierBadge tier={match.recruiting} sites={match.recruitingSites} />
         {!(match.recruiting === 2 && t.status === "RECRUITING") && <span className="pill">{t.status === "RECRUITING" ? tr("trial.registryRecruiting") : tr("trial.registryNotYet")}</span>}
+        {isStale(t, now()) && <span className="pill muted">{tr("trial.outdated")}</span>}
+      </p>
+      <p className="meta">
+        <span className="nct">{t.nctId}</span>
+        {phases && ` · ${phases}`} · {tr("trial.updated", { date: t.lastUpdated ? formatDate(t.lastUpdated) : tr("trial.unknownDate") })}
       </p>
       {match.recruiting === 0 && <p className="callout">{tr("tier.none.title")}</p>}
       <p className="actions noprint">
         <button className={`btn${saved ? "" : " primary"}`} onClick={() => toggleShortlist(t.nctId)} disabled={!saved && shortlist.length >= config.maxShortlist}>
-          {saved ? tr("card.saved") : tr("card.add")}
+          {saved ? tr("card.remove") : tr("card.add")}
         </button>
         <button className="btn" onClick={() => window.print()}>{tr("trial.print")}</button>
       </p>
@@ -77,10 +79,9 @@ export function TrialPage({ id }: { id: string }) {
           {facts.tested.length > 0 && (<><dt>{tr("plain.tested")}</dt><dd>{facts.tested.join("; ")}</dd></>)}
           {facts.against.length > 0 && (<><dt>{tr("plain.against")}</dt><dd>{facts.against.join("; ")}</dd></>)}
           {facts.phases.map((p) => (<div key={p}><dt>{tr("plain.phase")}</dt><dd>{tOr(`phase.text.${p}`, p)}</dd></div>))}
-          <div><dt>{tr("plain.randomisation")}</dt><dd>{tr(`allocation.${facts.allocation}`)}</dd></div>
+          {facts.allocation !== "unstated" && <div><dt>{tr("plain.randomisation")}</dt><dd>{tr(`allocation.${facts.allocation}`)}</dd></div>}
           <div><dt>{tr("plain.blinding")}</dt><dd>{tr(`blinding.${facts.blinding}`)}</dd></div>
-          <div><dt>{tr("plain.placebo")}</dt><dd>{tr(facts.hasPlacebo ? "placebo.yes" : "placebo.no")}</dd></div>
-          <div><dt>{tr("plain.visits")}</dt><dd>{tr("plain.visits.text")}</dd></div>
+          {facts.hasPlacebo && <div><dt>{tr("plain.placebo")}</dt><dd>{tr("placebo.yes")}</dd></div>}
         </dl>
         {t.briefSummary && (
           <details>
@@ -108,13 +109,13 @@ export function TrialPage({ id }: { id: string }) {
           {sites.slice(0, 40).map(({ s, d }, i) => (
             <li key={i}>
               {s.status ? (
-                <span className={`pill${isOpen(s) ? " live" : " muted"}`}>{tOr(`siteStatus.${s.status}`, s.status.toLowerCase().replace(/_/g, " "))}</span>
+                <span className={`pill${isOpen(s) ? " live" : " muted"}`}>{tOr(`siteStatus.${s.status}`, s.status.charAt(0) + s.status.slice(1).toLowerCase().replace(/_/g, " "))}</span>
               ) : (
                 <span className="pill caution">{tr("sites.unstated")}</span>
               )}
               <strong>{s.facility}</strong>
-              <span>{[s.city, countryName(s.country)].filter(Boolean).join(", ")}{d !== null && ` · ${formatKm(d)}`}</span>
-              {(s.contactName || s.contactPhone || s.contactEmail) && (
+              <span>{[s.city, countryName(s.country)].filter(Boolean).join(", ")}{d !== null && ` - ${formatKm(d)}`}</span>
+              {(s.contactName || s.contactPhone || s.contactEmail) && !sameContact(s) && (
                 <div className="meta">
                   {s.contactName} {s.contactPhone && <a href={`tel:${s.contactPhone.replace(/\s/g, "")}`}>{s.contactPhone}</a>} {s.contactEmail && <a href={`mailto:${s.contactEmail}`}>{s.contactEmail}</a>}
                 </div>
@@ -131,17 +132,21 @@ export function TrialPage({ id }: { id: string }) {
         )}
       </section>
 
-      <section>
-        <h2>{tr("registry.title")}</h2>
-        <ul>
-          {links.map((l) => (
-            <li key={l.url}>
-              <a href={l.url} rel="noreferrer noopener" target="_blank">{l.label}: {l.id}</a>
-            </li>
-          ))}
-        </ul>
+      {links.length > 1 ? (
+        <section>
+          <h2>{tr("registry.title")}</h2>
+          <ul>
+            {links.map((l) => (
+              <li key={l.url}>
+                <a href={l.url} rel="noreferrer noopener" target="_blank">{l.label}: {l.id}</a>
+              </li>
+            ))}
+          </ul>
+          <p className="meta">{tr("registry.source")}</p>
+        </section>
+      ) : (
         <p className="meta">{tr("registry.source")}</p>
-      </section>
+      )}
     </main>
   )
 }

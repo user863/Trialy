@@ -1,7 +1,7 @@
 import { messages } from "../define"
 
 export const pages = messages({
-  "wizard.progress": { en: "Question {current} of {total} · saved automatically", de: "Frage {current} von {total} · wird automatisch gespeichert" },
+  "wizard.progress": { en: "Question {current} of {total}", de: "Frage {current} von {total}" },
   "wizard.where": { en: "Where do I find this?", de: "Wo finde ich das?" },
   "wizard.back": { en: "Back", de: "Zurück" },
   "wizard.next": { en: "Next", de: "Weiter" },
@@ -14,28 +14,15 @@ export const pages = messages({
 
   "results.title": { en: "Matching trials", de: "Passende Studien" },
   "results.summary": { en: "{visible} of {total} trials may fit.", de: "{visible} von {total} Studien kommen möglicherweise in Frage." },
-  "results.hidden": { en: "{count} hidden because a criterion is not fulfilled.", de: "{count} ausgeblendet, weil ein Kriterium nicht erfüllt ist." },
-  "results.hide": { en: "Hide them", de: "Ausblenden" },
-  "results.show": { en: "Show them", de: "Anzeigen" },
-  "results.notStarted": {
-    en: "You haven’t answered any questions yet. <link>Answer a few questions</link> to see which trials fit.",
-    de: "Sie haben noch keine Fragen beantwortet. <link>Beantworten Sie ein paar Fragen</link>, um zu sehen, welche Studien passen."
-  },
+  "results.answer": { en: "Answer a few questions", de: "Ein paar Fragen beantworten" },
+  "results.edit": { en: "Edit my answers", de: "Meine Angaben ändern" },
+  "results.total.one": { en: "{count} trial", de: "{count} Studie" },
+  "results.total.other": { en: "{count} trials", de: "{count} Studien" },
   "results.matching": { en: "Matching…", de: "Abgleich läuft …" },
   "results.none": { en: "No trials match these filters.", de: "Keine Studien passen zu diesen Filtern." },
   "results.more": { en: "Show more ({left} left)", de: "Mehr anzeigen (noch {left})" },
 
-  "diff.title": { en: "Since your last visit", de: "Seit Ihrem letzten Besuch" },
-  "diff.added": { en: "{count} new:", de: "{count} neu:" },
-  "diff.nowFit": { en: "{count} now possible after your changes:", de: "{count} nach Ihren Änderungen jetzt möglich:" },
-  "diff.nowOut": { en: "{count} no longer a fit after your changes", de: "{count} nach Ihren Änderungen nicht mehr passend" },
-  "diff.closed": { en: "{count} no longer recruiting or removed:", de: "{count} rekrutieren nicht mehr oder wurden entfernt:" },
-  "diff.dismiss": { en: "Got it", de: "Verstanden" },
 
-  "impact.label": { en: "Answers that would help most", de: "Angaben, die am meisten helfen würden" },
-  "impact.title": { en: "Answers that would narrow this down", de: "Angaben, die das weiter eingrenzen würden" },
-  "impact.item.one": { en: "Your {field} is open in {count} trial", de: "Ihre Angabe zu „{field}“ ist in {count} Studie offen" },
-  "impact.item.other": { en: "Your {field} is open in {count} trials", de: "Ihre Angabe zu „{field}“ ist in {count} Studien offen" },
 
   "filters.title": { en: "Filters", de: "Filter" },
   "filters.sort": { en: "Sort by", de: "Sortieren nach" },
@@ -62,18 +49,14 @@ export const pages = messages({
   "filters.recruitingNow": { en: "Recruiting now", de: "Rekrutiert jetzt" },
   "filters.notYet": { en: "Not yet recruiting", de: "Rekrutiert noch nicht" },
   "filters.recruitingSite": { en: "Only trials with a recruiting site", de: "Nur Studien mit rekrutierendem Zentrum" },
+  "filters.showNotFulfilled": { en: "Show trials with a criterion not fulfilled ({count})", de: "Studien mit nicht erfülltem Kriterium anzeigen ({count})" },
   "filters.hideStale": { en: "Hide entries not updated for 6 months", de: "Einträge ausblenden, die seit 6 Monaten nicht aktualisiert wurden" },
 
   "where.label": { en: "Your location", de: "Ihr Standort" },
   "where.country": { en: "Country", de: "Land" },
-  "where.postcode": { en: "Postcode ({length} digits)", de: "Postleitzahl ({length} Ziffern)" },
-  "where.found": {
-    en: "Sorted by straight-line distance to the nearest recruiting site. Stays in your browser.",
-    de: "Sortiert nach Luftlinie zum nächsten rekrutierenden Zentrum. Bleibt in Ihrem Browser."
-  },
+  "where.postcode": { en: "Postcode", de: "Postleitzahl" },
   "where.unknown": { en: "Postcode not found. Distances stay hidden.", de: "Postleitzahl nicht gefunden. Entfernungen bleiben ausgeblendet." },
   "where.loading": { en: "Keep typing…", de: "Tippen Sie weiter …" },
-  "where.empty": { en: "Add it to see distances. Never sent anywhere.", de: "Geben Sie sie ein, um Entfernungen zu sehen. Wird nirgendwohin gesendet." },
 
   "divider.0": { en: "No site is listed as recruiting. Kept visible, ranked lower.", de: "Kein Zentrum ist als rekrutierend aufgeführt. Bleibt sichtbar, steht weiter unten." },
   "divider.1": {
@@ -87,10 +70,12 @@ export const pages = messages({
     de: "Der Registereintrag wurde seit über 6 Monaten nicht aktualisiert. Prüfen Sie, ob die Studie noch rekrutiert."
   },
   "card.nearest": { en: "nearest site {distance} away ({city}, {country})", de: "nächstes Zentrum {distance} entfernt ({city}, {country})" },
-  "card.see": { en: "See criteria", de: "Kriterien ansehen" },
   "card.saved": { en: "On my shortlist", de: "Auf meiner Merkliste" },
   "card.full": { en: "Shortlist full ({max})", de: "Merkliste voll ({max})" },
+  "card.toCheck.one": { en: "{count} criterion to check", de: "{count} Kriterium zu prüfen" },
+  "card.toCheck.other": { en: "{count} criteria to check", de: "{count} Kriterien zu prüfen" },
   "card.add": { en: "Add to shortlist", de: "Zur Merkliste hinzufügen" },
+  "card.remove": { en: "Remove from shortlist", de: "Von der Merkliste entfernen" },
 
   "trial.loading": { en: "Loading trial details…", de: "Studiendetails werden geladen …" },
   "trial.notFound": { en: "Trial not found", de: "Studie nicht gefunden" },
@@ -111,8 +96,8 @@ export const pages = messages({
 
   "plain.title": { en: "Summary", de: "Zusammenfassung" },
   "plain.note": {
-    en: "Assembled from structured registry fields, not written by a person or a language model. Read the full registry entry before deciding anything.",
-    de: "Aus strukturierten Registerfeldern zusammengestellt, nicht von einer Person oder einem Sprachmodell geschrieben. Lesen Sie den vollständigen Registereintrag, bevor Sie etwas entscheiden."
+    en: "Assembled from structured registry fields. Read the full registry entry before deciding anything.",
+    de: "Aus strukturierten Registerfeldern zusammengestellt. Lesen Sie den vollständigen Registereintrag, bevor Sie etwas entscheiden."
   },
   "plain.tested": { en: "What is tested", de: "Was getestet wird" },
   "plain.against": { en: "Compared with", de: "Verglichen mit" },
@@ -170,8 +155,8 @@ export const pages = messages({
     de: "Sie werden möglicherweise zufällig einer Behandlungsgruppe zugeteilt (wie beim Münzwurf), sodass Sie die neue Behandlung eventuell nicht erhalten."
   },
   "allocation.nonRandomized": {
-    en: "Groups are not assigned by chance; assignment follows the study plan (for example by your tumour type).",
-    de: "Die Gruppen werden nicht zufällig zugeteilt; die Zuteilung folgt dem Studienplan (zum Beispiel nach Ihrer Tumorart)."
+    en: "Groups are not assigned by chance; assignment follows the study plan (for example by your condition).",
+    de: "Die Gruppen werden nicht zufällig zugeteilt; die Zuteilung folgt dem Studienplan (zum Beispiel nach Ihrer Erkrankung)."
   },
   "allocation.unstated": { en: "The registry does not say how people are assigned.", de: "Das Register gibt nicht an, wie die Personen zugeteilt werden." },
   "blinding.open": {
@@ -205,17 +190,17 @@ export const pages = messages({
     en: "Distances are straight-line estimates from your postcode area, not travel times.",
     de: "Entfernungen sind Luftlinien-Schätzungen ab Ihrem Postleitzahlgebiet, keine Fahrzeiten."
   },
-  "sites.enter": { en: "Enter your postcode in the questions to see them.", de: "Geben Sie Ihre Postleitzahl in den Fragen ein, um sie zu sehen." },
+  "sites.enter": { en: "Enter your postcode on the results page to see them.", de: "Geben Sie Ihre Postleitzahl auf der Ergebnisseite ein, um sie zu sehen." },
   "sites.unstated": { en: "status not stated", de: "Status nicht angegeben" },
   "sites.more": { en: "…and {count} more on the registry page.", de: "… und {count} weitere auf der Registerseite." },
-  "siteStatus.RECRUITING": { en: "recruiting", de: "rekrutiert" },
-  "siteStatus.NOT_YET_RECRUITING": { en: "not yet recruiting", de: "rekrutiert noch nicht" },
-  "siteStatus.ENROLLING_BY_INVITATION": { en: "enrolling by invitation", de: "Aufnahme nur auf Einladung" },
-  "siteStatus.ACTIVE_NOT_RECRUITING": { en: "active, not recruiting", de: "aktiv, rekrutiert nicht" },
-  "siteStatus.COMPLETED": { en: "completed", de: "abgeschlossen" },
-  "siteStatus.SUSPENDED": { en: "suspended", de: "ausgesetzt" },
-  "siteStatus.TERMINATED": { en: "terminated", de: "beendet" },
-  "siteStatus.WITHDRAWN": { en: "withdrawn", de: "zurückgezogen" },
+  "siteStatus.RECRUITING": { en: "Recruiting", de: "Rekrutiert" },
+  "siteStatus.NOT_YET_RECRUITING": { en: "Not yet recruiting", de: "Rekrutiert noch nicht" },
+  "siteStatus.ENROLLING_BY_INVITATION": { en: "Enrolling by invitation", de: "Aufnahme nur auf Einladung" },
+  "siteStatus.ACTIVE_NOT_RECRUITING": { en: "Active, not recruiting", de: "Aktiv, rekrutiert nicht" },
+  "siteStatus.COMPLETED": { en: "Completed", de: "Abgeschlossen" },
+  "siteStatus.SUSPENDED": { en: "Suspended", de: "Ausgesetzt" },
+  "siteStatus.TERMINATED": { en: "Terminated", de: "Beendet" },
+  "siteStatus.WITHDRAWN": { en: "Withdrawn", de: "Zurückgezogen" },
   "registry.title": { en: "Registry entries", de: "Registereinträge" },
   "registry.source": {
     en: "Source: ClinicalTrials.gov. Opening these links contacts the registry directly; this site is not told which trial you open.",
@@ -234,15 +219,6 @@ export const pages = messages({
   "shortlist.nowNotMet": { en: "a criterion is now not met", de: "ein Kriterium ist jetzt nicht erfüllt" },
   "shortlist.remove": { en: "Remove", de: "Entfernen" },
   "shortlist.create": { en: "Create the doctor summary", de: "Zusammenfassung für die Ärztin oder den Arzt erstellen" },
-  "shortlist.again.title": { en: "Check again later", de: "Später erneut prüfen" },
-  "shortlist.again.text": {
-    en: "Trials open and close. Download a calendar reminder to come back after your next scan or treatment change.",
-    de: "Studien öffnen und schließen. Laden Sie eine Kalendererinnerung herunter, um nach Ihrer nächsten Untersuchung oder Behandlungsänderung wiederzukommen."
-  },
-  "shortlist.remind": { en: "Remind me in", de: "Erinnern Sie mich in" },
-  "shortlist.months.one": { en: "{count} month", de: "{count} Monat" },
-  "shortlist.months.other": { en: "{count} months", de: "{count} Monaten" },
-  "shortlist.download": { en: "Download reminder (.ics)", de: "Erinnerung herunterladen (.ics)" },
 
   "summary.back": { en: "← Back", de: "← Zurück" },
   "summary.print": { en: "Print or save as PDF", de: "Drucken oder als PDF speichern" },
@@ -285,7 +261,9 @@ export const pages = messages({
   "profile.brain": { en: "Brain metastases", de: "Hirnmetastasen" },
   "profile.ild": { en: "Interstitial lung disease / pneumonitis", de: "Interstitielle Lungenerkrankung / Pneumonitis" },
   "profile.autoimmune": { en: "Autoimmune disease", de: "Autoimmunerkrankung" },
-  "profile.agesex": { en: "Age / sex", de: "Alter / Geschlecht" },
+  "profile.age": { en: "Age", de: "Alter" },
+  "profile.sex": { en: "Sex", de: "Geschlecht" },
+  "summary.unansweredCount": { en: "{count} questions were not answered and are left out.", de: "{count} Fragen wurden nicht beantwortet und sind hier weggelassen." },
   "profile.ecog": { en: "ECOG performance status (patient-reported)", de: "ECOG-Leistungsstatus (laut Patientin oder Patient)" },
   "profile.unanswered": { en: "not known / not answered", de: "nicht bekannt / nicht beantwortet" },
   "profile.notKnown": { en: "not known", de: "nicht bekannt" },
@@ -371,8 +349,6 @@ export const pages = messages({
   },
   "wipe.blocked": { en: "Another Trialy tab is still open. Close it and try again.", de: "Ein weiterer Trialy-Tab ist noch geöffnet. Schließen Sie ihn und versuchen Sie es erneut." },
 
-  "results.condition": { en: "Condition: {condition}", de: "Erkrankung: {condition}" },
-  "results.change": { en: "Change", de: "Ändern" },
 
   "profile.mscourse": { en: "Type of multiple sclerosis", de: "Verlaufsform der Multiplen Sklerose" },
   "profile.edss": { en: "EDSS", de: "EDSS" },
@@ -383,5 +359,8 @@ export const pages = messages({
   "profile.steroids": { en: "Steroids in the last 3 months", de: "Steroide in den letzten 3 Monaten" },
   "profile.infection": { en: "HIV, hepatitis B or C, tuberculosis", de: "HIV, Hepatitis B oder C, Tuberkulose" },
   "profile.cancer": { en: "Cancer now or in the past", de: "Krebserkrankung aktuell oder früher" },
+  "profile.psychiatric": { en: "Psychiatric condition", de: "Psychiatrische Erkrankung" },
+  "profile.otherAutoimmune": { en: "Another autoimmune or neurological disease", de: "Weitere Autoimmun- oder neurologische Erkrankung" },
+  "profile.otherTrial": { en: "In another study or on an investigational drug", de: "In einer anderen Studie oder mit Prüfpräparat" },
   "profile.none": { en: "none", de: "keine" }
 })

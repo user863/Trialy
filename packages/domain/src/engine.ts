@@ -28,6 +28,9 @@ export type ProfileField =
   | "recentSteroids"
   | "chronicInfection"
   | "cancerHistory"
+  | "psychiatric"
+  | "otherAutoimmune"
+  | "otherTrial"
   | `lab:${string}`
 
 export type Answer =
@@ -118,7 +121,10 @@ const FLAG_LABEL: Record<string, string> = {
   mriUnsuitable: "a reason an MRI scan is not possible",
   recentSteroids: "recent steroid treatment",
   chronicInfection: "HIV, hepatitis B or C, or tuberculosis",
-  cancerHistory: "a history of cancer"
+  cancerHistory: "a history of cancer",
+  psychiatric: "a psychiatric condition",
+  otherAutoimmune: "another autoimmune or neurological disease",
+  otherTrial: "taking part in another study or an investigational drug"
 }
 const MS_COURSE_LABEL: Record<MsCourse, string> = {
   rrms: "relapsing-remitting MS",
@@ -338,6 +344,12 @@ export const evalRule = (rule: Rule, p: Profile): EvalNode => {
           return leaf(rule, p.chronicInfection, yesNo(p.chronicInfection), "chronicInfection")
         case "cancerHistory":
           return leaf(rule, p.cancerHistory, yesNo(p.cancerHistory), "cancerHistory")
+        case "psychiatric":
+          return leaf(rule, p.psychiatric, yesNo(p.psychiatric), "psychiatric")
+        case "otherAutoimmune":
+          return leaf(rule, p.otherAutoimmune, yesNo(p.otherAutoimmune), "otherAutoimmune")
+        case "otherTrial":
+          return leaf(rule, p.otherTrial, yesNo(p.otherTrial), "otherTrial")
       }
       return leaf(rule, "unknown", UNANSWERED)
     }

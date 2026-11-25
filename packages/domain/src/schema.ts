@@ -33,7 +33,10 @@ export const FlagKey = S.Literal(
   "mriUnsuitable",
   "recentSteroids",
   "chronicInfection",
-  "cancerHistory"
+  "cancerHistory",
+  "psychiatric",
+  "otherAutoimmune",
+  "otherTrial"
 )
 export type FlagKey = typeof FlagKey.Type
 
@@ -255,6 +258,9 @@ export const Profile = S.Struct({
   recentSteroids: Tri,
   chronicInfection: Tri,
   cancerHistory: Tri,
+  psychiatric: Tri,
+  otherAutoimmune: Tri,
+  otherTrial: Tri,
   labs: S.Struct({
     anc: S.NullOr(S.Number),
     platelets: S.NullOr(S.Number),
@@ -297,6 +303,9 @@ export const emptyProfile = (): Profile => ({
   recentSteroids: "unknown",
   chronicInfection: "unknown",
   cancerHistory: "unknown",
+  psychiatric: "unknown",
+  otherAutoimmune: "unknown",
+  otherTrial: "unknown",
   labs: { anc: null, platelets: null, hemoglobin: null, crcl: null },
   country: "DE",
   postcode: ""

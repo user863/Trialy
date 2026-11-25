@@ -23,6 +23,42 @@
   },
   {
     "trial": "NCT02912897",
+    "id": "NCT02912897-17",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Concomitant participation of any other trial",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "otherTrial"
+      }
+    }
+  },
+  {
+    "trial": "NCT02912897",
+    "id": "NCT02912897-18",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Patients with mental or psychiatry condition unable to understand the trial",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "psychiatric"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT02912897",
     "id": "NCT02912897-20",
     "kind": "exclusion",
     "confidence": "low",
@@ -81,6 +117,28 @@
     }
   },
   {
+    "trial": "NCT03910738",
+    "id": "NCT03910738-24",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Patients with organic or psychiatric disease compromise their ability to understand the information given and to follow the protocol",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "psychiatric"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
     "trial": "NCT04573673",
     "id": "NCT04573673-15",
     "kind": "exclusion",
@@ -100,6 +158,86 @@
           "_tag": "other"
         }
       ]
+    }
+  },
+  {
+    "trial": "NCT04694534",
+    "id": "NCT04694534-12",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Neurological or psychiatric comorbidity, other than MS and anxiodepressive syndrome",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "psychiatric"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT04694534",
+    "id": "NCT04694534-13",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Patient with severe anxiodepressive syndrome (BDI\\> 27)",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "psychiatric"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT04819737",
+    "id": "NCT04819737-3",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": ". History of severe (other) neurological, internal or psychiatric disease with SC affection",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "psychiatric"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT04873492",
+    "id": "NCT04873492-17",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Ongoing participation to a another study",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "otherTrial"
+      }
     }
   },
   {
@@ -141,6 +279,116 @@
               "ppms",
               "spms"
             ]
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT05355389",
+    "id": "NCT05355389-9",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Major psychiatric or medical disorder that could influence cognitive functions",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "psychiatric"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT05380856",
+    "id": "NCT05380856-6",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "EDSS \\> 5, neurological disease with severe progression within the last 6 months and/or unable to manage the electronic devices",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "otherAutoimmune"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT05380856",
+    "id": "NCT05380856-10",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Any other intestinal or gynecological pathology but neurological conditional symptoms",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "otherAutoimmune"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT05491031",
+    "id": "NCT05491031-3",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Other progressive neurological disease,",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "otherAutoimmune"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT05491031",
+    "id": "NCT05491031-5",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Severe psychiatric pathology not in balance,",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "psychiatric"
           }
         },
         {
@@ -208,6 +456,28 @@
     }
   },
   {
+    "trial": "NCT05772637",
+    "id": "NCT05772637-10",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Other associated neurological disease",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "otherAutoimmune"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
     "trial": "NCT05834855",
     "id": "NCT05834855-1",
     "kind": "inclusion",
@@ -254,6 +524,28 @@
           "rule": {
             "_tag": "flag",
             "flag": "chronicInfection"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT05834855",
+    "id": "NCT05834855-12",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Prior or current psychiatric illness, mental deficiency or cognitive dysfunction influencing the patient ability to make an informed consent or comply with the treatment and follow-up phases of this protocol.",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "psychiatric"
           }
         },
         {
@@ -360,6 +652,28 @@
           "ppms"
         ]
       }
+    }
+  },
+  {
+    "trial": "NCT05877963",
+    "id": "NCT05877963-9",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Active chronic (or stable but treated with immune therapy) disease of the immune system other than MS (e.g., rheumatoid arthritis, scleroderma, Sjögren's syndrome, Crohn's disease, ulcerative colitis, etc.) or immunodeficiency syndrome (hereditary immune deficiency, drug-induced immune deficiency, etc.).",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "otherAutoimmune"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
     }
   },
   {
@@ -616,6 +930,20 @@
     }
   },
   {
+    "trial": "NCT06062693",
+    "id": "NCT06062693-10",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "participation on other interventional trials",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "otherTrial"
+      }
+    }
+  },
+  {
     "trial": "NCT06068582",
     "id": "NCT06068582-3",
     "kind": "inclusion",
@@ -660,6 +988,28 @@
     }
   },
   {
+    "trial": "NCT06068582",
+    "id": "NCT06068582-7",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "presence of neurological (other than MS) and psychiatric disorders",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "psychiatric"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
     "trial": "NCT06280742",
     "id": "NCT06280742-11",
     "kind": "exclusion",
@@ -673,6 +1023,50 @@
           "rule": {
             "_tag": "flag",
             "flag": "mriUnsuitable"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06280742",
+    "id": "NCT06280742-15",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Current symptoms of severe or uncontrolled renal, hepatic, hematological, gastrointestinal, pulmonary or cardiac disease, or any other chronic neurological diseases",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "otherAutoimmune"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06280742",
+    "id": "NCT06280742-18",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Participation in another interventional study or being in the exclusion period at the end of a previous study",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "otherTrial"
           }
         },
         {
@@ -749,6 +1143,50 @@
   },
   {
     "trial": "NCT06330077",
+    "id": "NCT06330077-21",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Any uncontrolled general (cancer, infectious, hematologic, hepatic, immunologic, endocrinologic, neurologic, dermatologic, psychiatric, allergic, renal, or cardiovascular) disease.",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "psychiatric"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06330077",
+    "id": "NCT06330077-30",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Participation in another interventional trial evaluating a health product or any randomized trial or being in the exclusion period at the end of a previous study",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "otherTrial"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06330077",
     "id": "NCT06330077-34",
     "kind": "exclusion",
     "confidence": "low",
@@ -771,6 +1209,28 @@
   },
   {
     "trial": "NCT06330077",
+    "id": "NCT06330077-37",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Known presence of any neurological disorders",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "otherAutoimmune"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06330077",
     "id": "NCT06330077-38",
     "kind": "exclusion",
     "confidence": "high",
@@ -778,6 +1238,28 @@
     "rule": {
       "_tag": "flag",
       "flag": "pregnancy"
+    }
+  },
+  {
+    "trial": "NCT06330077",
+    "id": "NCT06330077-43",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Participation in another interventional trial evaluating a health product or any randomized trial or being in the exclusion period at the end of a previous study",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "otherTrial"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
     }
   },
   {
@@ -805,6 +1287,72 @@
           "rule": {
             "_tag": "flag",
             "flag": "mriUnsuitable"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06426316",
+    "id": "NCT06426316-6",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "type 2 diabetes, immune deficit, other chronic autoimmune or inflammatory disease",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "otherAutoimmune"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06426316",
+    "id": "NCT06426316-13",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "for patients : diagnosis of several autoimmune or inflammatory diseases",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "otherAutoimmune"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06569550",
+    "id": "NCT06569550-8",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Major psychiatric disorder, including current clinical depression.",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "psychiatric"
           }
         },
         {
@@ -971,6 +1519,50 @@
     }
   },
   {
+    "trial": "NCT06663189",
+    "id": "NCT06663189-13",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "History of neurological disease affecting the central nervous system: hereditary degenerative CNS disease, degenerative cognitive disease, systemic autoimmune disease, sarcoidosis, Lyme disease…",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "otherAutoimmune"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06663189",
+    "id": "NCT06663189-16",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Patient participating in another interventional trial (drug or a medical device) or patient who are still within an exclusion period",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "otherTrial"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
     "trial": "NCT06675955",
     "id": "NCT06675955-9",
     "kind": "exclusion",
@@ -984,6 +1576,94 @@
           "rule": {
             "_tag": "flag",
             "flag": "cancerHistory"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06675955",
+    "id": "NCT06675955-10",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Known presence of other neurological disorders",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "otherAutoimmune"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06782464",
+    "id": "NCT06782464-13",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Current enrollment in an investigational drug or device study targeting spasticity management.",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "otherTrial"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06782464",
+    "id": "NCT06782464-16",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Contraindications to BoNT-A administration, such as: Myasthenia Gravis Eaton-Lambert syndrome Possible drug interactions (e.g., aminoglycosides and BoNT-A)",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "otherAutoimmune"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06782464",
+    "id": "NCT06782464-20",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Diagnosis of concomitant progressive neurological diseases such as Amyotrophic Lateral Sclerosis.",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "otherAutoimmune"
           }
         },
         {
@@ -1012,6 +1692,116 @@
     }
   },
   {
+    "trial": "NCT06782724",
+    "id": "NCT06782724-14",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Patient is in active treatments for other psychiatric disorders, judged by the screening clinician to be a more significant clinical problem than depression / distress.",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "psychiatric"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06782724",
+    "id": "NCT06782724-16",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Patients with any lifetime diagnosis of schizophrenia spectrum or other psychotic disorders.",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "psychiatric"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06782724",
+    "id": "NCT06782724-18",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Patients with a pre-existing psychiatric condition judged to be incompatible with safe exposure to psilocybin therapy.",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "psychiatric"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06782724",
+    "id": "NCT06782724-19",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Significant suicide risk as defined by (1) suicidal ideation with intent to act (defined as ≥ 5 on MADRS item 10), (2) suicidal attempts within the past year, or (3) clinical assessment of significant suicidal risk during patient interview.",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "psychiatric"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06782724",
+    "id": "NCT06782724-23",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Patient has neurological conditions (e.g., intracranial tumour, epilepsy, brain injuries, or other neurological disorders) expected by the PIs to conflict with the treatment / study protocol.",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "otherAutoimmune"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
     "trial": "NCT06846281",
     "id": "NCT06846281-1",
     "kind": "inclusion",
@@ -1026,6 +1816,50 @@
           "spms"
         ]
       }
+    }
+  },
+  {
+    "trial": "NCT06846281",
+    "id": "NCT06846281-6",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "History of clinically significant Central Nervous System disease or neurological disorders",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "otherAutoimmune"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT06920524",
+    "id": "NCT06920524-4",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Contraindication to musical intervention (severe hearing impairment, unstabilized psychotic disorders, history of auditory trauma)",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "psychiatric"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
     }
   },
   {
@@ -1090,6 +1924,20 @@
           "_tag": "other"
         }
       ]
+    }
+  },
+  {
+    "trial": "NCT07020715",
+    "id": "NCT07020715-9",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Prior treatment with any investigational agent within 3 months, or 5 half-lives, whichever is longer.",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "otherTrial"
+      }
     }
   },
   {
@@ -1194,6 +2042,72 @@
     }
   },
   {
+    "trial": "NCT07020715",
+    "id": "NCT07020715-19",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Dementia or severe psychiatric, cognitive or behavioral problems or other comorbidity that could interfere with the compliance to the protocol.",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "psychiatric"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07067463",
+    "id": "NCT07067463-6",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "History or current diagnosis of other neurological disorders that may mimic MS",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "otherAutoimmune"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07067463",
+    "id": "NCT07067463-8",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "History of suicidal behavior within 6 months prior to Screening",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "psychiatric"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
     "trial": "NCT07086950",
     "id": "NCT07086950-5",
     "kind": "exclusion",
@@ -1207,6 +2121,28 @@
           "rule": {
             "_tag": "relapse",
             "withinMonths": 3
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07086950",
+    "id": "NCT07086950-9",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Major psychiatric and/or neurocognitive disorders according to the DSM-5 (APA, 2013),",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "psychiatric"
           }
         },
         {
@@ -1251,6 +2187,28 @@
           "rule": {
             "_tag": "flag",
             "flag": "pregnancy"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07108088",
+    "id": "NCT07108088-16",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Person under psychiatric care or admitted to a health or social establishment for purposes other than research",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "psychiatric"
           }
         },
         {
@@ -1422,6 +2380,72 @@
   },
   {
     "trial": "NCT07178431",
+    "id": "NCT07178431-26",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "History of neuromyelitis optica spectrum disorder (NMOSD) or MOG antibody associated disease.",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "otherAutoimmune"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07178431",
+    "id": "NCT07178431-27",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "History of CNS or spinal cord tumor, metabolic or infectious causes of myelopathy, genetically inherited progressive CNS disorder, sarcoidosis or non MS-progressive neurological condition affecting the ability to perform the study assessments",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "otherAutoimmune"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07178431",
+    "id": "NCT07178431-31",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Patients with positive antiphospholipid antibodies, anti-cardiolipin or lupus anticoagulant.",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "otherAutoimmune"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07178431",
     "id": "NCT07178431-37",
     "kind": "exclusion",
     "confidence": "low",
@@ -1440,6 +2464,20 @@
           "_tag": "other"
         }
       ]
+    }
+  },
+  {
+    "trial": "NCT07178431",
+    "id": "NCT07178431-41",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Concurrent participation in another interventional trial",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "otherTrial"
+      }
     }
   },
   {
@@ -1478,6 +2516,28 @@
           "rule": {
             "_tag": "flag",
             "flag": "mriUnsuitable"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07183683",
+    "id": "NCT07183683-17",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Planned participation in another interventional clinical trial during the study period",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "otherTrial"
           }
         },
         {
@@ -1548,6 +2608,28 @@
     }
   },
   {
+    "trial": "NCT07193602",
+    "id": "NCT07193602-9",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Medical or psychiatric conditions that compromise the ability to comply with the protocol, or to complete the study",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "psychiatric"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
     "trial": "NCT07202195",
     "id": "NCT07202195-3",
     "kind": "exclusion",
@@ -1567,6 +2649,20 @@
           "_tag": "other"
         }
       ]
+    }
+  },
+  {
+    "trial": "NCT07224373",
+    "id": "NCT07224373-6",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Participant has significant psychiatric condition (active or history of).",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "psychiatric"
+      }
     }
   },
   {
@@ -1680,6 +2776,72 @@
     }
   },
   {
+    "trial": "NCT07225504",
+    "id": "NCT07225504-7",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "History of clinically significant central nervous system (CNS) disease (e.g. stroke, traumatic brain or spinal injury, history or presence of myelopathy) or neurological disorders which may mimic multiple sclerosis (MS).",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "otherAutoimmune"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07225868",
+    "id": "NCT07225868-7",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Current or prior brain trauma or neurological condition (other than MS)",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "otherAutoimmune"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07225868",
+    "id": "NCT07225868-8",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Psychiatric disorder that heavily impacts cognitive and/or daily functioning",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "psychiatric"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
     "trial": "NCT07245589",
     "id": "NCT07245589-1",
     "kind": "inclusion",
@@ -1691,6 +2853,28 @@
         {
           "_tag": "edss",
           "max": 9.5
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07248657",
+    "id": "NCT07248657-5",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Contraindications such as severe orthopedic or cardiovascular dysfunction, or presence of another neurological disorder",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "otherAutoimmune"
+          }
         },
         {
           "_tag": "other"
@@ -1712,6 +2896,50 @@
           "rule": {
             "_tag": "flag",
             "flag": "mriUnsuitable"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07252895",
+    "id": "NCT07252895-9",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Person affected by other somatic or neuropsychiatric diagnoses (e.g., arrhythmias, uncontrolled epilepsy, diseases causing osteoarticular and muscular pain).",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "psychiatric"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07252895",
+    "id": "NCT07252895-16",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Person that is part of another study",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "otherTrial"
           }
         },
         {
@@ -1818,6 +3046,50 @@
             "courses": [
               "ppms"
             ]
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07299019",
+    "id": "NCT07299019-7",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "History or current diagnosis of other neurological disorders that may mimic MS",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "otherAutoimmune"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07299019",
+    "id": "NCT07299019-11",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "History of suicidal behavior within 6 months prior to Screening",
+    "rule": {
+      "_tag": "allOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "psychiatric"
           }
         },
         {
@@ -1965,62 +3237,6 @@
     }
   },
   {
-    "trial": "NCT07503873",
-    "id": "NCT07503873-0",
-    "kind": "inclusion",
-    "confidence": "low",
-    "text": "Diagnosis of relapsing multiple sclerosis (RMS) (2017 Revised McDonald criteria).",
-    "rule": {
-      "_tag": "narrow",
-      "rule": {
-        "_tag": "msCourse",
-        "courses": [
-          "rrms",
-          "spms"
-        ]
-      }
-    }
-  },
-  {
-    "trial": "NCT07503873",
-    "id": "NCT07503873-4",
-    "kind": "exclusion",
-    "confidence": "low",
-    "text": "Primary-progressive multiple sclerosis (PPMS) or inactive secondary progressive multiple sclerosis (SPMS).",
-    "rule": {
-      "_tag": "narrow",
-      "rule": {
-        "_tag": "msCourse",
-        "courses": [
-          "spms",
-          "ppms"
-        ]
-      }
-    }
-  },
-  {
-    "trial": "NCT07503873",
-    "id": "NCT07503873-9",
-    "kind": "exclusion",
-    "confidence": "low",
-    "text": "Females who are pregnant or nursing.",
-    "rule": {
-      "_tag": "anyOf",
-      "rules": [
-        {
-          "_tag": "narrow",
-          "rule": {
-            "_tag": "flag",
-            "flag": "pregnancy"
-          }
-        },
-        {
-          "_tag": "other"
-        }
-      ]
-    }
-  },
-  {
     "trial": "NCT07545889",
     "id": "NCT07545889-3",
     "kind": "inclusion",
@@ -2033,6 +3249,28 @@
           "_tag": "edss",
           "min": 0,
           "max": 7
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07545889",
+    "id": "NCT07545889-15",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Patient participating in another interventional study or still within an exclusion period.",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "otherTrial"
+          }
         },
         {
           "_tag": "other"
@@ -2077,6 +3315,28 @@
           "spms"
         ]
       }
+    }
+  },
+  {
+    "trial": "NCT07647952",
+    "id": "NCT07647952-8",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Patients with current or past history of other autoimmune diseases.",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "otherAutoimmune"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
     }
   },
   {
@@ -2198,6 +3458,28 @@
     }
   },
   {
+    "trial": "NCT07647952",
+    "id": "NCT07647952-15",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Patients participating in another clinical trial, whether therapeutic or not, that could interfere with the objectives of the study.",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "otherTrial"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
     "trial": "NCT07666958",
     "id": "NCT07666958-2",
     "kind": "inclusion",
@@ -2215,6 +3497,42 @@
           "_tag": "other"
         }
       ]
+    }
+  },
+  {
+    "trial": "NCT07666958",
+    "id": "NCT07666958-6",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Conditions impairing mobility (e.g., severe injuries, orthopaedic problems, other neurological conditions)",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "otherAutoimmune"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07805850",
+    "id": "NCT07805850-10",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Participation in another study;",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "otherTrial"
+      }
     }
   },
   {
@@ -2305,6 +3623,42 @@
   },
   {
     "trial": "NCT07852156",
+    "id": "NCT07852156-7",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Severe concomitant disease states (i.e. orthopaedic, cardiovascular, metabolic, psychiatric (e.g., substance abuse), other neurological disease states, other serious medical conditions) impairing the ability to participate;",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "otherAutoimmune"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07852156",
+    "id": "NCT07852156-8",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Participation in another study;",
+    "rule": {
+      "_tag": "narrow",
+      "rule": {
+        "_tag": "flag",
+        "flag": "otherTrial"
+      }
+    }
+  },
+  {
+    "trial": "NCT07852156",
     "id": "NCT07852156-10",
     "kind": "exclusion",
     "confidence": "low",
@@ -2360,6 +3714,28 @@
     }
   },
   {
+    "trial": "NCT07897760",
+    "id": "NCT07897760-25",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Known presence of other neurological disorders that may mimic MS including but not limited to: neuromyelitis optica spectrum dis-ease, Lyme disease, untreated Vitamin B12 deficiency, neurosar-coidosis, cerebrovascular disorders, and untreated hypothyroid-ism.",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "otherAutoimmune"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
     "trial": "NCT07902479",
     "id": "NCT07902479-7",
     "kind": "exclusion",
@@ -2368,6 +3744,138 @@
     "rule": {
       "_tag": "flag",
       "flag": "pregnancy"
+    }
+  },
+  {
+    "trial": "NCT07932262",
+    "id": "NCT07932262-14",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Subject used any investigational agents within 15 days of leukapheresis",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "otherTrial"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07932262",
+    "id": "NCT07932262-19",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "History or presence of clinically relevant CNS pathology other than the underlying diseases in this protocol, such as epilepsy, seizure, paresis, aphasia, stroke, subarachnoid hemorrhage or other CNS bleed, severe brain injuries, dementia, Parkinson's disease, cerebellar disease, organic brain syndrome, or psychosis.",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "psychiatric"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07932262",
+    "id": "NCT07932262-26",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Subject is positive for human immunodeficiency virus (HIV-1), uncontrolled hepatitis B or C",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "chronicInfection"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07932262",
+    "id": "NCT07932262-29",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Subject has uncontrolled systemic fungal, bacterial, viral or other infection (including tuberculosis) despite appropriate antibiotics or other treatment",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "chronicInfection"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07932262",
+    "id": "NCT07932262-31",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Subject is a female who is pregnant, nursing, or breastfeeding, or who intends to become pregnant during participation in the study",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "pregnancy"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
+    }
+  },
+  {
+    "trial": "NCT07932262",
+    "id": "NCT07932262-32",
+    "kind": "exclusion",
+    "confidence": "low",
+    "text": "Subject has any significant medical condition, laboratory abnormality, or psychiatric illness that would prevent the subject from participating in the study",
+    "rule": {
+      "_tag": "anyOf",
+      "rules": [
+        {
+          "_tag": "narrow",
+          "rule": {
+            "_tag": "flag",
+            "flag": "psychiatric"
+          }
+        },
+        {
+          "_tag": "other"
+        }
+      ]
     }
   }
 ]

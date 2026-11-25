@@ -242,6 +242,26 @@ describe("multiple sclerosis rules", () => {
   })
 })
 
+describe("sex rule", () => {
+  const femaleOnly: Rule = { _tag: "sex", sex: "female" }
+  const maleOnly: Rule = { _tag: "sex", sex: "male" }
+
+  it("an unanswered sex never excludes, for inclusion or exclusion criteria", () => {
+    for (const rule of [femaleOnly, maleOnly]) {
+      for (const kind of ["inclusion", "exclusion"] as const) {
+        expect(evalCriterion(crit(kind, rule), profile({ sex: "unknown" })).status).toBe("unknown")
+      }
+    }
+  })
+
+  it("a trial limited to one sex stays visible when sex is not given, and is hidden when it clearly does not fit", () => {
+    const t = trial("NCT-SEX", [crit("inclusion", femaleOnly)])
+    expect(matchTrial(t, profile({ sex: "unknown" }), null).hidden).toBe(false)
+    expect(matchTrial(t, profile({ sex: "female" }), null).hidden).toBe(false)
+    expect(matchTrial(t, profile({ sex: "male" }), null).hidden).toBe(true)
+  })
+})
+
 describe("phases", () => {
   it("hides NA and joins neighbouring phases", () => {
     expect(displayPhases(["NA"])).toEqual([])

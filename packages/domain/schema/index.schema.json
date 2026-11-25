@@ -321,7 +321,10 @@
                 "mriUnsuitable",
                 "recentSteroids",
                 "chronicInfection",
-                "cancerHistory"
+                "cancerHistory",
+                "psychiatric",
+                "otherAutoimmune",
+                "otherTrial"
               ]
             }
           },
@@ -1067,7 +1070,10 @@
                             "mriUnsuitable",
                             "recentSteroids",
                             "chronicInfection",
-                            "cancerHistory"
+                            "cancerHistory",
+                            "psychiatric",
+                            "otherAutoimmune",
+                            "otherTrial"
                           ]
                         }
                       },
@@ -1629,7 +1635,10 @@
                             "mriUnsuitable",
                             "recentSteroids",
                             "chronicInfection",
-                            "cancerHistory"
+                            "cancerHistory",
+                            "psychiatric",
+                            "otherAutoimmune",
+                            "otherTrial"
                           ]
                         }
                       },

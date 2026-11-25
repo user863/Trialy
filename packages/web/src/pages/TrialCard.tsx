@@ -19,6 +19,7 @@ export const TrialCard = memo(function TrialCard({ row: { s, t }, divider, stale
   const fulfilledLine = useFulfilledLine()
   const site = s.siteIdx >= 0 ? t.sites[s.siteIdx] : undefined
   const total = s.met + s.notMet + s.unknown
+  const decided = s.met + s.notMet > 0
   const countries = [...new Set(t.sites.map((x) => countryName(x.country)))].join(", ")
 
   return (
@@ -32,16 +33,17 @@ export const TrialCard = memo(function TrialCard({ row: { s, t }, divider, stale
           {stale && <span className="pill muted" title={tr("card.stale.title")}>{tr("card.stale")}</span>}
         </div>
         <h2 className="card-title"><A to={`/trial/${t.nctId}`}>{t.title}</A></h2>
-        <div className="meter" role="img" aria-label={fulfilledLine(s.met, total, s.notMet)}>
-          <span style={{ width: `${total ? (s.met / total) * 100 : 0}%` }} />
-        </div>
+        {decided && (
+          <div className="meter" role="img" aria-label={fulfilledLine(s.met, total, s.notMet)}>
+            <span style={{ width: `${total ? (s.met / total) * 100 : 0}%` }} />
+          </div>
+        )}
         <p className="meta">
-          {fulfilledLine(s.met, total, s.notMet)}
+          {decided ? fulfilledLine(s.met, total, s.notMet) : tr("card.toCheck", { count: total })}
           {site && s.distanceKm !== null ? ` · ${tr("card.nearest", { distance: formatKm(s.distanceKm), city: site.city, country: countryName(site.country) })}` : ` · ${countries}`}
           {` · `}<span className="nct">{t.nctId}</span>
         </p>
         <div className="actions">
-          <A to={`/trial/${t.nctId}`} className="btn primary small">{tr("card.see")}</A>
           <button className="btn outline small" onClick={() => onSave(t.nctId)} disabled={!saved && full} aria-pressed={saved}>
             {saved ? tr("card.saved") : full ? tr("card.full", { max: config.maxShortlist }) : tr("card.add")}
           </button>

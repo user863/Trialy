@@ -10,8 +10,8 @@ export const ui = messages({
     de: "Möchten Sie mit jemandem sprechen? Die <link1>Deutsche Multiple Sklerose Gesellschaft (DMSG)</link1> berät und vermittelt Selbsthilfegruppen vor Ort, und das <link2>Krankheitsbezogene Kompetenznetz Multiple Sklerose</link2> informiert über die Erkrankung und ihre Behandlung."
   },
   "disclaimer.text": {
-    en: "These are <b>possible fits to discuss with your doctor</b>, not a promise that a trial will help or that you qualify. Data comes from public registries and may be incomplete or out of date. The treating team always decides.",
-    de: "Das sind <b>mögliche Treffer, die Sie mit Ihrer Ärztin oder Ihrem Arzt besprechen können</b>, kein Versprechen, dass eine Studie hilft oder dass Sie teilnehmen können. Die Daten stammen aus öffentlichen Registern und können unvollständig oder veraltet sein. Das behandelnde Team entscheidet immer."
+    en: "These are <b>possible fits to discuss with your doctor</b>. Participation in trials can never be guaranteed. Data comes from public registries and may be incomplete or out of date. Discuss your results with your treating team.",
+    de: "Das sind <b>mögliche Treffer, die Sie mit Ihrer Ärztin oder Ihrem Arzt besprechen können</b>. Eine Teilnahme an Studien kann nie garantiert werden. Die Daten stammen aus öffentlichen Registern und können unvollständig oder veraltet sein. Besprechen Sie die Ergebnisse mit Ihrem behandelnden Team."
   },
   "tier.recruiting.one": { en: "Recruiting · {count} site", de: "Rekrutiert · {count} Zentrum" },
   "tier.recruiting.other": { en: "Recruiting · {count} sites", de: "Rekrutiert · {count} Zentren" },
@@ -45,7 +45,7 @@ export const ui = messages({
   "said.gene.positive": { en: "You said: {gene} alteration present", de: "Sie haben angegeben: {gene}-Veränderung vorhanden" },
   "said.gene.negative": { en: "You said: no {gene} alteration", de: "Sie haben angegeben: keine {gene}-Veränderung" },
   "said.pdl1.lt1": { en: "You said: PD-L1 below 1%", de: "Sie haben angegeben: PD-L1 unter 1 %" },
-  "said.pdl1.1to49": { en: "You said: PD-L1 1–49%", de: "Sie haben angegeben: PD-L1 1–49 %" },
+  "said.pdl1.1to49": { en: "You said: PD-L1 1-49%", de: "Sie haben angegeben: PD-L1 1-49 %" },
   "said.pdl1.ge50": { en: "You said: PD-L1 50% or higher", de: "Sie haben angegeben: PD-L1 50 % oder höher" },
   "said.yesNo": { en: "You said: {value}", de: "Sie haben angegeben: {value}" },
   "said.lines.one": { en: "You said: {count} line", de: "Sie haben angegeben: {count} Linie" },

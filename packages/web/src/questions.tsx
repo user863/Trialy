@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from "react"
+import { useEffect, useId, useState, type ReactNode } from "react"
 import type { Profile, Tri } from "@trial-finder/domain"
 import { GENES, MS_THERAPIES } from "@trial-finder/domain"
 import { useApp } from "./app"
@@ -17,7 +17,7 @@ interface Step {
   body: (p: Profile, set: Set, i18n: I18n) => ReactNode
 }
 
-export const HELP_TAGS = { b: (text: string) => <strong>{text}</strong>, em: (text: string) => <em>{text}</em> }
+export const HELP_TAGS = { b: (text: string) => <strong>{text}</strong> }
 
 
 function Choice<T extends string>({
@@ -59,21 +59,22 @@ function Segments<T extends string>({
   options: Array<{ value: T; label: string }>
   onChange: (v: T) => void
 }) {
+  const labelId = useId()
   return (
-    <fieldset className="row">
-      <legend>
+    <div className="qrow" role="radiogroup" aria-labelledby={labelId}>
+      <p className="qrow-label" id={labelId}>
         {label}
         {hint && <small>{hint}</small>}
-      </legend>
+      </p>
       <div className="seg">
         {options.map((o) => (
-          <label key={o.value} className={value === o.value ? "on" : ""}>
-            <input type="radio" name={label} checked={value === o.value} onChange={() => onChange(o.value)} />
+          <label key={o.value} className={value === o.value ? (o.value === "unknown" ? "on idk" : "on") : ""}>
+            <input type="radio" name={labelId} checked={value === o.value} onChange={() => onChange(o.value)} />
             {o.label}
           </label>
         ))}
       </div>
-    </fieldset>
+    </div>
   )
 }
 
@@ -150,7 +151,7 @@ export const STEPS: Step[] = [
         value={p.cancerType}
         onChange={(v) => set((x) => ({ ...x, cancerType: v }))}
         options={[
-          { value: "nsclc", label: t("step.type.nsclc"), hint: t("step.type.nsclc.hint") },
+          { value: "nsclc", label: t("step.type.nsclc") },
           { value: "sclc", label: t("step.type.sclc") },
           { value: "unknown", label: t("answer.unknown") }
         ]}
@@ -437,6 +438,9 @@ export const STEPS: Step[] = [
         <Segments label={t("step.mshealth.steroids")} hint={t("step.mshealth.steroids.hint")} value={p.recentSteroids} onChange={(v) => set((x) => ({ ...x, recentSteroids: v }))} options={triOptions(t)} />
         <Segments label={t("step.mshealth.infection")} hint={t("step.mshealth.infection.hint")} value={p.chronicInfection} onChange={(v) => set((x) => ({ ...x, chronicInfection: v }))} options={triOptions(t)} />
         <Segments label={t("step.mshealth.cancer")} hint={t("step.mshealth.cancer.hint")} value={p.cancerHistory} onChange={(v) => set((x) => ({ ...x, cancerHistory: v }))} options={triOptions(t)} />
+        <Segments label={t("step.mshealth.psychiatric")} hint={t("step.mshealth.psychiatric.hint")} value={p.psychiatric} onChange={(v) => set((x) => ({ ...x, psychiatric: v }))} options={triOptions(t)} />
+        <Segments label={t("step.mshealth.autoimmune")} hint={t("step.mshealth.autoimmune.hint")} value={p.otherAutoimmune} onChange={(v) => set((x) => ({ ...x, otherAutoimmune: v }))} options={triOptions(t)} />
+        <Segments label={t("step.mshealth.trial")} hint={t("step.mshealth.trial.hint")} value={p.otherTrial} onChange={(v) => set((x) => ({ ...x, otherTrial: v }))} options={triOptions(t)} />
       </div>
     )
   },
@@ -448,8 +452,9 @@ export const STEPS: Step[] = [
     body: (p, set, { t }) => (
       <>
         <NumberField label={t("step.person.age")} value={p.age} min={18} max={110} unit={t("step.person.years")} onChange={(v) => set((x) => ({ ...x, age: v }))} />
-        <Choice
-          name={t("step.person.sex")}
+        <Segments
+          label={t("step.person.sex")}
+          hint={t("step.person.sex.hint")}
           value={p.sex}
           onChange={(v) => set((x) => ({ ...x, sex: v }))}
           options={[
@@ -578,7 +583,10 @@ export const STEP_FOR_FIELD = (field: string): string => {
     mriUnsuitable: "mshealth",
     recentSteroids: "mshealth",
     chronicInfection: "mshealth",
-    cancerHistory: "mshealth"
+    cancerHistory: "mshealth",
+    psychiatric: "mshealth",
+    otherAutoimmune: "mshealth",
+    otherTrial: "mshealth"
   }
   return map[field] ?? "type"
 }
@@ -604,7 +612,10 @@ const FIELD_KEYS = [
   "mriUnsuitable",
   "recentSteroids",
   "chronicInfection",
-  "cancerHistory"
+  "cancerHistory",
+  "psychiatric",
+  "otherAutoimmune",
+  "otherTrial"
 ] as const
 
 export const fieldLabel = (t: I18n["t"], tOr: I18n["tOr"], field: string): string => {
