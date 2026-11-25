@@ -11,7 +11,7 @@ export const ui = messages({
   },
   "disclaimer.text": {
     en: "These are <b>possible fits to discuss with your doctor</b>. Participation in trials can never be guaranteed. Data comes from public registries and may be incomplete or out of date. Discuss your results with your treating team.",
-    de: "Das sind <b>mögliche Treffer, die Sie mit Ihrer Ärztin oder Ihrem Arzt besprechen können</b>. Eine Teilnahme an Studien kann nie garantiert werden. Die Daten stammen aus öffentlichen Registern und können unvollständig oder veraltet sein. Besprechen Sie die Ergebnisse mit Ihrem behandelnden Team."
+    de: "Das sind <b>Ergebnisse, die Sie mit Ihrer Ärztin oder Ihrem Arzt besprechen können</b>. Eine Teilnahme an Studien kann nie garantiert werden. Die Daten stammen aus öffentlichen Registern und können unvollständig oder veraltet sein. Besprechen Sie die Ergebnisse mit Ihrem behandelnden Team."
   },
   "tier.recruiting.one": { en: "Recruiting · {count} site", de: "Rekrutiert · {count} Zentrum" },
   "tier.recruiting.other": { en: "Recruiting · {count} sites", de: "Rekrutiert · {count} Zentren" },

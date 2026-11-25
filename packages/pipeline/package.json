@@ -4,10 +4,7 @@
   "license": "Apache-2.0",
   "type": "module",
   "scripts": {
-    "run": "tsx src/main.ts",
-    "poc:fetch": "tsx src/poc/fetch.ts",
-    "poc:size": "tsx src/poc/size.ts",
-    "poc:tier": "tsx src/poc/tier.ts"
+    "run": "tsx src/main.ts"
   },
   "dependencies": {
     "@trial-finder/domain": "*",

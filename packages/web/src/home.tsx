@@ -42,7 +42,6 @@ export function LivePreview() {
 
   return (
     <div className="plate" aria-hidden="true">
-      <span className="blob" />
       <div className="plate-ui" inert>
         {sample && match ? (
           <>

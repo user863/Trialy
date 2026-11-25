@@ -1,4 +1,4 @@
-import { and, not, or } from "./kleene.js"
+import { and, not, or } from "./logic.js"
 import type { Criterion, MsCourse, MsTherapyCategory, Profile, RelapseAge, Rule, Site, Trial, Tri } from "./schema.js"
 
 export type Status = "met" | "notMet" | "unknown"
@@ -463,33 +463,6 @@ export const compareMatches = (a: TrialMatch, b: TrialMatch): number =>
 
 export const matchTrials = (trials: ReadonlyArray<Trial>, p: Profile, home: LatLon | null): TrialMatch[] =>
   trials.map((t) => matchTrial(t, p, home)).sort(compareMatches)
-
-export const unknownImpact = (
-  matches: ReadonlyArray<TrialMatch>
-): Array<{ field: ProfileField; trials: number; criteria: number }> => {
-  const byField = new Map<ProfileField, { trials: Set<string>; criteria: number }>()
-  const walk = (n: EvalNode, acc: Set<ProfileField>) => {
-    if (n.children) n.children.forEach((c) => walk(c, acc))
-    else if (n.result === "unknown" && n.field) acc.add(n.field)
-  }
-  for (const m of matches) {
-    if (m.hidden) continue
-    for (const r of m.results) {
-      if (r.status !== "unknown") continue
-      const fields = new Set<ProfileField>()
-      walk(r.node, fields)
-      for (const f of fields) {
-        const e = byField.get(f) ?? { trials: new Set<string>(), criteria: 0 }
-        e.trials.add(m.trial.nctId)
-        e.criteria++
-        byField.set(f, e)
-      }
-    }
-  }
-  return [...byField.entries()]
-    .map(([field, e]) => ({ field, trials: e.trials.size, criteria: e.criteria }))
-    .sort((a, b) => b.trials - a.trials || b.criteria - a.criteria)
-}
 
 export const STALE_AFTER_DAYS = 180
 

@@ -51,8 +51,8 @@ describe("translate", () => {
   })
 
   it("picks the plural form from the count", () => {
-    expect(translate("en", "map.trials", { count: 1 })).toBe("1 recruiting trial here")
-    expect(translate("en", "map.trials", { count: 3 })).toBe("3 recruiting trials here")
+    expect(translate("en", "results.total", { count: 1 })).toBe("1 trial")
+    expect(translate("en", "results.total", { count: 3 })).toBe("3 trials")
     expect(translate("de", "summary.rec2", { count: 1 })).toBe("1 aufgeführtes Zentrum gibt an zu rekrutieren")
     expect(translate("de", "summary.rec2", { count: 2 })).toBe("2 aufgeführte Zentren geben an zu rekrutieren")
   })

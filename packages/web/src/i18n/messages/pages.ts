@@ -105,11 +105,6 @@ export const pages = messages({
   "plain.randomisation": { en: "Randomisation", de: "Randomisierung" },
   "plain.blinding": { en: "Blinding", de: "Verblindung" },
   "plain.placebo": { en: "Placebo", de: "Placebo" },
-  "plain.visits": { en: "Visits", de: "Besuche" },
-  "plain.visits.text": {
-    en: "The registry data does not state the visit schedule. Ask the trial site.",
-    de: "Die Registerdaten nennen keinen Besuchsplan. Fragen Sie beim Studienzentrum nach."
-  },
   "phase.EARLY_PHASE1": { en: "Early phase 1", de: "Frühe Phase 1" },
   "phase.PHASE1": { en: "Phase 1", de: "Phase 1" },
   "phase.PHASE2": { en: "Phase 2", de: "Phase 2" },
@@ -170,10 +165,6 @@ export const pages = messages({
   "placebo.yes": {
     en: "A placebo (dummy treatment) appears in this study's description. Ask whether it replaces or is added to active treatment.",
     de: "In der Beschreibung dieser Studie kommt ein Placebo (Scheinbehandlung) vor. Fragen Sie nach, ob es eine wirksame Behandlung ersetzt oder zusätzlich gegeben wird."
-  },
-  "placebo.no": {
-    en: "No placebo is named in the registry entry. Check the full protocol to be sure.",
-    de: "Im Registereintrag wird kein Placebo genannt. Prüfen Sie das vollständige Studienprotokoll, um sicherzugehen."
   },
   "summary.original": { en: "Original wording", de: "Originaltext" },
 

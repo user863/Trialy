@@ -3,3 +3,4 @@ dist
 packages/pipeline/.cache
 .DS_Store
 release
+packages/web/public/data/*.review-queue.json

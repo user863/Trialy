@@ -438,36 +438,13 @@
     color: var(--ink-3);
   }
 
-  .plain-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding-left: 20px;
-    list-style: disc;
-    color: var(--ink-2);
-  }
-
   .page-head {
     display: flex;
     flex-direction: column;
     gap: 8px;
   }
 
-  .hero {
-    padding-top: 40px;
-    padding-bottom: 40px;
-  }
-
-  .hero > div:first-child {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 24px;
-  }
-
-  .split,
-  .cols-2,
-  .cols-3 {
+  .split {
     display: grid;
     gap: 24px;
     align-items: start;
@@ -477,40 +454,12 @@
     grid-template-columns: 490fr 686fr;
   }
 
-  .cols-2 {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .cols-3 {
-    grid-template-columns: repeat(3, 1fr);
-    align-items: stretch;
-  }
-
   main.page > .section {
     margin-top: 40px;
   }
 
-  .section-copy {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-  }
-
   .search h2 {
     margin-bottom: 8px;
-  }
-
-  .search-fields {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px 24px;
-  }
-
-  .search-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
   }
 
   .field {
@@ -556,19 +505,9 @@
     background: var(--plate);
   }
 
-  .blob {
-    position: absolute;
-    top: -72px;
-    right: -72px;
-    width: 280px;
-    height: 280px;
-    border-radius: 50%;
-    background: var(--green);
-  }
-
   .plate-ui {
     position: absolute;
-    inset: 40px 24px 0 40px;
+    inset: 40px 40px 0;
     padding: 24px;
     overflow: hidden;
     border: 1px solid var(--line);
@@ -1063,8 +1002,6 @@
 
 @media (max-width: 960px) {
   .split,
-  .cols-2,
-  .cols-3,
   .cards-grid,
   .criteria-sections,
   .sites,
@@ -1275,14 +1212,6 @@
     margin-top: var(--s2);
   }
 
-  .h-head {
-    display: grid;
-    grid-template-columns: 1fr var(--phi);
-    gap: var(--s5);
-    align-items: end;
-    margin-bottom: var(--s5);
-  }
-
   .faq {
     align-items: start;
   }
@@ -1348,8 +1277,7 @@
       font-size: 34px;
     }
 
-    .h-split,
-    .h-head {
+    .h-split {
       grid-template-columns: 1fr;
     }
 

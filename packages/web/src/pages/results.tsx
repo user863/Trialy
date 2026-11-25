@@ -21,7 +21,7 @@ function FilterSelect({ label, value, onChange, children, disabled }: { label: s
 
 export function Results() {
   const { t: tr, countryName, tOr } = useI18n()
-  const { summaries, byId, trials, shortlist, toggleShortlist, postcodeStatus, bundle, loadError, started, now: clock, group } = useApp()
+  const { summaries, byId, trials, shortlist, toggleShortlist, postcodeStatus, bundle, loadError, started, now: clock } = useApp()
   const [showHidden, setShowHidden] = useState(false)
   const [maxKm, setMaxKm] = useState(0)
   const [country, setCountry] = useState("")

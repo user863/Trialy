@@ -77,7 +77,7 @@ export function Finder() {
         <p className={unsupported ? "error" : "meta"} role={unsupported ? "alert" : undefined}>
           {unsupported
             ? t("finder.unsupported")
-            : (loadError ?? (stats ? t("finder.stats", { count: stats.trials, countries: stats.countries }) : t("finder.loadingTrials")))}
+            : (loadError ?? (stats ? t("finder.stats", { count: stats.trials }) : t("finder.loadingTrials")))}
         </p>
       </section>
 

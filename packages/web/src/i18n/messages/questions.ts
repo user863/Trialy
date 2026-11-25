@@ -214,22 +214,6 @@ export const questions = messages({
     de: "Optional. Ohne sie werden Studien nicht nach Entfernung sortiert."
   },
 
-  "field.biomarker": { en: "{gene} gene result", de: "Genergebnis {gene}" },
-  "field.priorTherapy": { en: "previous {therapy}", de: "bisherige Behandlung: {therapy}" },
-  "field.lab": { en: "blood value ({lab})", de: "Blutwert ({lab})" },
-  "field.cancerType": { en: "lung cancer type", de: "Art des Lungenkrebses" },
-  "field.histology": { en: "tissue type", de: "Gewebetyp" },
-  "field.stage": { en: "stage", de: "Stadium" },
-  "field.sclcExtent": { en: "limited or extensive disease", de: "begrenzte oder ausgedehnte Erkrankung" },
-  "field.pdl1": { en: "PD-L1 level", de: "PD-L1-Wert" },
-  "field.priorLines": { en: "lines of drug treatment", de: "Linien medikamentöser Behandlung" },
-  "field.currentTherapy": { en: "current treatment", de: "aktuelle Behandlung" },
-  "field.age": { en: "age", de: "Alter" },
-  "field.sex": { en: "sex", de: "Geschlecht" },
-  "field.ecog": { en: "day-to-day condition", de: "Zustand im Alltag" },
-  "field.brainMets": { en: "brain metastases", de: "Hirnmetastasen" },
-  "field.ild": { en: "lung scarring / inflammation", de: "Vernarbung / Entzündung der Lunge" },
-  "field.autoimmune": { en: "autoimmune disease", de: "Autoimmunerkrankung" },
 
   "step.condition.title": { en: "Which condition are you looking for trials for?", de: "Für welche Erkrankung suchen Sie Studien?" },
   "step.condition.help": {
@@ -337,17 +321,4 @@ export const questions = messages({
   "step.mshealth.autoimmune.hint": { en: "for example lupus, rheumatoid arthritis, NMOSD or epilepsy", de: "zum Beispiel Lupus, rheumatoide Arthritis, NMOSD oder Epilepsie" },
   "step.mshealth.trial": { en: "In another study or on an investigational drug", de: "In einer anderen Studie oder mit einem Prüfpräparat behandelt" },
   "step.mshealth.trial.hint": { en: "now or in the last few months", de: "aktuell oder in den letzten Monaten" },
-
-  "field.msCourse": { en: "type of MS", de: "Verlaufsform der MS" },
-  "field.edss": { en: "EDSS score", de: "EDSS-Wert" },
-  "field.lastRelapse": { en: "last relapse", de: "letzter Schub" },
-  "field.msTherapy": { en: "earlier treatment with {therapy}", de: "bisherige Behandlung mit {therapy}" },
-  "field.pregnancy": { en: "pregnancy or breastfeeding status", de: "Schwangerschaft oder Stillzeit" },
-  "field.mriUnsuitable": { en: "ability to have an MRI", de: "Möglichkeit einer MRT-Untersuchung" },
-  "field.recentSteroids": { en: "recent steroid treatment", de: "kürzliche Steroidbehandlung" },
-  "field.chronicInfection": { en: "HIV, hepatitis or tuberculosis status", de: "HIV, Hepatitis oder Tuberkulose" },
-  "field.cancerHistory": { en: "history of cancer", de: "Krebserkrankung in der Vorgeschichte" },
-  "field.psychiatric": { en: "psychiatric condition", de: "psychiatrische Erkrankung" },
-  "field.otherAutoimmune": { en: "another autoimmune or neurological disease", de: "weitere Autoimmun- oder neurologische Erkrankung" },
-  "field.otherTrial": { en: "participation in another study", de: "Teilnahme an einer anderen Studie" }
 })

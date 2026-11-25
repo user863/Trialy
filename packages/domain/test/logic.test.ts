@@ -1,11 +1,11 @@
 import fc from "fast-check"
 import { describe, expect, it } from "vitest"
-import { and, not, or } from "../src/kleene.js"
+import { and, not, or } from "../src/logic.js"
 import { tri } from "./arbitraries.js"
 
 const list = fc.array(tri, { maxLength: 8 })
 
-describe("kleene operators", () => {
+describe("three-valued logic", () => {
   it("not undoes itself", () => {
     fc.assert(fc.property(tri, (t) => not(not(t)) === t))
   })
